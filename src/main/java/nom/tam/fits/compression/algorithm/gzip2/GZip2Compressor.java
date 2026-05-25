@@ -30,7 +30,6 @@ package nom.tam.fits.compression.algorithm.gzip2;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -41,7 +40,6 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import nom.tam.fits.compression.algorithm.gzip.GZipCompressor;
 import nom.tam.util.type.ElementType;
 
@@ -64,13 +62,12 @@ public abstract class GZip2Compressor<T extends Buffer> extends GZipCompressor<T
 
         @Override
         protected void getPixel(IntBuffer pixelData, byte[] pixelBytes) {
-            IntBuffer pixelBuffer = ByteBuffer.wrap(pixelBytes).asIntBuffer();
-            pixelBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(IntBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(ByteBuffer.wrap(pixelBytes).asIntBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -82,13 +79,12 @@ public abstract class GZip2Compressor<T extends Buffer> extends GZipCompressor<T
 
         @Override
         protected void getPixel(FloatBuffer pixelData, byte[] pixelBytes) {
-            FloatBuffer pixelBuffer = ByteBuffer.wrap(pixelBytes).asFloatBuffer();
-            pixelBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(FloatBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(ByteBuffer.wrap(pixelBytes).asFloatBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -100,13 +96,12 @@ public abstract class GZip2Compressor<T extends Buffer> extends GZipCompressor<T
 
         @Override
         protected void getPixel(LongBuffer pixelData, byte[] pixelBytes) {
-            LongBuffer pixelBuffer = ByteBuffer.wrap(pixelBytes).asLongBuffer();
-            pixelBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(LongBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(ByteBuffer.wrap(pixelBytes).asLongBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -118,13 +113,12 @@ public abstract class GZip2Compressor<T extends Buffer> extends GZipCompressor<T
 
         @Override
         protected void getPixel(DoubleBuffer pixelData, byte[] pixelBytes) {
-            DoubleBuffer pixelBuffer = ByteBuffer.wrap(pixelBytes).asDoubleBuffer();
-            pixelBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(DoubleBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(ByteBuffer.wrap(pixelBytes).asDoubleBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -136,13 +130,12 @@ public abstract class GZip2Compressor<T extends Buffer> extends GZipCompressor<T
 
         @Override
         protected void getPixel(ShortBuffer pixelData, byte[] pixelBytes) {
-            ShortBuffer shortBuffer = ByteBuffer.wrap(pixelBytes).asShortBuffer();
-            shortBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(ShortBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(ByteBuffer.wrap(pixelBytes).asShortBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -161,62 +154,19 @@ public abstract class GZip2Compressor<T extends Buffer> extends GZipCompressor<T
 
     @Override
     public boolean compress(T pixelData, ByteBuffer compressed) {
-        int pixelDataLimit = pixelData.limit();
-        byte[] pixelBytes = new byte[pixelDataLimit * primitiveSize];
-        getPixel(pixelData, pixelBytes);
-        pixelBytes = shuffle(pixelBytes);
-        try (GZIPOutputStream zip = createGZipOutputStream(pixelDataLimit, compressed)) {
-            // FIXME AK: FB complains the line below has a redundant null ckeck for 'zip', but where exactly?
-            zip.write(pixelBytes, 0, pixelBytes.length);
-        } catch (IOException e) {
-            throw new IllegalStateException("could not gzip data", e);
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void decompress(ByteBuffer compressed, T pixelData) {
-        int pixelDataLimit = pixelData.limit();
-        byte[] pixelBytes = new byte[pixelDataLimit * primitiveSize];
-        try (GZIPInputStream zip = createGZipInputStream(compressed)) {
-            int count = 0;
-            int offset = 0;
-            while (offset < pixelBytes.length && count >= 0) {
-                count = zip.read(pixelBytes, offset, pixelBytes.length - offset);
-                if (count >= 0) {
-                    offset = offset + count;
-                }
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("could not gunzip data", e);
-        }
-        pixelBytes = unshuffle(pixelBytes);
-        setPixel(pixelData, pixelBytes);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public byte[] shuffle(byte[] byteArray) {
-        byte[] result = new byte[byteArray.length];
-        int resultIndex = 0;
-        int[] offset = calculateOffsets(byteArray);
-        for (int index = 0; index < byteArray.length; index += primitiveSize) {
-            for (int primitiveIndex = 0; primitiveIndex < primitiveSize; primitiveIndex++) {
-                result[resultIndex + offset[primitiveIndex]] = byteArray[index + primitiveIndex];
-            }
-            resultIndex++;
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public byte[] unshuffle(byte[] byteArray) {
-        byte[] result = new byte[byteArray.length];
-        int resultIndex = 0;
-        int[] offset = calculateOffsets(byteArray);
-        for (int index = 0; index < byteArray.length; index += primitiveSize) {
-            for (int primitiveIndex = 0; primitiveIndex < primitiveSize; primitiveIndex++) {
-                result[index + primitiveIndex] = byteArray[resultIndex + offset[primitiveIndex]];
-            }
-            resultIndex++;
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

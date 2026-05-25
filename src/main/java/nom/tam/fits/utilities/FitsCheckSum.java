@@ -30,7 +30,6 @@ package nom.tam.fits.utilities;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
@@ -42,7 +41,6 @@ import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-
 import nom.tam.fits.BasicHDU;
 import nom.tam.fits.Data;
 import nom.tam.fits.FitsDate;
@@ -53,7 +51,6 @@ import nom.tam.fits.HeaderCard;
 import nom.tam.util.FitsIO;
 import nom.tam.util.FitsOutputStream;
 import nom.tam.util.RandomAccess;
-
 import static nom.tam.fits.header.Checksum.CHECKSUM;
 import static nom.tam.fits.header.Checksum.DATASUM;
 
@@ -87,20 +84,33 @@ import static nom.tam.fits.header.Checksum.DATASUM;
 public final class FitsCheckSum {
 
     private static final int CHECKSUM_BLOCK_SIZE = 4;
-    private static final int CHECKSUM_BLOCK_MASK = CHECKSUM_BLOCK_SIZE - 1;
-    private static final int CHECKSUM_STRING_SIZE = 16;
-    private static final int SHIFT_2_BYTES = 16;
-    private static final int MASK_2_BYTES = 0xffff;
-    private static final int MASK_4_BYTES = 0xffffffff;
-    private static final int MASK_BYTE = 0xff;
-    private static final int ASCII_ZERO = '0';
-    private static final int BUFFER_SIZE = 0x8000; // 32 kB
 
-    private static final int[] SELECT_BYTE = {24, 16, 8, 0};
+    private static final int CHECKSUM_BLOCK_MASK = CHECKSUM_BLOCK_SIZE - 1;
+
+    private static final int CHECKSUM_STRING_SIZE = 16;
+
+    private static final int SHIFT_2_BYTES = 16;
+
+    private static final int MASK_2_BYTES = 0xffff;
+
+    private static final int MASK_4_BYTES = 0xffffffff;
+
+    private static final int MASK_BYTE = 0xff;
+
+    private static final int ASCII_ZERO = '0';
+
+    // 32 kB
+    private static final int BUFFER_SIZE = 0x8000;
+
+    private static final int[] SELECT_BYTE = { 24, 16, 8, 0 };
+
     private static final String EXCLUDE = ":;<=>?@[\\]^_`";
+
     private static final String CHECKSUM_DEFAULT = "0000000000000000";
 
-    /** The expected checksum for a HDU that already contains a valid CHECKSUM keyword */
+    /**
+     * The expected checksum for a HDU that already contains a valid CHECKSUM keyword
+     */
     public static final long HDU_CHECKSUM = 0xffffffffL;
 
     private FitsCheckSum() {
@@ -110,6 +120,7 @@ public final class FitsCheckSum {
      * Internal class for accumulating FITS checksums.
      */
     private static class Checksum {
+
         private long h, l;
 
         Checksum(long prior) {
@@ -118,31 +129,20 @@ public final class FitsCheckSum {
         }
 
         void add(int i) {
-            h += i >>> SHIFT_2_BYTES;
-            l += i & MASK_2_BYTES;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         long getChecksum() {
-            long hi = h & MASK_4_BYTES; // as unsigned 32-bit integer
-            long lo = l & MASK_4_BYTES;
-
-            for (;;) {
-                long hicarry = hi >>> SHIFT_2_BYTES;
-                long locarry = lo >>> SHIFT_2_BYTES;
-                if ((hicarry | locarry) == 0) {
-                    break;
-                }
-                hi = (hi & MASK_2_BYTES) + locarry;
-                lo = (lo & MASK_2_BYTES) + hicarry;
-            }
-            return (hi << SHIFT_2_BYTES) | lo;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
     private static class PipeWriter extends Thread {
+
         private Exception exception;
+
         private PipedOutputStream out;
+
         private FitsElement data;
 
         PipeWriter(FitsElement data, PipedInputStream in) throws IOException {
@@ -152,20 +152,11 @@ public final class FitsCheckSum {
 
         @Override
         public void run() {
-            exception = null;
-            try (FitsOutputStream fos = new FitsOutputStream(out)) {
-                if (data instanceof Header) {
-                    ((Header) data).writeUnchecked(fos);
-                } else {
-                    data.write(fos);
-                }
-            } catch (Exception e) {
-                exception = e;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public Exception getException() {
-            return exception;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -179,7 +170,7 @@ public final class FitsCheckSum {
      * @see         #checksum(byte[], int, int)
      */
     public static long checksum(byte[] data) {
-        return checksum(ByteBuffer.wrap(data));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -196,7 +187,7 @@ public final class FitsCheckSum {
      * @since       1.17
      */
     public static long checksum(byte[] data, int from, int to) {
-        return checksum(ByteBuffer.wrap(data, from, to));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,31 +210,19 @@ public final class FitsCheckSum {
      * @see         #differenceOf(long, long)
      */
     public static long checksum(ByteBuffer data) {
-        Checksum sum = new Checksum(0);
-        if (!(data.remaining() % CHECKSUM_BLOCK_SIZE == 0)) {
-            throw new IllegalArgumentException("fits blocks must always be divisible by 4");
-        }
-        data.position(0);
-        data.order(ByteOrder.BIG_ENDIAN);
-        IntBuffer iData = data.asIntBuffer();
-        while (iData.hasRemaining()) {
-            sum.add(iData.get());
-        }
-        return sum.getChecksum();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static long checksum(InputStream in) throws IOException {
         Checksum sum = new Checksum(0);
         DataInputStream din = new DataInputStream(in);
-
-        for (;;) {
+        for (; ; ) {
             try {
                 sum.add(din.readInt());
             } catch (EOFException e) {
                 break;
             }
         }
-
         return sum.getChecksum();
     }
 
@@ -251,14 +230,11 @@ public final class FitsCheckSum {
         try (PipedInputStream in = new PipedInputStream()) {
             PipeWriter writer = new PipeWriter(data, in);
             writer.start();
-
             long sum = checksum(in);
-
             writer.join();
             if (writer.getException() != null) {
                 throw writer.getException();
             }
-
             return sum;
         } catch (Exception e) {
             if (e instanceof FitsException) {
@@ -273,7 +249,7 @@ public final class FitsCheckSum {
      * will always calculate the checksum for the data in memory, and as such load deferred mode data into RAM as
      * necessary to perform the calculation. If you rather not load a huge amount of data into RAM, you might consider
      * using {@link #checksum(RandomAccess, long, long)} instead.
-     * 
+     *
      * @deprecated               Use {@link BasicHDU#verifyIntegrity()} instead.
      *
      * @param      data          The FITS data object for which to calculate a checksum
@@ -298,7 +274,7 @@ public final class FitsCheckSum {
     /**
      * Computes the checksum for a FITS header. It returns the checksum for the header as is, without attempting to
      * validate the header, or modifying it in any way.
-     * 
+     *
      * @deprecated               Use {@link BasicHDU#verifyIntegrity()} instead.
      *
      * @param      header        The FITS header object for which to calculate a checksum
@@ -358,26 +334,7 @@ public final class FitsCheckSum {
      * @see                #checksum(Data)
      */
     public static long checksum(RandomAccess f, long from, long size) throws IOException {
-        if (f == null) {
-            return 0L;
-        }
-
-        int len = (int) Math.min(BUFFER_SIZE, size);
-        byte[] buf = new byte[len];
-        long oldpos = f.position();
-        f.position(from);
-        long sum = 0;
-
-        while (size > 0) {
-            len = (int) Math.min(BUFFER_SIZE, size);
-            len = f.read(buf, 0, len);
-            sum = sumOf(sum, checksum(buf, 0, len));
-            from += len;
-            size -= len;
-        }
-
-        f.position(oldpos);
-        return sum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -405,7 +362,7 @@ public final class FitsCheckSum {
      * @since           1.17
      */
     public static String encode(long checksum) {
-        return encode(checksum, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -422,36 +379,7 @@ public final class FitsCheckSum {
      * @since           1.17
      */
     public static String encode(long checksum, boolean compl) {
-        if (compl) {
-            checksum = ~checksum & FitsIO.INTEGER_MASK;
-        }
-
-        final byte[] asc = new byte[CHECKSUM_STRING_SIZE];
-        final byte[] ch = new byte[CHECKSUM_BLOCK_SIZE];
-        final int sum = (int) checksum;
-
-        for (int i = 0; i < CHECKSUM_BLOCK_SIZE; i++) {
-            // each byte becomes four
-            final int byt = MASK_BYTE & (sum >>> SELECT_BYTE[i]);
-
-            Arrays.fill(ch, (byte) ((byt >>> 2) + ASCII_ZERO)); // quotient
-            ch[0] += (byte) (byt & CHECKSUM_BLOCK_MASK); // remainder
-
-            for (int j = 0; j < CHECKSUM_BLOCK_SIZE; j += 2) {
-                while (EXCLUDE.indexOf(ch[j]) >= 0 || EXCLUDE.indexOf(ch[j + 1]) >= 0) {
-                    ch[j]++;
-                    ch[j + 1]--;
-                }
-            }
-
-            for (int j = 0; j < CHECKSUM_BLOCK_SIZE; j++) {
-                int k = CHECKSUM_BLOCK_SIZE * j + i + 1;
-                k = (k < CHECKSUM_STRING_SIZE) ? k : 0; // rotate right
-                asc[k] = ch[j];
-            }
-        }
-
-        return new String(asc, StandardCharsets.US_ASCII);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -470,7 +398,7 @@ public final class FitsCheckSum {
      * @since                           1.17
      */
     public static long decode(String encoded) throws IllegalArgumentException {
-        return decode(encoded, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -491,27 +419,7 @@ public final class FitsCheckSum {
      * @since                           1.17
      */
     public static long decode(String encoded, boolean compl) throws IllegalArgumentException {
-        byte[] bytes = encoded.getBytes(StandardCharsets.US_ASCII);
-        if (bytes.length != CHECKSUM_STRING_SIZE) {
-            throw new IllegalArgumentException("Bad checksum with " + bytes.length + " chars (expected 16)");
-        }
-        // Rotate the bytes one to the left
-        byte tmp = bytes[0];
-        System.arraycopy(bytes, 1, bytes, 0, CHECKSUM_STRING_SIZE - 1);
-        bytes[CHECKSUM_STRING_SIZE - 1] = tmp;
-
-        for (int i = 0; i < CHECKSUM_STRING_SIZE; i++) {
-            if (bytes[i] < ASCII_ZERO) {
-                throw new IllegalArgumentException("Bad checksum with illegal char " + Integer.toHexString(bytes[i])
-                        + " at pos " + i + " (ASCII below 0x30)");
-            }
-            bytes[i] -= ASCII_ZERO;
-        }
-
-        ByteBuffer bb = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN);
-
-        long sum = (bb.getInt() + bb.getInt() + bb.getInt() + bb.getInt());
-        return (compl ? ~sum : sum) & FitsIO.INTEGER_MASK;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -527,13 +435,7 @@ public final class FitsCheckSum {
      * @since        1.17
      */
     public static long sumOf(long... parts) {
-        Checksum sum = new Checksum(0);
-
-        for (long part : parts) {
-            sum.h += part >>> SHIFT_2_BYTES;
-            sum.l += part & MASK_2_BYTES;
-        }
-        return sum.getChecksum();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -579,23 +481,7 @@ public final class FitsCheckSum {
      * @since                1.17
      */
     public static void setDatasum(Header header, long datasum) throws FitsException {
-        // Add the freshly calculated datasum to the header, before calculating the checksum
-        header.seekTail();
-        header.updateLine(DATASUM,
-                new HeaderCard(DATASUM.key(), Long.toString(datasum), "data checksum at " + FitsDate.getFitsDateString()));
-
-        HeaderCard hc = header.getCard(CHECKSUM);
-
-        if (hc != null) {
-            hc.setValue(CHECKSUM_DEFAULT);
-            hc.setComment("HDU checksum at " + FitsDate.getFitsDateString());
-        } else {
-            header.seekTail();
-            header.addValue(CHECKSUM, CHECKSUM_DEFAULT);
-        }
-
-        long hsum = checksum(header);
-        header.getCard(CHECKSUM).setValue(encode(sumOf(hsum, datasum)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -615,13 +501,7 @@ public final class FitsCheckSum {
      * @see                  #differenceOf(long, long)
      */
     public static void setChecksum(BasicHDU<?> hdu) throws FitsException {
-        try {
-            setDatasum(hdu.getHeader(), checksum(hdu.getData()));
-        } catch (FitsException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new FitsException("Exception while computing data checksum: " + e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -639,13 +519,7 @@ public final class FitsCheckSum {
      * @see                  BasicHDU#getStoredDatasum()
      */
     public static long getStoredDatasum(Header header) throws FitsException {
-        HeaderCard hc = header.getCard(DATASUM);
-
-        if (hc == null) {
-            throw new FitsException("Header does not have a DATASUM value.");
-        }
-
-        return hc.getValue(Long.class, 0L) & FitsIO.INTEGER_MASK;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -671,11 +545,9 @@ public final class FitsCheckSum {
     @Deprecated
     public static long getStoredChecksum(Header header) throws FitsException {
         String encoded = header.getStringValue(CHECKSUM);
-
         if (encoded == null) {
             throw new FitsException("Header does not have a CHECKUM value.");
         }
-
         return decode(encoded);
     }
 }

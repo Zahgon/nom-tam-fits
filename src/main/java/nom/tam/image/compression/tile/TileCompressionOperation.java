@@ -30,10 +30,8 @@ package nom.tam.image.compression.tile;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
 import nom.tam.image.compression.tile.mask.AbstractNullPixelMask;
@@ -62,9 +60,7 @@ abstract class TileCompressionOperation extends AbstractTileOperation implements
 
     @Override
     public String toString() {
-        synchronized (this) {
-            return getClass().getSimpleName() + "(" + getTileIndex() + "," + compressionType + "," + compressedOffset + ")";
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private ByteBuffer convertToBuffer(Object data) {
@@ -78,56 +74,44 @@ abstract class TileCompressionOperation extends AbstractTileOperation implements
      * @param value the value to set.
      */
     protected void forceNoLoss(boolean value) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected synchronized byte[] getCompressedData() {
-        byte[] data = new byte[compressedData.limit()];
-        compressedData.rewind();
-        ElementType.BYTE.getArray(compressedData, data);
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ByteBuffer getCompressedWholeArea() {
-        return getTiledImageOperation().getCompressedWholeArea();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected synchronized TileCompressionType getCompressionType() {
-        return compressionType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ICompressorControl getCompressorControl() {
-        return getTiledImageOperation().getCompressorControl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ICompressorControl getGzipCompressorControl() {
-        return getTiledImageOperation().getGzipCompressorControl();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected synchronized TileCompressionOperation initTileOptions() {
-        tileOptions = getTiledImageOperation().compressOptions().copy() //
-                .setTileWidth(getTileBuffer().getWidth()) //
-                .setTileHeight(getTileBuffer().getHeight());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected synchronized TileCompressionOperation setCompressed(Object data, TileCompressionType type) {
-        if (data != null && Array.getLength(data) > 0) {
-            compressionType = type;
-            compressedData = convertToBuffer(data);
-            compressedOffset = 0;
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected synchronized TileCompressionOperation setCompressedOffset(int value) {
-        compressedOffset = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public TileCompressionOperation setDimensions(int dataOffset, int width, int height) {
-        super.setDimensions(dataOffset, width, height);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -139,11 +123,7 @@ abstract class TileCompressionOperation extends AbstractTileOperation implements
      * @param compressed the buffer that describes the whole image.
      */
     protected synchronized void setWholeImageCompressedBuffer(ByteBuffer compressed) {
-        compressed.position(compressedOffset * getBaseType().size());
-        compressedData = compressed.slice();
-        compressedOffset = 0;
-        // we do not limit this buffer but is expected not to write more than
-        // the uncompressed size.
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected abstract AbstractNullPixelMask createImageNullPixelMask(ImageNullPixelMask imageNullPixelMask);

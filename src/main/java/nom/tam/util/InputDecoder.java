@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.EOFException;
@@ -38,7 +37,6 @@ import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.util.type.ElementType;
 
@@ -56,19 +54,29 @@ import nom.tam.util.type.ElementType;
  */
 public abstract class InputDecoder {
 
-    /** The buffer size for array translation */
+    /**
+     * The buffer size for array translation
+     */
     private static final int BUFFER_SIZE = 8 * FitsFactory.FITS_BLOCK_SIZE;
 
-    /** bit mask for 1 byte */
+    /**
+     * bit mask for 1 byte
+     */
     private static final int BYTE_MASK = 0xFF;
 
-    /** bit mask for a 16-byte integer (a Java <code>short</code>). */
+    /**
+     * bit mask for a 16-byte integer (a Java <code>short</code>).
+     */
     private static final int SHORT_MASK = 0xFFFF;
 
-    /** the input providing the binary representation of data */
+    /**
+     * the input providing the binary representation of data
+     */
     private InputReader in;
 
-    /** the conversion buffer */
+    /**
+     * the conversion buffer
+     */
     private InputBuffer buf;
 
     /**
@@ -96,7 +104,7 @@ public abstract class InputDecoder {
      * @param i the new binary input.
      */
     protected void setInput(InputReader i) {
-        in = i;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,7 +115,7 @@ public abstract class InputDecoder {
      * @return the conversion buffer used by this decoder.
      */
     protected InputBuffer getInputBuffer() {
-        return buf;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -123,14 +131,7 @@ public abstract class InputDecoder {
      *                         additional data from the underlying input
      */
     boolean makeAvailable(int size) throws IOException {
-        // TODO Once the deprecated BufferDecoder is retired, this should become
-        // a private method of InputBuffer (with buf. prefixed removed below).
-        while (buf.buffer.remaining() < size) {
-            if (!buf.fetch()) {
-                return false;
-            }
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +142,7 @@ public abstract class InputDecoder {
      * @throws IOException if an IO error, other than the end-of-file prevented the read.
      */
     protected synchronized int read() throws IOException {
-        return in.read();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,7 +157,7 @@ public abstract class InputDecoder {
      * @throws IOException if an IO error, other than the end-of-file prevented the read.
      */
     protected synchronized int read(byte[] b, int start, int length) throws IOException {
-        return in.read(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -172,14 +173,7 @@ public abstract class InputDecoder {
      * @throws IOException  if there was an IO error before the requested number of bytes could all be read.
      */
     protected void readFully(byte[] b, int off, int len) throws EOFException, IOException {
-        while (len > 0) {
-            int n = read(b, off, len);
-            if (n < 0) {
-                throw new EOFException();
-            }
-            off += n;
-            len -= n;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,9 +191,7 @@ public abstract class InputDecoder {
      * @see                             #readImage(Object)
      */
     public void readArrayFully(Object o) throws IOException, IllegalArgumentException {
-        if (readArray(o) != FitsEncoder.computeSize(o)) {
-            throw new EOFException("Incomplete array read (FITS encoding).");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -233,23 +225,7 @@ public abstract class InputDecoder {
      * @since                           1.18
      */
     public void readImage(Object o) throws IOException, IllegalArgumentException {
-        if (o == null) {
-            return;
-        }
-
-        if (!o.getClass().isArray()) {
-            throw new IllegalArgumentException("Not an array: " + o.getClass().getName());
-        }
-
-        long size = FitsEncoder.computeSize(o);
-        if (size == 0) {
-            return;
-        }
-
-        getInputBuffer().loadBytes(size, 1);
-        if (getImage(o) != size) {
-            throw new EOFException("Incomplete image read.");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private long getImage(Object o) throws IOException, IllegalArgumentException {
@@ -257,7 +233,6 @@ public abstract class InputDecoder {
         if (length == 0) {
             return 0L;
         }
-
         if (o instanceof byte[]) {
             return buf.get((byte[]) o, 0, length);
         }
@@ -279,10 +254,8 @@ public abstract class InputDecoder {
         if (!(o instanceof Object[])) {
             throw new IllegalArgumentException("Not a numerical image type: " + o.getClass().getName());
         }
-
         Object[] array = (Object[]) o;
         long count = 0L;
-
         // Process multidim arrays recursively.
         for (int i = 0; i < length; i++) {
             try {
@@ -309,13 +282,7 @@ public abstract class InputDecoder {
      * @throws EOFException the rethrown exception, or a new one, as appropriate
      */
     long eofCheck(EOFException e, long got, long expected) throws EOFException {
-        if (got == 0) {
-            if (e == null) {
-                throw new EOFException();
-            }
-            throw e;
-        }
-        return got;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -373,16 +340,24 @@ public abstract class InputDecoder {
      */
     protected final class InputBuffer {
 
-        /** the byte array in which to buffer data from the input */
+        /**
+         * the byte array in which to buffer data from the input
+         */
         private final byte[] data;
 
-        /** the buffer wrapped for NIO access */
+        /**
+         * the buffer wrapped for NIO access
+         */
         private final ByteBuffer buffer;
 
-        /** The current type-specific view of the buffer or null */
+        /**
+         * The current type-specific view of the buffer or null
+         */
         private Buffer view;
 
-        /** the number of bytes requested, but not yet buffered */
+        /**
+         * the number of bytes requested, but not yet buffered
+         */
         private long pending = 0;
 
         private InputBuffer(int size) {
@@ -399,7 +374,7 @@ public abstract class InputDecoder {
          * @see         ByteBuffer#order(ByteOrder)
          */
         protected void setByteOrder(ByteOrder order) {
-            buffer.order(order);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -411,7 +386,7 @@ public abstract class InputDecoder {
          * @see    ByteBuffer#order()
          */
         protected ByteOrder byteOrder() {
-            return buffer.order();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private boolean isViewingAs(Class<? extends Buffer> type) {
@@ -440,9 +415,7 @@ public abstract class InputDecoder {
          * @param size the number of bytes in each elements.
          */
         protected void loadBytes(long n, int size) {
-            rewind();
-            buffer.limit(0);
-            pending = n * size;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -457,10 +430,7 @@ public abstract class InputDecoder {
          * @throws IOException if there was an IO error, other than the end-of-file.
          */
         protected boolean loadOne(int size) throws IOException {
-            pending = size;
-            rewind();
-            buffer.limit(0);
-            return makeAvailable(size);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -474,12 +444,10 @@ public abstract class InputDecoder {
          */
         private boolean fetch() throws IOException {
             int remaining = buffer.remaining();
-
             if (remaining > 0) {
                 System.arraycopy(data, buffer.position(), data, 0, remaining);
             }
             rewind();
-
             int n = (int) Math.min(pending, data.length - remaining);
             n = in.read(data, remaining, n);
             if (n < 0) {
@@ -487,7 +455,6 @@ public abstract class InputDecoder {
             }
             buffer.limit(remaining + n);
             pending -= n;
-
             return true;
         }
 
@@ -507,11 +474,7 @@ public abstract class InputDecoder {
          * @see                #loadBytes(long, int)
          */
         protected int get() throws IOException {
-            if (makeAvailable(1)) {
-                view = null;
-                return buffer.get() & BYTE_MASK;
-            }
-            return -1;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -528,11 +491,7 @@ public abstract class InputDecoder {
          * @see                #loadBytes(long, int)
          */
         protected int getUnsignedShort() throws IOException {
-            if (makeAvailable(Short.BYTES)) {
-                view = null;
-                return buffer.getShort() & SHORT_MASK;
-            }
-            return -1;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -548,11 +507,7 @@ public abstract class InputDecoder {
          * @see                 #loadBytes(long, int)
          */
         protected int getInt() throws EOFException, IOException {
-            if (makeAvailable(Integer.BYTES)) {
-                view = null;
-                return buffer.getInt();
-            }
-            throw new EOFException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -568,11 +523,7 @@ public abstract class InputDecoder {
          * @see                 #loadBytes(long, int)
          */
         protected long getLong() throws EOFException, IOException {
-            if (makeAvailable(Long.BYTES)) {
-                view = null;
-                return buffer.getLong();
-            }
-            throw new EOFException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -588,11 +539,7 @@ public abstract class InputDecoder {
          * @see                 #loadBytes(long, int)
          */
         protected float getFloat() throws EOFException, IOException {
-            if (makeAvailable(Float.BYTES)) {
-                view = null;
-                return buffer.getFloat();
-            }
-            throw new EOFException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -609,11 +556,7 @@ public abstract class InputDecoder {
          * @see                 #loadBytes(long, int)
          */
         protected double getDouble() throws EOFException, IOException {
-            if (makeAvailable(Double.BYTES)) {
-                view = null;
-                return buffer.getDouble();
-            }
-            throw new EOFException();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -634,28 +577,7 @@ public abstract class InputDecoder {
          * @since               1.18
          */
         protected int get(byte[] dst, int from, int n) throws EOFException, IOException {
-            if (n == 1) {
-                int i = get();
-                if (i < 0) {
-                    throw new EOFException();
-                }
-                dst[from] = (byte) i;
-                return 1;
-            }
-
-            view = null;
-            int got = 0;
-
-            while (got < n) {
-                if (!makeAvailable(1)) {
-                    return (int) eofCheck(null, got, n);
-                }
-                int m = Math.min(n - got, buffer.remaining());
-                buffer.get(dst, from + got, m);
-                got += m;
-            }
-
-            return got;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -676,15 +598,7 @@ public abstract class InputDecoder {
          * @since               1.18
          */
         protected int get(short[] dst, int from, int n) throws EOFException, IOException {
-            if (n == 1 && !isViewingAs(ElementType.SHORT.bufferClass())) {
-                int i = getUnsignedShort();
-                if (i < 0) {
-                    throw new EOFException();
-                }
-                dst[from] = (short) i;
-                return 1;
-            }
-            return get(ElementType.SHORT, dst, from, n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -705,11 +619,7 @@ public abstract class InputDecoder {
          * @since               1.18
          */
         protected int get(int[] dst, int from, int n) throws EOFException, IOException {
-            if (n == 1 && !isViewingAs(ElementType.INT.bufferClass())) {
-                dst[from] = getInt();
-                return 1;
-            }
-            return get(ElementType.INT, dst, from, n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -730,11 +640,7 @@ public abstract class InputDecoder {
          * @since               1.18
          */
         protected int get(long[] dst, int from, int n) throws EOFException, IOException {
-            if (n == 1 && !isViewingAs(ElementType.LONG.bufferClass())) {
-                dst[from] = getLong();
-                return 1;
-            }
-            return get(ElementType.LONG, dst, from, n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -755,11 +661,7 @@ public abstract class InputDecoder {
          * @since               1.18
          */
         protected int get(float[] dst, int from, int n) throws EOFException, IOException {
-            if (n == 1 && !isViewingAs(ElementType.FLOAT.bufferClass())) {
-                dst[from] = getFloat();
-                return 1;
-            }
-            return get(ElementType.FLOAT, dst, from, n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -780,11 +682,7 @@ public abstract class InputDecoder {
          * @since               1.18
          */
         protected int get(double[] dst, int from, int n) throws EOFException, IOException {
-            if (n == 1 && !isViewingAs(ElementType.DOUBLE.bufferClass())) {
-                dst[from] = getDouble();
-                return 1;
-            }
-            return get(ElementType.DOUBLE, dst, from, n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -807,7 +705,6 @@ public abstract class InputDecoder {
         @SuppressWarnings("unchecked")
         private <B extends Buffer> int get(ElementType<B> e, Object dst, int from, int n) throws EOFException, IOException {
             int got = 0;
-
             while (got < n) {
                 if (!makeAvailable(e.size())) {
                     return (int) eofCheck(null, got, n);
@@ -818,7 +715,6 @@ public abstract class InputDecoder {
                 buffer.position(buffer.position() + m * e.size());
                 got += m;
             }
-
             return got;
         }
     }

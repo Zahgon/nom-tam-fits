@@ -30,7 +30,6 @@ package nom.tam.fits.compress;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,7 +38,7 @@ import java.io.InputStream;
  * files that have been compressed with <code>bzip2</code>, or use {@link CompressionManager} to automatically detect
  * the type of compression used. This class uses the Apache <b>commons-compress</b> package to perform the
  * decompression.
- * 
+ *
  * @see CompressionManager
  */
 public class BZip2CompressionProvider implements ICompressProvider {
@@ -49,22 +48,16 @@ public class BZip2CompressionProvider implements ICompressProvider {
     @SuppressWarnings("deprecation")
     @Override
     public InputStream decompress(InputStream in) throws IOException {
-        try {
-            return CompressionLibLoaderProtection.createBZip2Stream(in);
-        } catch (IOException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int priority() {
-        return PRIORITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean provides(int mag1, int mag2) {
-        return mag1 == 'B' && mag2 == 'Z';
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,7 +30,6 @@ package nom.tam.fits.compress;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,7 +38,7 @@ import java.io.InputStream;
  * decompress files that have been compressed with the UNIX <b>compress</b> tool (or via <b>gzip</b>) and have the
  * characteristic <code>.Z</code> file name extension. Or, use {@link CompressionManager} to automatically detect the
  * type of compression used. This class uses the Apache <b>commons-compress</b> package to perform the decompression.
- * 
+ *
  * @see CompressionManager
  */
 public class ZCompressionProvider implements ICompressProvider {
@@ -53,22 +52,16 @@ public class ZCompressionProvider implements ICompressProvider {
     @SuppressWarnings("deprecation")
     @Override
     public InputStream decompress(InputStream in) throws IOException {
-        try {
-            return CompressionLibLoaderProtection.createZStream(in);
-        } catch (IOException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new IOException(e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int priority() {
-        return PRIORITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean provides(int mag1, int mag2) {
-        return mag1 == Z_COMPRESS_MAGIC_BYTE1 && mag2 == Z_COMPRESS_MAGIC_BYTE2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

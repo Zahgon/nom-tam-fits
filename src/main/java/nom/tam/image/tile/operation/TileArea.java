@@ -30,13 +30,12 @@ package nom.tam.image.tile.operation;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.util.Arrays;
 
 /**
  * The area represented by a 2D tile in an image, including its location inside the image and its size. FITS tiles are
  * always 2-dimentional, but really images of any dimensions may be covered with such tiles.
- * 
+ *
  * @see nom.tam.image.ImageTiler
  */
 public class TileArea {
@@ -48,18 +47,17 @@ public class TileArea {
     /**
      * Sets the pixel boundaries where this tile ends. Alternatively you can specify the tile size with
      * {@link #size(int...)}
-     * 
+     *
      * @param  newEndPoint the pixel indices along all image dimensions that specify where this tile ends. The tile will
      *                         end before reaching these indices and will not include them.
-     * 
+     *
      * @return             itself
-     * 
+     *
      * @see                #start(int...)
      * @see                #size(int...)
      */
     public TileArea end(int... newEndPoint) {
-        endPoint = Arrays.copyOf(newEndPoint, newEndPoint.length);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -70,7 +68,7 @@ public class TileArea {
      * @since  1.17
      */
     public int dimension() {
-        return startPoint == null ? 0 : startPoint.length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -81,53 +79,37 @@ public class TileArea {
      * @throws IllegalArgumentException if the two tiles have different dimensionalities.
      */
     public boolean intersects(TileArea other) throws IllegalArgumentException {
-        if (other.dimension() != dimension()) {
-            throw new IllegalArgumentException(
-                    "Tiles of different dimensionalities (" + other.dimension() + " vs " + dimension() + ".");
-        }
-
-        for (int i = dimension(); --i >= 0;) {
-            if ((other.startPoint[i] >= endPoint[i]) || (startPoint[i] >= other.endPoint[i])) {
-                return false;
-            }
-        }
-
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the size of this tile area. Alternatively you can specify where the tiles ends in the image via
      * {@link #end(int...)}.
-     * 
+     *
      * @param  sizes the tile size in pixels. If the sizes are specified in the leading dimensions only, the tile sizes
      *                   in the remaining dimensions will default to 1.
-     * 
+     *
      * @return       itself
-     * 
+     *
      * @see          #start(int...)
      * @see          #end(int...)
      */
     public TileArea size(int... sizes) {
-        endPoint = new int[startPoint.length];
-        for (int index = 0; index < startPoint.length; index++) {
-            endPoint[index] = startPoint[index] + (index < sizes.length ? sizes[index] : 1);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the pixel boundaries where this tile begins. {@link #size(int...)}
-     * 
+     *
      * @param  newStartPoint the pixel indices along all image dimensions that specify where this tile begins. The tile
      *                           will include the pixels at the specified indices.
-     * 
+     *
      * @return               itself
-     * 
+     *
      * @see                  #start(int...)
      * @see                  #size(int...)
      */
     public TileArea start(int... newStartPoint) {
-        startPoint = Arrays.copyOf(newStartPoint, newStartPoint.length);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,16 +30,15 @@ package nom.tam.fits.compression.provider.param.base;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * (<i>for internal use</i>) A parameter stored in the FITS header or compressed table that is linked to a compression
  * option. When writing compressed data, the parameter ensures that the compression options that were used to generate
  * the compressed data are stored in the FITS (headers of compressed table) along with the compressed data themselves.
  * When reading compressed data, the parameter acts to apply the options stored in the FITS along with the data to set
  * the appropriate options for decompression.
- * 
+ *
  * @see            nom.tam.fits.compression.algorithm.api.ICompressOption
- * 
+ *
  * @param <OPTION> The generic type of the compression option that is linked to this parameter.
  */
 public class CompressParameter<OPTION> implements Cloneable {
@@ -51,7 +50,7 @@ public class CompressParameter<OPTION> implements Cloneable {
     /**
      * Creates a new compression parameter with the name it is recorded in the FITS and the compression options it is to
      * be linked with.
-     * 
+     *
      * @param name   the FITS header keyword or binary table column name that records this parameter in the FITS.
      * @param option the compression option instance that this parameter is linked to.
      */
@@ -72,32 +71,24 @@ public class CompressParameter<OPTION> implements Cloneable {
      * @since      1.18
      */
     public CompressParameter<OPTION> copy(OPTION opt) {
-        try {
-            @SuppressWarnings("unchecked")
-            CompressParameter<OPTION> p = (CompressParameter<OPTION>) super.clone();
-            p.option = opt;
-            return p;
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the name of this parameter as it is recorded in the FITS
-     * 
+     *
      * @return the FITS header keyword or binary table column name that records this parameter in the FITS.
      */
     public final String getName() {
-        return name;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the compression options that are linked to this parameter
-     * 
+     *
      * @return the compression option instance that this parameter is linked to.
      */
     protected final OPTION getOption() {
-        return option;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

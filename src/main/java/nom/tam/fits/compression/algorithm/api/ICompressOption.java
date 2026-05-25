@@ -32,7 +32,6 @@ import nom.tam.fits.compression.provider.param.api.ICompressParameters;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * Option for the compression algorithm, implementors are used to control the compression algorithm.
  */
@@ -40,7 +39,7 @@ public interface ICompressOption extends Cloneable {
 
     /**
      * Returns an independent copy of this option. Modifications to the original or the copy will not affect the other.
-     * 
+     *
      * @return copy the option (normally the option from with the copy happened is saved as original).
      */
     ICompressOption copy();
@@ -48,16 +47,16 @@ public interface ICompressOption extends Cloneable {
     /**
      * (<i>for internal use</i>) Returns the parameters that represent the settings for this option in the FITS header
      * or compressed data column.
-     * 
+     *
      * @return the parameters that must be synchronized with the hdu meta data.
-     * 
+     *
      * @see    #setParameters(ICompressParameters)
      */
     ICompressParameters getCompressionParameters();
 
     /**
      * Checks if this type of compression is inherently lossy
-     * 
+     *
      * @return <code>true</code> if the compression done with this specified options uses approximations. That means if
      *             the reconstruction of the data is excact the return should be <code>false</code>.
      */
@@ -68,7 +67,7 @@ public interface ICompressOption extends Cloneable {
      * or compressed table columns.
      *
      * @param parameters the parameters to synchronized
-     * 
+     *
      * @see              #getCompressionParameters()
      */
     void setParameters(ICompressParameters parameters);
@@ -80,7 +79,7 @@ public interface ICompressOption extends Cloneable {
      * @param  value the new tile height in pixels
      *
      * @return       itself
-     * 
+     *
      * @see          #getTileHeight()
      * @see          #setTileWidth(int)
      */
@@ -93,7 +92,7 @@ public interface ICompressOption extends Cloneable {
      * @param  value the new tile with in pixels
      *
      * @return       itself
-     * 
+     *
      * @see          #getTileWidth()
      * @see          #setTileHeight(int)
      */
@@ -103,28 +102,28 @@ public interface ICompressOption extends Cloneable {
      * Returns the tile height (if supported), or else 0 (also the default implementation).
      *
      * @return the tile height in pixels, or 0 if the options do not have a tile size setting.
-     * 
+     *
      * @see    #setTileHeight(int)
      * @see    #getTileWidth()
-     * 
+     *
      * @since  1.18
      */
     default int getTileHeight() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the tile width (if supported), or else 0 (also the default implementation).
      *
      * @return the tile width in pixels, or 0 if the options do not have a tile size setting.
-     * 
+     *
      * @see    #setTileHeight(int)
      * @see    #getTileWidth()
      *
      * @since  1.18
      */
     default int getTileWidth() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**

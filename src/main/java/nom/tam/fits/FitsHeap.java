@@ -30,9 +30,7 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
-
 import nom.tam.util.ArrayDataInput;
 import nom.tam.util.ArrayDataOutput;
 import nom.tam.util.ByteArrayIO;
@@ -46,20 +44,28 @@ import nom.tam.util.FitsEncoder;
  */
 public class FitsHeap implements FitsElement {
 
-    /** The minimum stoprage size to allocate for the heap, from which it can grow as necessary */
+    /**
+     * The minimum stoprage size to allocate for the heap, from which it can grow as necessary
+     */
     private static final int MIN_HEAP_CAPACITY = 16384;
 
     // TODO
     // AK: In principle we could use ReadWriteAccess interface as the storage, which can be either an in-memory
     // array or a buffered file region. The latter could support heaps over 2G, and could reduce memory overhead
     // for heap access in some future release...
-    /** The underlying storage space of the heap */
+    /**
+     * The underlying storage space of the heap
+     */
     private ByteArrayIO store;
 
-    /** conversion from Java arrays to FITS binary representation */
+    /**
+     * conversion from Java arrays to FITS binary representation
+     */
     private FitsEncoder encoder;
 
-    /** conversion from FITS binary representation to Java arrays */
+    /**
+     * conversion from FITS binary representation to Java arrays
+     */
     private FitsDecoder decoder;
 
     /**
@@ -79,7 +85,6 @@ public class FitsHeap implements FitsElement {
         if (size < 0) {
             throw new IllegalArgumentException("Illegal size for FITS heap: " + size);
         }
-
         ByteArrayIO data = new ByteArrayIO(Math.max(size, MIN_HEAP_CAPACITY));
         data.setLength(Math.max(0, size));
         setData(data);
@@ -93,7 +98,7 @@ public class FitsHeap implements FitsElement {
      * @param data the new underlying storage object for this heap instance.
      */
     protected synchronized void setData(ByteArrayIO data) {
-        store = data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -101,13 +106,7 @@ public class FitsHeap implements FitsElement {
      * included variable length columns.
      */
     synchronized FitsHeap copy() {
-        FitsHeap copy = new FitsHeap();
-        synchronized (copy) {
-            copy.setData(store.copy());
-            copy.encoder = new FitsEncoder(copy.store);
-            copy.decoder = new FitsDecoder(copy.store);
-        }
-        return copy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,110 +118,79 @@ public class FitsHeap implements FitsElement {
      * @throws FitsException if the operation failed
      */
     public synchronized void getData(int offset, Object array) throws FitsException {
-        try {
-            store.position(offset);
-            decoder.readArrayFully(array);
-        } catch (Exception e) {
-            throw new FitsException("Error decoding heap area at offset=" + offset + ", size="
-                    + FitsEncoder.computeSize(array) + " (heap size " + size() + "): " + e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getFileOffset() {
-        throw new IllegalStateException("FitsHeap should only be reset from inside its parent, never alone");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized long getSize() {
-        return size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Puts data to the end of the heap.
-     * 
+     *
      * @param  data a primitive array object, which may be multidimensional
-     * 
+     *
      * @return      the number of bytes used by the data.
-     * 
+     *
      * @see         #putData(Object, long)
      * @see         #getData(int, Object)
      */
     synchronized long putData(Object data) throws FitsException {
-        return putData(data, store.length());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Puts data onto the heap at a specific heap position.
-     * 
+     *
      * @param  data a primitive array object, which may be multidimensional
      * @param  pos  the byte offset at which the data should begin.
-     * 
+     *
      * @return      the number of bytes used by the data.
-     * 
+     *
      * @see         #putData(Object, long)
      * @see         #getData(int, Object)
      */
     synchronized long putData(Object data, long pos) throws FitsException {
-        long lsize = pos + FitsEncoder.computeSize(data);
-        if (lsize > Integer.MAX_VALUE) {
-            throw new FitsException("FITS Heap > 2 G");
-        }
-
-        try {
-            store.position(pos);
-            encoder.writeArray(data);
-        } catch (Exception e) {
-            throw new FitsException("Unable to write variable column length data: " + e.getMessage(), e);
-        }
-
-        return store.position() - pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Copies a segment of data from another heap to the end of this heap
-     * 
+     *
      * @param  src    the heap to source data from
      * @param  offset the byte offset of the data in the source heap
      * @param  len    the number of bytes to copy
-     * 
+     *
      * @return        the position of the copied data in this heap.
      */
     synchronized int copyFrom(FitsHeap src, int offset, int len) {
-        int pos = (int) store.length();
-        store.setLength(pos + len);
-        synchronized (src) {
-            System.arraycopy(src.store.getBuffer(), offset, store.getBuffer(), pos, len);
-        }
-        return pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void read(ArrayDataInput str) throws FitsException {
-        if (store.length() == 0) {
-            return;
-        }
-
-        try {
-            str.readFully(store.getBuffer(), 0, (int) store.length());
-        } catch (IOException e) {
-            throw new FitsException("Error reading heap " + e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean reset() {
-        throw new IllegalStateException("FitsHeap should only be reset from inside its parent, never alone");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void rewrite() throws IOException, FitsException {
-        throw new FitsException("FitsHeap should only be rewritten from inside its parent, never alone");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean rewriteable() {
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -231,16 +199,11 @@ public class FitsHeap implements FitsElement {
      * @return the size of the heap in bytes
      */
     public synchronized int size() {
-        return (int) store.length();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void write(ArrayDataOutput str) throws FitsException {
-        try {
-            str.write(store.getBuffer(), 0, (int) store.length());
-        } catch (IOException e) {
-            throw new FitsException("Error writing heap:" + e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

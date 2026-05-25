@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.FitsFactory.FitsSettings;
 import nom.tam.fits.header.Bitpix;
 import nom.tam.fits.header.Checksum;
@@ -31,7 +30,6 @@ import nom.tam.util.FitsInputStream;
 import nom.tam.util.FitsOutput;
 import nom.tam.util.HashedList;
 import nom.tam.util.RandomAccess;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -62,7 +60,6 @@ import nom.tam.util.RandomAccess;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Standard.BITPIX;
 import static nom.tam.fits.header.Standard.BLANKS;
 import static nom.tam.fits.header.Standard.COMMENT;
@@ -138,7 +135,7 @@ public class Header implements FitsElement {
 
     /**
      * The earliest position (zero-based) at which a comment may start for a regular key/value entry.
-     * 
+     *
      * @deprecated We will disable changing alignment in the future because it may violate the standard for
      *                 'fixed-format' header entries, and result in files that are unreadable by some other software.
      *                 This constant will be obsoleted and removed.
@@ -148,7 +145,7 @@ public class Header implements FitsElement {
 
     /**
      * The largest (zero-based) comment alignment allowed that can still contain some meaningful comment (word)
-     * 
+     *
      * @deprecated We will disable changing alignment in the future because it may violate the standard for
      *                 'fixed-format' header entries, and result in files that are unreadable by some other software.
      *                 This constant will be obsoleted and removed.
@@ -171,14 +168,18 @@ public class Header implements FitsElement {
      */
     private final HashedList<HeaderCard> cards;
 
-    /** Offset of this Header in the FITS file */
+    /**
+     * Offset of this Header in the FITS file
+     */
     private long fileOffset;
 
     private List<HeaderCard> duplicates;
 
     private HashSet<String> dupKeys;
 
-    /** Input descriptor last time header was read */
+    /**
+     * Input descriptor last time header was read
+     */
     private ArrayDataInput input;
 
     /**
@@ -191,7 +192,9 @@ public class Header implements FitsElement {
      */
     private long readSize;
 
-    /** The checksum calculated from the input stream */
+    /**
+     * The checksum calculated from the input stream
+     */
     private long streamSum = -1L;
 
     /**
@@ -203,15 +206,20 @@ public class Header implements FitsElement {
 
     /**
      * Keyword checking mode when adding standardized keywords via the {@link IFitsHeader} interface.
-     * 
+     *
      * @author Attila Kovacs
-     * 
+     *
      * @since  1.19
      */
     public enum KeywordCheck {
-        /** No keyword checking will be performed. */
+
+        /**
+         * No keyword checking will be performed.
+         */
         NONE,
-        /** Check only that the keyword is appropriate for the type of data contained in the associated HDU */
+        /**
+         * Check only that the keyword is appropriate for the type of data contained in the associated HDU
+         */
         DATA_TYPE,
         /**
          * Strict checking, will refuse to set mandatory FITS keywords -- which should normally be set by the library
@@ -243,16 +251,7 @@ public class Header implements FitsElement {
      * @throws IOException            if the header could not be read.
      */
     public static Header readHeader(ArrayDataInput dis) throws TruncatedFileException, IOException {
-        Header myHeader = new Header();
-        try {
-            myHeader.read(dis);
-        } catch (EOFException e) {
-            // An EOF exception is thrown only if the EOF was detected
-            // when reading the first card. In this case we want
-            // to return a null.
-            return null;
-        }
-        return myHeader;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -265,7 +264,9 @@ public class Header implements FitsElement {
         FitsFactory.setLongStringsEnabled(flag);
     }
 
-    /** Create a new header with the required default keywords for a standalone header. */
+    /**
+     * Create a new header with the required default keywords for a standalone header.
+     */
     public Header() {
         cards = new HashedList<>();
         headerSorter = new HeaderOrder();
@@ -311,10 +312,7 @@ public class Header implements FitsElement {
     }
 
     void assignTo(BasicHDU<?> hdu) {
-        // if (owner != null) {
-        // throw new IllegalStateException("This header was already assigned to a HDU");
-        // }
-        this.owner = hdu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -345,10 +343,7 @@ public class Header implements FitsElement {
      * @see          #resetOriginalSize()
      */
     public void ensureCardSpace(int nCards) {
-        if (nCards < 1) {
-            nCards = 1;
-        }
-        minCards = nCards;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -358,27 +353,15 @@ public class Header implements FitsElement {
      * so they do not conflict). The merged entries are added at the end of the header, in the same order as they appear
      * in the source. The merged entries will be copies of the cards in the original, such that subsequent modifications
      * to the source will not affect this header or vice versa.
-     * 
+     *
      * @param source The header from which to inherit non-conflicting entries
-     * 
+     *
      * @since        1.19
-     * 
+     *
      * @see          #updateLines(Header)
      */
     public void mergeDistinct(Header source) {
-        seekTail();
-
-        Cursor<String, HeaderCard> c = source.iterator();
-        while (c.hasNext()) {
-            HeaderCard card = c.next();
-            if (card.isCommentStyleCard() || !containsKey(card.getKey())) {
-                if (card.getKey().equals(Standard.SIMPLE.key()) || card.getKey().equals(Standard.XTENSION.key())) {
-                    // Do not merge SIMPLE / XTENSION -- these are private matters...
-                    continue;
-                }
-                addLine(card.copy());
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -386,22 +369,14 @@ public class Header implements FitsElement {
      * the current position to point to after the newly inserted card.
      *
      * @param  fcard                    The card to be inserted.
-     * 
+     *
      * @throws IllegalArgumentException if the current keyword checking mode does not allow the headercard with its
      *                                      standard keyword in the header.
-     * 
+     *
      * @see                             #setKeywordChecking(KeywordCheck)
      */
     public void addLine(HeaderCard fcard) throws IllegalArgumentException {
-        if (fcard == null) {
-            return;
-        }
-
-        if (fcard.getStandardKey() != null) {
-            checkKeyword(fcard.getStandardKey());
-        }
-
-        cursor().add(fcard);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -414,16 +389,16 @@ public class Header implements FitsElement {
      * This method changes the keyword checking mode for this header instance only. If you want to change the mode for
      * all newly created headers globally, use {@link #setDefaultKeywordChecking(KeywordCheck)} instead.
      * </p>
-     * 
+     *
      * @param mode The keyword checking mode to use.
-     * 
+     *
      * @see        #getKeywordChecking()
      * @see        HeaderCard#setValueCheckingPolicy(nom.tam.fits.HeaderCard.ValueCheck)
-     * 
+     *
      * @since      1.19
      */
     public void setKeywordChecking(KeywordCheck mode) {
-        keyCheck = mode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -431,87 +406,79 @@ public class Header implements FitsElement {
      * using {@link IFitsHeader} keywords the library will check if the given keyword is appropriate for the type of HDU
      * that the header represents, and will throw an {@link IllegalArgumentException} if the specified keyword is not
      * allowed for that type of HDU.
-     * 
+     *
      * @param mode The keyword checking policy to use.
-     * 
+     *
      * @see        #setKeywordChecking(KeywordCheck)
      * @see        #getKeywordChecking()
      * @see        HeaderCard#setValueCheckingPolicy(nom.tam.fits.HeaderCard.ValueCheck)
-     * 
+     *
      * @since      1.19
      */
     public static void setDefaultKeywordChecking(KeywordCheck mode) {
-        defaultKeyCheck = mode;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the current keyword checking mode.
-     * 
+     *
      * @return the current keyword checking mode
-     * 
+     *
      * @see    #setKeywordChecking(KeywordCheck)
-     * 
+     *
      * @since  1.19
      */
     public final KeywordCheck getKeywordChecking() {
-        return keyCheck;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void checkKeyword(IFitsHeader keyword) throws IllegalArgumentException {
         if (keyCheck == KeywordCheck.NONE || owner == null) {
             return;
         }
-
-        if (keyCheck == KeywordCheck.STRICT
-                && (keyword.status() == IFitsHeader.SOURCE.MANDATORY || keyword.status() == IFitsHeader.SOURCE.INTEGRAL)) {
+        if (keyCheck == KeywordCheck.STRICT && (keyword.status() == IFitsHeader.SOURCE.MANDATORY || keyword.status() == IFitsHeader.SOURCE.INTEGRAL)) {
             throw new IllegalArgumentException("Keyword " + keyword + " should be set by the library only");
         }
-
-        switch (keyword.hdu()) {
-
-        case PRIMARY:
-            if (!owner.canBePrimary()) {
-                throw new IllegalArgumentException(
-                        "Keyword " + keyword + " is a primary keyword and may not be used in extensions");
-            }
-            return;
-        case EXTENSION:
-            if (owner instanceof RandomGroupsHDU) {
-                throw new IllegalArgumentException(
-                        "Keyword " + keyword + " is an extension keyword but random groups may only be primary");
-            }
-            return;
-        case IMAGE:
-            if (owner instanceof ImageHDU || owner instanceof RandomGroupsHDU) {
+        switch(keyword.hdu()) {
+            case PRIMARY:
+                if (!owner.canBePrimary()) {
+                    throw new IllegalArgumentException("Keyword " + keyword + " is a primary keyword and may not be used in extensions");
+                }
                 return;
-            }
-            break;
-        case GROUPS:
-            if (owner instanceof RandomGroupsHDU) {
+            case EXTENSION:
+                if (owner instanceof RandomGroupsHDU) {
+                    throw new IllegalArgumentException("Keyword " + keyword + " is an extension keyword but random groups may only be primary");
+                }
                 return;
-            }
-            break;
-        case TABLE:
-            if (owner instanceof TableHDU) {
+            case IMAGE:
+                if (owner instanceof ImageHDU || owner instanceof RandomGroupsHDU) {
+                    return;
+                }
+                break;
+            case GROUPS:
+                if (owner instanceof RandomGroupsHDU) {
+                    return;
+                }
+                break;
+            case TABLE:
+                if (owner instanceof TableHDU) {
+                    return;
+                }
+                break;
+            case ASCII_TABLE:
+                if (owner instanceof AsciiTableHDU) {
+                    return;
+                }
+                break;
+            case BINTABLE:
+                if (owner instanceof BinaryTableHDU) {
+                    return;
+                }
+                break;
+            default:
                 return;
-            }
-            break;
-        case ASCII_TABLE:
-            if (owner instanceof AsciiTableHDU) {
-                return;
-            }
-            break;
-        case BINTABLE:
-            if (owner instanceof BinaryTableHDU) {
-                return;
-            }
-            break;
-        default:
-            return;
         }
-
-        throw new IllegalArgumentException(
-                "Keyword " + keyword.key() + " is not appropriate for " + owner.getClass().getName());
+        throw new IllegalArgumentException("Keyword " + keyword.key() + " is not appropriate for " + owner.getClass().getName());
     }
 
     /**
@@ -530,9 +497,7 @@ public class Header implements FitsElement {
      * @see                             #addValue(String, Boolean, String)
      */
     public HeaderCard addValue(IFitsHeader key, Boolean val) throws HeaderCardException, IllegalArgumentException {
-        HeaderCard card = HeaderCard.create(key, val);
-        addLine(card);
-        return card;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -551,9 +516,7 @@ public class Header implements FitsElement {
      * @see                             #addValue(String, Number, String)
      */
     public HeaderCard addValue(IFitsHeader key, Number val) throws HeaderCardException, IllegalArgumentException {
-        HeaderCard card = HeaderCard.create(key, val);
-        addLine(card);
-        return card;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -572,9 +535,7 @@ public class Header implements FitsElement {
      * @see                             #addValue(String, String, String)
      */
     public HeaderCard addValue(IFitsHeader key, String val) throws HeaderCardException, IllegalArgumentException {
-        HeaderCard card = HeaderCard.create(key, val);
-        addLine(card);
-        return card;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -595,9 +556,7 @@ public class Header implements FitsElement {
      * @since                           1.17
      */
     public HeaderCard addValue(IFitsHeader key, ComplexValue val) throws HeaderCardException, IllegalArgumentException {
-        HeaderCard card = HeaderCard.create(key, val);
-        addLine(card);
-        return card;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -616,9 +575,7 @@ public class Header implements FitsElement {
      * @see                        HeaderCard#HeaderCard(String, Boolean, String)
      */
     public HeaderCard addValue(String key, Boolean val, String comment) throws HeaderCardException {
-        HeaderCard hc = new HeaderCard(key, val, comment);
-        addLine(hc);
-        return hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -640,9 +597,7 @@ public class Header implements FitsElement {
      * @see                        HeaderCard#HeaderCard(String, Number, String)
      */
     public HeaderCard addValue(String key, Number val, String comment) throws HeaderCardException {
-        HeaderCard hc = new HeaderCard(key, val, comment);
-        addLine(hc);
-        return hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -666,9 +621,7 @@ public class Header implements FitsElement {
      * @see                        HeaderCard#HeaderCard(String, Number, int, String)
      */
     public HeaderCard addValue(String key, Number val, int decimals, String comment) throws HeaderCardException {
-        HeaderCard hc = new HeaderCard(key, val, decimals, comment);
-        addLine(hc);
-        return hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -689,9 +642,7 @@ public class Header implements FitsElement {
      * @see                        HeaderCard#HeaderCard(String, ComplexValue, String)
      */
     public HeaderCard addValue(String key, ComplexValue val, String comment) throws HeaderCardException {
-        HeaderCard hc = new HeaderCard(key, val, comment);
-        addLine(hc);
-        return hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -717,9 +668,7 @@ public class Header implements FitsElement {
      * @see                        HeaderCard#HeaderCard(String, ComplexValue, int, String)
      */
     public HeaderCard addValue(String key, ComplexValue val, int decimals, String comment) throws HeaderCardException {
-        HeaderCard hc = new HeaderCard(key, val, decimals, comment);
-        addLine(hc);
-        return hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -763,9 +712,7 @@ public class Header implements FitsElement {
      * @see                        HeaderCard#HeaderCard(String, String, String)
      */
     public HeaderCard addValue(String key, String val, String comment) throws HeaderCardException {
-        HeaderCard hc = new HeaderCard(key, val, comment);
-        addLine(hc);
-        return hc;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -776,7 +723,7 @@ public class Header implements FitsElement {
      * @return     the builder for header cards.
      */
     public HeaderCardBuilder card(IFitsHeader key) {
-        return new HeaderCardBuilder(this, key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -787,7 +734,7 @@ public class Header implements FitsElement {
      * @return     <code>true</code> if the specified keyword is present in this table; <code>false</code> otherwise.
      */
     public final boolean containsKey(IFitsHeader key) {
-        return cards.containsKey(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -798,7 +745,7 @@ public class Header implements FitsElement {
      * @return     <code>true</code> if the specified keyword is present in this table; <code>false</code> otherwise.
      */
     public final boolean containsKey(String key) {
-        return cards.containsKey(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -807,7 +754,7 @@ public class Header implements FitsElement {
      * @param key The header key.
      */
     public void deleteKey(IFitsHeader key) {
-        deleteKey(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -816,11 +763,7 @@ public class Header implements FitsElement {
      * @param key The header key.
      */
     public void deleteKey(String key) {
-        // AK: This version will not move the current position to the deleted
-        // key
-        if (containsKey(key)) {
-            cards.remove(cards.get(key));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -828,14 +771,11 @@ public class Header implements FitsElement {
      * keyword, and thus does not necessarily show the same layout as what would appear in a file.
      *
      * @param ps the stream to which the card images are dumped.
-     * 
+     *
      * @see      #ensureCardSpace(int)
      */
     public void dumpHeader(PrintStream ps) {
-        Cursor<String, HeaderCard> iter = iterator();
-        while (iter.hasNext()) {
-            ps.println(iter.next());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -845,14 +785,14 @@ public class Header implements FitsElement {
      * @param  key the header key.
      *
      * @return     <CODE>null</CODE> if the keyword could not be found; return the HeaderCard object otherwise.
-     * 
+     *
      * @see        #getCard(String)
      * @see        #findCard(IFitsHeader)
-     * 
+     *
      * @since      1.18.1
      */
     public HeaderCard getCard(IFitsHeader key) {
-        return this.getCard(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -863,12 +803,12 @@ public class Header implements FitsElement {
      * @param  key The header key.
      *
      * @return     <CODE>null</CODE> if the keyword could not be found; return the HeaderCard object otherwise.
-     * 
+     *
      * @see        #getCard(IFitsHeader)
      * @see        #findCard(String)
      */
     public HeaderCard findCard(IFitsHeader key) {
-        return this.findCard(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -878,14 +818,14 @@ public class Header implements FitsElement {
      * @param  key the header key.
      *
      * @return     <CODE>null</CODE> if the keyword could not be found; return the HeaderCard object otherwise.
-     * 
+     *
      * @see        #getCard(IFitsHeader)
      * @see        #findCard(String)
-     * 
+     *
      * @since      1.18.1
      */
     public HeaderCard getCard(String key) {
-        return cards.get(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -894,61 +834,37 @@ public class Header implements FitsElement {
      * header contains no matching entry, the mark is reset to the tail of the header (the same as {@link #seekTail()}).
      * The mark determines where new cards will be added to the header by default. If you do not want to alter the mark
      * position, use {@link #getCard(String)} instead.
-     * 
+     *
      * @param  key the header key.
      *
      * @return     Returns the header entry for the given keyword, or <CODE>null</CODE> if the header has no such entry.
-     * 
+     *
      * @see        #getCard(String)
      * @see        #findCard(String)
      */
     public HeaderCard findCard(String key) {
-        HeaderCard card = cards.get(key);
-        if (card != null) {
-            cursor().setKey(key);
-        } else {
-            cursor().end();
-        }
-        return card;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /************************************
-     * brief Collect the header cards that match a regular expression. This is useful if one needs to search for a
-     * keyword that is buried under some HIERARCH string conventions of unspecified depth. So to search for some key
-     * like "HIERARCH OBO SUBOBO MYOBO", which would appear with the key HIERARCH.OBO.SUBOBO.MYOBO in this FITS
-     * implementation, one could search with regex="HIER.*MYOBO" and find it, supposed FitsFactory.setUseHierarch(true)
-     * was called before creating the header.
-     * 
-     * @param  regex The generalized regular expression for the keyword search
-     * 
-     * @return       The list of header cards that match the regular expression.
-     * 
-     * @since        1.19.1
+    /**
+     * *********************************
+     *  brief Collect the header cards that match a regular expression. This is useful if one needs to search for a
+     *  keyword that is buried under some HIERARCH string conventions of unspecified depth. So to search for some key
+     *  like "HIERARCH OBO SUBOBO MYOBO", which would appear with the key HIERARCH.OBO.SUBOBO.MYOBO in this FITS
+     *  implementation, one could search with regex="HIER.*MYOBO" and find it, supposed FitsFactory.setUseHierarch(true)
+     *  was called before creating the header.
+     *
+     *  @param  regex The generalized regular expression for the keyword search
+     *
+     *  @return       The list of header cards that match the regular expression.
+     *
+     *  @since        1.19.1
      */
     public HeaderCard[] findCards(final String regex) {
-        /*
-         * The collection of header cards that match.
-         */
-        ArrayList<HeaderCard> crds = new ArrayList<>();
+        throw new UnsupportedOperationException("STUB: not implemented");
+    }
 
-        /*
-         * position pointer to start of card stack and loop over all header cards
-         */
-        nom.tam.util.Cursor<String, HeaderCard> iter = iterator();
-        while (iter.hasNext()) {
-            final HeaderCard card = iter.next();
-            /*
-             * compare with regular expression and add to output list if it does
-             */
-            if (card.getKey().matches(regex)) {
-                crds.add(card);
-            }
-        }
-
-        HeaderCard[] tmp = new HeaderCard[crds.size()];
-        return crds.toArray(tmp);
-    } /* findCards */
-
+    /* findCards */
     /**
      * @deprecated     Use {@link #findCard(String)} or {@link #getCard(String)} instead. Find the card associated with
      *                     a given key.
@@ -968,7 +884,7 @@ public class Header implements FitsElement {
 
     /**
      * Get the bid decimal value associated with the given key.
-     * 
+     *
      * @deprecated     The FITS header does not support decimal types beyond those that can be represented by a 64-bit
      *                     IEEE double-precision floating point value.
      *
@@ -983,7 +899,7 @@ public class Header implements FitsElement {
 
     /**
      * Get the big decimal value associated with the given key.
-     * 
+     *
      * @deprecated     The FITS header does not support decimal types beyond those that can be represented by a 64-bit
      *                     IEEE double-precision floating point value.
      *
@@ -999,7 +915,7 @@ public class Header implements FitsElement {
 
     /**
      * Get the big decimal value associated with the given key.
-     * 
+     *
      * @deprecated     The FITS header does not support decimal types beyond those that can be represented by a 64-bit
      *                     IEEE double-precision floating point value.
      *
@@ -1034,7 +950,7 @@ public class Header implements FitsElement {
 
     /**
      * Get the big integer value associated with the given key.
-     * 
+     *
      * @deprecated     The FITS header does not support integer types beyond those that can be represented by a 64-bit
      *                     integer.
      *
@@ -1065,7 +981,7 @@ public class Header implements FitsElement {
 
     /**
      * Get the big integer value associated with the given key.
-     * 
+     *
      * @deprecated     The FITS header does not support integer types beyond those that can be represented by a 64-bit
      *                     integer.
      *
@@ -1080,7 +996,7 @@ public class Header implements FitsElement {
 
     /**
      * Get the big integer value associated with the given key.
-     * 
+     *
      * @deprecated     The FITS header does not support integer types beyond those that can be represented by a 64-bit
      *                     integer.
      *
@@ -1112,7 +1028,7 @@ public class Header implements FitsElement {
      * @see        #addValue(String, ComplexValue, String)
      */
     public final ComplexValue getComplexValue(String key) {
-        return getComplexValue(key, ComplexValue.ZERO);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1130,11 +1046,7 @@ public class Header implements FitsElement {
      * @see        #addValue(String, ComplexValue, String)
      */
     public ComplexValue getComplexValue(String key, ComplexValue dft) {
-        HeaderCard fcard = getCard(key);
-        if (fcard == null) {
-            return dft;
-        }
-        return fcard.getValue(ComplexValue.class, dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1145,7 +1057,7 @@ public class Header implements FitsElement {
      * @return     The value found, or false if not found or if the keyword is not a logical keyword.
      */
     public final boolean getBooleanValue(IFitsHeader key) {
-        return getBooleanValue(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1158,7 +1070,7 @@ public class Header implements FitsElement {
      * @return     the associated value.
      */
     public final boolean getBooleanValue(IFitsHeader key, boolean dft) {
-        return getBooleanValue(key.key(), dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1169,7 +1081,7 @@ public class Header implements FitsElement {
      * @return     The value found, or false if not found or if the keyword is not a logical keyword.
      */
     public final boolean getBooleanValue(String key) {
-        return getBooleanValue(key, false);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1182,11 +1094,7 @@ public class Header implements FitsElement {
      * @return     the associated value.
      */
     public boolean getBooleanValue(String key, boolean dft) {
-        HeaderCard fcard = getCard(key);
-        if (fcard == null) {
-            return dft;
-        }
-        return fcard.getValue(Boolean.class, dft).booleanValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1213,7 +1121,7 @@ public class Header implements FitsElement {
      * @return the data segment size including any needed padding.
      */
     public long getDataSize() {
-        return FitsUtil.addPadding(trueDataSize());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1224,7 +1132,7 @@ public class Header implements FitsElement {
      * @return     The associated value or 0.0 if not found.
      */
     public final double getDoubleValue(IFitsHeader key) {
-        return getDoubleValue(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1236,7 +1144,7 @@ public class Header implements FitsElement {
      * @return     the associated value.
      */
     public final double getDoubleValue(IFitsHeader key, double dft) {
-        return getDoubleValue(key.key(), dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1247,7 +1155,7 @@ public class Header implements FitsElement {
      * @return     The associated value or 0.0 if not found.
      */
     public final double getDoubleValue(String key) {
-        return getDoubleValue(key, 0.0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1259,11 +1167,7 @@ public class Header implements FitsElement {
      * @return     the associated value.
      */
     public double getDoubleValue(String key, double dft) {
-        HeaderCard fcard = getCard(key);
-        if (fcard == null) {
-            return dft;
-        }
-        return fcard.getValue(Double.class, dft).doubleValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1291,7 +1195,7 @@ public class Header implements FitsElement {
      * @see    #getDuplicateKeySet()
      */
     public List<HeaderCard> getDuplicates() {
-        return duplicates;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1306,12 +1210,12 @@ public class Header implements FitsElement {
      * @since  1.17
      */
     public Set<String> getDuplicateKeySet() {
-        return dupKeys;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getFileOffset() {
-        return fileOffset;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1322,20 +1226,19 @@ public class Header implements FitsElement {
      * @return     The associated value or 0.0 if not found.
      */
     public final float getFloatValue(IFitsHeader key) {
-        return getFloatValue(key.key());
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Get the <CODE>float</CODE> value associated with the given key, or return a default value.
-     * 
+     *
      * @return     the <CODE>float</CODE> value associated with the given key.
      *
      * @param  key The header key.
      * @param  dft The value to be returned if the key is not found.
      */
     public final float getFloatValue(IFitsHeader key, float dft) {
-        return getFloatValue(key.key(), dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1346,23 +1249,19 @@ public class Header implements FitsElement {
      * @return     The associated value or 0.0 if not found.
      */
     public final float getFloatValue(String key) {
-        return getFloatValue(key, 0.0F);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Get the <CODE>float</CODE> value associated with the given key, or return a default value.
-     * 
+     *
      * @return     the <CODE>float</CODE> value associated with the given key.
      *
      * @param  key The header key.
      * @param  dft The value to be returned if the key is not found.
      */
     public float getFloatValue(String key, float dft) {
-        HeaderCard fcard = getCard(key);
-        if (fcard == null) {
-            return dft;
-        }
-        return fcard.getValue(Float.class, dft).floatValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1373,19 +1272,19 @@ public class Header implements FitsElement {
      * @return     The associated value or 0 if not found.
      */
     public final int getIntValue(IFitsHeader key) {
-        return (int) getLongValue(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Get the <CODE>int</CODE> value associated with the given key, or return a default value.
-     * 
+     *
      * @return     the value associated with the key as an int.
      *
      * @param  key The header key.
      * @param  dft The value to be returned if the key is not found.
      */
     public final int getIntValue(IFitsHeader key, int dft) {
-        return (int) getLongValue(key, dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1396,19 +1295,19 @@ public class Header implements FitsElement {
      * @return     The associated value or 0 if not found.
      */
     public final int getIntValue(String key) {
-        return (int) getLongValue(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Get the <CODE>int</CODE> value associated with the given key, or return a default value.
-     * 
+     *
      * @return     the value associated with the key as an int.
      *
      * @param  key The header key.
      * @param  dft The value to be returned if the key is not found.
      */
     public int getIntValue(String key, int dft) {
-        return (int) getLongValue(key, dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1427,7 +1326,6 @@ public class Header implements FitsElement {
             return cards.get(n).getKey();
         }
         return null;
-
     }
 
     /**
@@ -1438,7 +1336,7 @@ public class Header implements FitsElement {
      * @return     The associated value or 0 if not found.
      */
     public final long getLongValue(IFitsHeader key) {
-        return getLongValue(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1450,7 +1348,7 @@ public class Header implements FitsElement {
      * @return     the associated value.
      */
     public final long getLongValue(IFitsHeader key, long dft) {
-        return getLongValue(key.key(), dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1461,7 +1359,7 @@ public class Header implements FitsElement {
      * @return     The associated value or 0 if not found.
      */
     public final long getLongValue(String key) {
-        return getLongValue(key, 0L);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1473,11 +1371,7 @@ public class Header implements FitsElement {
      * @return     the associated value.
      */
     public long getLongValue(String key, long dft) {
-        HeaderCard fcard = getCard(key);
-        if (fcard == null) {
-            return dft;
-        }
-        return fcard.getValue(Long.class, dft).longValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1536,7 +1430,7 @@ public class Header implements FitsElement {
      * @see    #getNumberOfPhysicalCards()
      */
     public int getNumberOfCards() {
-        return cards.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1549,17 +1443,7 @@ public class Header implements FitsElement {
      * @see    #getSize()
      */
     public int getNumberOfPhysicalCards() {
-        int count = 0;
-        for (HeaderCard card : cards) {
-            count += card.cardSize();
-        }
-
-        // AK: Count the END card, which may not have been added yet...
-        if (!containsKey(END)) {
-            count++;
-        }
-
-        return count;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1575,7 +1459,7 @@ public class Header implements FitsElement {
      * @see    #read(ArrayDataInput)
      */
     public long getMinimumSize() {
-        return FitsUtil.addPadding((long) minCards * HeaderCard.FITS_HEADER_CARD_SIZE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1594,12 +1478,7 @@ public class Header implements FitsElement {
 
     @Override
     public final long getSize() {
-        if (!isValidHeader()) {
-            return 0;
-        }
-
-        return FitsUtil
-                .addPadding((long) Math.max(minCards, getNumberOfPhysicalCards()) * HeaderCard.FITS_HEADER_CARD_SIZE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1613,7 +1492,7 @@ public class Header implements FitsElement {
      * @see        #getStringValue(IFitsHeader, String)
      */
     public final String getStringValue(IFitsHeader key) {
-        return getStringValue(key.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1628,7 +1507,7 @@ public class Header implements FitsElement {
      * @see        #getStringValue(IFitsHeader)
      */
     public final String getStringValue(IFitsHeader key, String dft) {
-        return getStringValue(key.key(), dft);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1642,7 +1521,7 @@ public class Header implements FitsElement {
      * @see        #getStringValue(String, String)
      */
     public final String getStringValue(String key) {
-        return getStringValue(key, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1657,22 +1536,16 @@ public class Header implements FitsElement {
      * @see        #getStringValue(String)
      */
     public String getStringValue(String key, String dft) {
-
-        HeaderCard fcard = getCard(key);
-        if (fcard == null || !fcard.isStringValue()) {
-            return dft;
-        }
-
-        return fcard.getValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if the header had duplicate assignments in the FITS.
-     * 
+     *
      * @return Were duplicate header keys found when this record was read in?
      */
     public boolean hadDuplicates() {
-        return duplicates != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1691,21 +1564,7 @@ public class Header implements FitsElement {
      * @see            HeaderCard#createCommentStyleCard(String, String)
      */
     public HeaderCard insertCommentStyle(String key, String comment) {
-        if (comment == null) {
-            comment = "";
-        } else if (comment.length() > HeaderCard.MAX_COMMENT_CARD_COMMENT_LENGTH) {
-            comment = comment.substring(0, HeaderCard.MAX_COMMENT_CARD_COMMENT_LENGTH);
-            LOG.warning("Truncated comment to fit card: [" + comment + "]");
-        }
-
-        try {
-            HeaderCard hc = HeaderCard.createCommentStyleCard(key, HeaderCard.sanitize(comment));
-            cursor().add(hc);
-            return hc;
-        } catch (HeaderCardException e) {
-            LOG.log(Level.WARNING, "Ignoring comment card with invalid key [" + HeaderCard.sanitize(key) + "]", e);
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1727,32 +1586,7 @@ public class Header implements FitsElement {
      * @see            #insertHistory(String)
      */
     public int insertCommentStyleMultiline(String key, String comment) {
-
-        // Empty comments must have at least one space char to write at least one
-        // comment card...
-        if ((comment == null) || comment.isEmpty()) {
-            comment = " ";
-        }
-
-        int n = 0;
-
-        for (int from = 0; from < comment.length();) {
-            int to = from + HeaderCard.MAX_COMMENT_CARD_COMMENT_LENGTH;
-            String part = null;
-            if (to < comment.length()) {
-                part = comment.substring(from, --to) + "&";
-            } else {
-                part = comment.substring(from);
-            }
-
-            if (insertCommentStyle(key, part) == null) {
-                return n;
-            }
-            from = to;
-            n++;
-        }
-
-        return n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1768,7 +1602,7 @@ public class Header implements FitsElement {
      * @see          HeaderCard#createCommentCard(String)
      */
     public int insertComment(String value) {
-        return insertCommentStyleMultiline(COMMENT.key(), value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1788,7 +1622,7 @@ public class Header implements FitsElement {
      * @see          #insertBlankCard()
      */
     public int insertUnkeyedComment(String value) {
-        return insertCommentStyleMultiline(BLANKS.key(), value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1799,7 +1633,7 @@ public class Header implements FitsElement {
      * @see   #insertUnkeyedComment(String)
      */
     public void insertBlankCard() {
-        insertCommentStyle(null, null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1815,7 +1649,7 @@ public class Header implements FitsElement {
      * @see          HeaderCard#createHistoryCard(String)
      */
     public int insertHistory(String value) {
-        return insertCommentStyleMultiline(HISTORY.key(), value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1824,12 +1658,12 @@ public class Header implements FitsElement {
      * @return an iterator over the header cards
      */
     public Cursor<String, HeaderCard> iterator() {
-        return cards.iterator(0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns a cursor-based iterator for this header's entries.
-     * 
+     *
      * @deprecated       We should never use indexed access to the header. This function will be removed in 2.0.
      *
      * @return           an iterator over the header cards starting at an index
@@ -1848,7 +1682,7 @@ public class Header implements FitsElement {
      * in the header), we can just use findCard().
      *
      * @return the iterator representing the current position in the header.
-     * 
+     *
      * @see    #iterator()
      */
     private Cursor<String, HeaderCard> cursor() {
@@ -1858,39 +1692,32 @@ public class Header implements FitsElement {
     /**
      * Move the cursor to the end of the header. Subsequently, all <code>addValue()</code> calls will add new cards to
      * the end of the header.
-     * 
+     *
      * @return the cursor after it has been repositioned to the end
-     * 
+     *
      * @since  1.18.1
-     * 
+     *
      * @see    #seekTail()
      * @see    #findCard(String)
      * @see    #nextCard()
      */
     public Cursor<String, HeaderCard> seekHead() {
-        Cursor<String, HeaderCard> c = cursor();
-
-        while (c.hasPrev()) {
-            c.prev();
-        }
-
-        return c;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Move the cursor to the end of the header. Subsequently, all <code>addValue()</code> calls will add new cards to
      * the end of the header.
-     * 
+     *
      * @return the cursor after it has been repositioned to the end
-     * 
+     *
      * @since  1.18.1
-     * 
+     *
      * @see    #seekHead()
      * @see    #findCard(String)
      */
     public Cursor<String, HeaderCard> seekTail() {
-        cursor().end();
-        return cursor();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1912,40 +1739,34 @@ public class Header implements FitsElement {
      * Returns the header card at the currently set mark position and increments the mark position by one. The mark
      * position determines the location at which new entries are added to the header. The mark is set either to just
      * prior a particular card (e.g. via {@link #findCard(IFitsHeader)}.
-     * 
+     *
      * @return the next card in the Header using the built-in iterator
-     * 
+     *
      * @see    #prevCard()
      * @see    #findCard(IFitsHeader)
      * @see    #findCard(String)
      * @see    #seekHead()
      */
     public HeaderCard nextCard() {
-        if (cursor().hasNext()) {
-            return cursor().next();
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the header card prior to the currently set mark position and decrements the mark position by one. The
      * mark position determines the location at which new entries are added to the header. The mark is set either to
      * just prior a particular card (e.g. via {@link #findCard(IFitsHeader)}.
-     * 
+     *
      * @return the next card in the Header using the built-in iterator
-     * 
+     *
      * @see    #nextCard()
      * @see    #findCard(IFitsHeader)
      * @see    #findCard(String)
      * @see    #seekHead()
-     * 
+     *
      * @since  1.18.1
      */
     public HeaderCard prevCard() {
-        if (cursor().hasPrev()) {
-            return cursor().prev();
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1983,7 +1804,7 @@ public class Header implements FitsElement {
      * @since  1.16
      */
     public boolean isEmpty() {
-        return cards.isEmpty();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2004,142 +1825,38 @@ public class Header implements FitsElement {
      */
     @Override
     public void read(ArrayDataInput dis) throws TruncatedFileException, IOException {
-        // AK: Start afresh, in case the header had prior contents from before.
-        clear();
-
-        if (dis instanceof RandomAccess) {
-            fileOffset = FitsUtil.findOffset(dis);
-        } else {
-            fileOffset = -1;
-        }
-
-        if (dis instanceof FitsInputStream) {
-            ((FitsInputStream) dis).nextChecksum();
-        }
-        streamSum = -1L;
-
-        int trailingBlanks = 0;
-        minCards = 0;
-
-        HeaderCardCountingArrayDataInput cardCountingArray = new HeaderCardCountingArrayDataInput(dis);
-        try {
-            for (;;) {
-                HeaderCard fcard = new HeaderCard(cardCountingArray);
-                minCards += fcard.cardSize();
-
-                // AK: Note, 'key' can never be null, as per contract of getKey(). So no need to check...
-                String key = fcard.getKey();
-
-                if (isEmpty()) {
-                    checkFirstCard(key);
-                } else if (fcard.isBlank()) {
-                    // AK: We don't add the trailing blank cards, but keep count of them.
-                    // (esp. in case the aren't trailing...)
-                    trailingBlanks++;
-                    continue;
-                } else if (END.key().equals(key)) {
-                    addLine(fcard);
-                    break; // Out of reading the header.
-                } else if (LONGSTRN.key().equals(key)) {
-                    // We don't check the value here. If the user
-                    // wants to be sure that long strings are disabled,
-                    // they can call setLongStringsEnabled(false) after
-                    // reading the header.
-                    FitsFactory.setLongStringsEnabled(true);
-                }
-
-                // AK: The preceding blank spaces were internal, not trailing
-                // so add them back in now...
-                for (int i = 0; i < trailingBlanks; i++) {
-                    insertBlankCard();
-                }
-                trailingBlanks = 0;
-
-                if (cards.containsKey(key)) {
-                    addDuplicate(cards.get(key));
-                }
-
-                addLine(fcard);
-            }
-        } catch (EOFException e) {
-            // Normal end-of-file before END key...
-            throw e;
-        } catch (Exception e) {
-            if (isEmpty() && FitsFactory.getAllowTerminalJunk()) {
-                // If this happened where we expect a new header to start, then
-                // treat is as if end-of-file if terminal junk is allowed
-                forceEOF(
-                        "Junk detected where header was expected to start" + ((fileOffset > 0) ? ": at " + fileOffset : ""),
-                        e);
-            }
-            if (e instanceof TruncatedFileException) {
-                throw (TruncatedFileException) e;
-            }
-            throw new IOException("Invalid FITS Header" + (isEmpty() ? e :
-                    ":\n\n --> Try FitsFactory.setAllowTerminalJunk(true) prior to reading to work around.\n"), e);
-        }
-
-        if (fileOffset >= 0) {
-            input = dis;
-        }
-
-        ensureCardSpace(cardCountingArray.getPhysicalCardsRead());
-        readSize = FitsUtil.addPadding((long) minCards * HeaderCard.FITS_HEADER_CARD_SIZE);
-
-        // Read to the end of the current FITS block.
-        //
-        try {
-            dis.skipAllBytes(FitsUtil.padding(minCards * HeaderCard.FITS_HEADER_CARD_SIZE));
-        } catch (EOFException e) {
-            // No biggy. We got a complete header just fine, it's only that there was no
-            // padding before EOF. We'll just log that, but otherwise keep going.
-            LOG.log(Level.WARNING, "Premature end-of-file: no padding after header.", e);
-        }
-
-        if (dis instanceof FitsInputStream) {
-            streamSum = ((FitsInputStream) dis).nextChecksum();
-        }
-
-        // AK: Log if the file ends before the expected end-of-header position.
-        if (Fits.checkTruncated(dis)) {
-            // No biggy. We got a complete header just fine, it's only that there was no
-            // padding before EOF. We'll just log that, but otherwise keep going.
-            LOG.warning("Premature end-of-file: no padding after header.");
-        }
-
-        // Move the cursor to after the last card -- this is where new cards will be added.
-        seekTail();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the random-accessible input from which this header was read, or <code>null</code> if the header is not
      * associated with an input, or the input is not random accessible.
-     * 
+     *
      * @return the random-accessible input associated with this header or <code>null</code>
-     * 
+     *
      * @see    #read(ArrayDataInput)
-     * 
+     *
      * @since  1.18.1
      */
     RandomAccess getRandomAccessInput() {
-        return (input instanceof RandomAccess) ? (RandomAccess) input : null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the checksum value calculated duting reading from a stream. It is only populated when reading from
      * {@link FitsInputStream} imputs, and never from other types of inputs. Valid values are greater or equal to zero.
      * Thus, the return value will be <code>-1L</code> to indicate an invalid (unpopulated) checksum.
-     * 
+     *
      * @return the non-negative checksum calculated for the data read from a stream, or else <code>-1L</code> if the
      *             data was not read from the stream.
-     * 
+     *
      * @see    FitsInputStream
      * @see    Data#getStreamChecksum()
-     * 
+     *
      * @since  1.18.1
      */
     final long getStreamChecksum() {
-        return streamSum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2172,13 +1889,7 @@ public class Header implements FitsElement {
 
     @Override
     public boolean reset() {
-        try {
-            FitsUtil.reposition(input, fileOffset);
-            return true;
-        } catch (Exception e) {
-            LOG.log(Level.WARNING, "Exception while repositioning " + input, e);
-            return false;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2206,23 +1917,12 @@ public class Header implements FitsElement {
 
     @Override
     public void rewrite() throws FitsException, IOException {
-        ArrayDataOutput dos = (ArrayDataOutput) input;
-
-        if (!rewriteable()) {
-            throw new FitsException("Invalid attempt to rewrite Header.");
-        }
-
-        FitsUtil.reposition(dos, fileOffset);
-
-        write(dos);
-        dos.flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean rewriteable() {
-        long writeSize = FitsUtil
-                .addPadding((long) Math.max(minCards, getNumberOfPhysicalCards()) * HeaderCard.FITS_HEADER_CARD_SIZE);
-        return fileOffset >= 0 && input instanceof ArrayDataOutput && writeSize == getOriginalSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2235,7 +1935,7 @@ public class Header implements FitsElement {
      * <li>-32 -- IEEE 32 bit floating point numbers.</li>
      * <li>-64 -- IEEE 64 bit floating point numbers.</li>
      * </ul>
-     * 
+     *
      * @deprecated                          Use the safer {@link #setBitpix(Bitpix)} instead.
      *
      * @param      val                      The value set by the user.
@@ -2255,9 +1955,9 @@ public class Header implements FitsElement {
 
     /**
      * Sets a standard BITPIX value for the header.
-     * 
+     *
      * @deprecated        (<i>for internall use</i>) Visibility will be reduced to the package level in the future.
-     * 
+     *
      * @param      bitpix The predefined enum value, e.g. {@link Bitpix#INTEGER}.
      *
      * @since             1.16
@@ -2277,12 +1977,12 @@ public class Header implements FitsElement {
      * @param headerSorter the sorter tu use or null to disable sorting
      */
     public void setHeaderSorter(Comparator<String> headerSorter) {
-        this.headerSorter = headerSorter;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Set the value of the NAXIS keyword
-     * 
+     *
      * @deprecated     (<i>for internal use</i>) Visibility will be reduced to the package level in the future.
      *
      * @param      val The dimensionality of the data.
@@ -2301,7 +2001,7 @@ public class Header implements FitsElement {
      * Set the dimension for a given axis.
      *
      * @deprecated      (<i>for internal use</i>) Visibility will be reduced to the package level in the future.
-     * 
+     *
      * @param      axis The axis being set.
      * @param      dim  The dimension
      */
@@ -2312,13 +2012,11 @@ public class Header implements FitsElement {
             LOG.warning("setNaxis ignored because axis less than 0");
             return;
         }
-
         if (axis == 1) {
             iter.setKey(NAXIS.key());
         } else {
             iter.setKey(NAXISn.n(axis - 1).key());
         }
-
         if (iter.hasNext()) {
             iter.next();
         }
@@ -2327,7 +2025,7 @@ public class Header implements FitsElement {
 
     /**
      * Set the SIMPLE keyword to the given value.
-     * 
+     *
      * @deprecated     (<i>for internall use</i>) Visibility will be reduced to the package level in the future.
      *
      * @param      val <code>true</code> for the primary header, otherwise <code>false</code>
@@ -2337,11 +2035,8 @@ public class Header implements FitsElement {
         deleteKey(SIMPLE);
         deleteKey(XTENSION);
         deleteKey(EXTEND);
-
         Cursor<String, HeaderCard> iter = iterator();
-
         iter.add(HeaderCard.create(SIMPLE, val));
-
         // If we're flipping back to and from the primary header
         // we need to add in the EXTEND keyword whenever we become
         // a primary, because it's not permitted in the extensions
@@ -2351,16 +2046,15 @@ public class Header implements FitsElement {
                 iter.next();
             }
         }
-
         iter.add(HeaderCard.create(EXTEND, true));
     }
 
     /**
      * Set the XTENSION keyword to the given value.
-     * 
+     *
      * @deprecated                          (<i>for internall use</i>) Visibility will be reduced to the package level
      *                                          in the future.
-     * 
+     *
      * @param      val                      The name of the extension.
      *
      * @throws     IllegalArgumentException if the string value contains characters that are not allowed in FITS
@@ -2395,7 +2089,7 @@ public class Header implements FitsElement {
      * @throws HeaderCardException if the operation failed
      */
     public void updateLine(IFitsHeader key, HeaderCard card) throws HeaderCardException {
-        updateLine(key.key(), card);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void updateValue(IFitsHeader key, Boolean value) {
@@ -2435,10 +2129,7 @@ public class Header implements FitsElement {
      * @throws HeaderCardException if the operation failed
      */
     public final void updateLine(String key, HeaderCard card) throws HeaderCardException {
-        // Remove an existing card with the matching 'key' (even if that key
-        // isn't the same
-        // as the key of the card argument!)
-        cards.update(key, card);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2448,20 +2139,11 @@ public class Header implements FitsElement {
      * @param  newHdr              the list of new header data lines to replace the current ones.
      *
      * @throws HeaderCardException if the operation failed
-     * 
+     *
      * @see                        #mergeDistinct(Header)
      */
     public void updateLines(final Header newHdr) throws HeaderCardException {
-        Cursor<String, HeaderCard> j = newHdr.iterator();
-
-        while (j.hasNext()) {
-            HeaderCard card = j.next();
-            if (card.isCommentStyleCard()) {
-                insertCommentStyle(card.getKey(), card.getComment());
-            } else {
-                updateLine(card.getKey(), card);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2480,7 +2162,6 @@ public class Header implements FitsElement {
     private void writeBlankCards(ArrayDataOutput dos, int n) throws IOException {
         byte[] blank = new byte[HeaderCard.FITS_HEADER_CARD_SIZE];
         Arrays.fill(blank, (byte) ' ');
-
         while (--n >= 0) {
             dos.write(blank);
         }
@@ -2499,47 +2180,7 @@ public class Header implements FitsElement {
      * @see                  #validate(FitsOutput)
      */
     void setRequiredKeys(String xType) throws FitsException {
-
-        if (xType == null) {
-            // Delete keys that cannot be in primary
-            deleteKey(XTENSION);
-
-            // Some FITS readers don't like the PCOUNT and GCOUNT keywords in the primary header
-            if (!getBooleanValue(GROUPS, false)) {
-                deleteKey(PCOUNT);
-                deleteKey(GCOUNT);
-            }
-
-            // Make sure we have SIMPLE
-            updateValue(SIMPLE, true);
-        } else {
-            // Delete keys that cannot be in extensions
-            deleteKey(SIMPLE);
-
-            // Some FITS readers don't like the EXTEND keyword in extensions.
-            deleteKey(EXTEND);
-
-            // Make sure we have XTENSION
-            updateValue(XTENSION, xType);
-        }
-
-        // Make sure we have BITPIX
-        updateValue(BITPIX, getIntValue(BITPIX, Bitpix.VALUE_FOR_INT));
-
-        int naxes = getIntValue(NAXIS, 0);
-        updateValue(NAXIS, naxes);
-
-        for (int i = 1; i <= naxes; i++) {
-            IFitsHeader naxisi = NAXISn.n(i);
-            updateValue(naxisi, getIntValue(naxisi, 1));
-        }
-
-        if (xType == null) {
-            updateValue(EXTEND, true);
-        } else {
-            updateValue(PCOUNT, getIntValue(PCOUNT, 0));
-            updateValue(GCOUNT, getIntValue(GCOUNT, 1));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2554,8 +2195,7 @@ public class Header implements FitsElement {
      * @since                1.17
      */
     public void validate(boolean asPrimary) throws FitsException {
-        setRequiredKeys(asPrimary ? null : getStringValue(XTENSION, "UNKNOWN"));
-        validate();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2569,10 +2209,8 @@ public class Header implements FitsElement {
         if (headerSorter != null) {
             cards.sort(headerSorter);
         }
-
         checkBeginning();
         checkEnd();
-
         updateChecksum();
     }
 
@@ -2590,51 +2228,24 @@ public class Header implements FitsElement {
     /**
      * (<i>for internal use</i>) Similar to {@link #write(ArrayDataOutput)}, but writes the header as is, without
      * ensuring that mandatory keys are present, and in the correct order, or that checksums are updated.
-     * 
+     *
      * @param  out           The output file or stream to which to write
-     * 
+     *
      * @throws FitsException if there was a violation of the FITS standard
      * @throws IOException   if the output was not accessible
-     * 
+     *
      * @since                1.20.1
      *
      * @see                  #write(ArrayDataOutput)
      * @see                  #validate(boolean)
      */
     public void writeUnchecked(ArrayDataOutput out) throws FitsException, IOException {
-        FitsSettings settings = FitsFactory.current();
-        fileOffset = FitsUtil.findOffset(out);
-
-        Cursor<String, HeaderCard> writeIterator = cards.iterator(0);
-
-        int size = 0;
-
-        while (writeIterator.hasNext()) {
-            HeaderCard card = writeIterator.next();
-            byte[] b = AsciiFuncs.getBytes(card.toString(settings));
-            size += b.length;
-
-            if (END.key().equals(card.getKey()) && minCards * HeaderCard.FITS_HEADER_CARD_SIZE > size) {
-                // AK: Add preallocated blank header space before the END key.
-                writeBlankCards(out, minCards - size / HeaderCard.FITS_HEADER_CARD_SIZE);
-                size = minCards * HeaderCard.FITS_HEADER_CARD_SIZE;
-            }
-
-            out.write(b);
-        }
-        FitsUtil.pad(out, size, (byte) ' ');
-        out.flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(ArrayDataOutput out) throws FitsException {
-        validate();
-
-        try {
-            writeUnchecked(out);
-        } catch (IOException e) {
-            throw new FitsException("IO Error writing header", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void addDuplicate(HeaderCard dup) {
@@ -2642,17 +2253,14 @@ public class Header implements FitsElement {
         if (dup.isCommentStyleCard()) {
             return;
         }
-
         if (duplicates == null) {
             duplicates = new ArrayList<>();
             dupKeys = new HashSet<>();
         }
-
         if (!dupKeys.contains(dup.getKey())) {
             HeaderCardParser.getLogger().log(Level.WARNING, "Multiple occurrences of key:" + dup.getKey());
             dupKeys.add(dup.getKey());
         }
-
         duplicates.add(dup);
     }
 
@@ -2687,7 +2295,6 @@ public class Header implements FitsElement {
         cardCheck(iter, BITPIX);
         cardCheck(iter, NAXIS);
         int nax = getIntValue(NAXIS);
-
         for (int i = 1; i <= nax; i++) {
             cardCheck(iter, NAXISn.n(i));
         }
@@ -2730,7 +2337,6 @@ public class Header implements FitsElement {
             }
         }
         doCardChecks(iter, isTable, isExtension);
-
         Bitpix.fromHeader(this, false);
     }
 
@@ -2741,9 +2347,7 @@ public class Header implements FitsElement {
         // Ensure we have an END card only at the end of the
         // header.
         Cursor<String, HeaderCard> iter = iterator();
-
         HeaderCard card;
-
         while (iter.hasNext()) {
             card = iter.next();
             if (!card.isKeyValuePair() && card.getKey().equals(END.key())) {
@@ -2801,24 +2405,7 @@ public class Header implements FitsElement {
      * should specify a prefix to a keyword that is guaranteed to be present.
      */
     Cursor<String, HeaderCard> positionAfterIndex(IFitsHeader prefix, int col) {
-        String colnum = String.valueOf(col);
-        cursor().setKey(prefix.n(col).key());
-        if (cursor().hasNext()) {
-            // Bug fix (references to forward) here by Laurent Borges
-            boolean toFar = false;
-            while (cursor().hasNext()) {
-                String key = cursor().next().getKey().trim();
-                // AK: getKey() cannot return null so no need to check.
-                if (key.length() <= colnum.length() || !key.substring(key.length() - colnum.length()).equals(colnum)) {
-                    toFar = true;
-                    break;
-                }
-            }
-            if (toFar) {
-                cursor().prev(); // Gone one too far, so skip back an element.
-            }
-        }
-        return cursor();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2834,41 +2421,7 @@ public class Header implements FitsElement {
      * @throws HeaderCardException If <CODE>newKey</CODE> is not a valid FITS keyword.
      */
     boolean replaceKey(IFitsHeader oldKey, IFitsHeader newKey) throws HeaderCardException {
-
-        if (oldKey.valueType() == VALUE.NONE) {
-            throw new IllegalArgumentException("cannot replace comment-style " + oldKey.key());
-        }
-
-        HeaderCard card = getCard(oldKey);
-        VALUE newType = newKey.valueType();
-
-        if (card != null && oldKey.valueType() != newType && newType != VALUE.ANY) {
-            Class<?> type = card.valueType();
-            Exception e = null;
-
-            // Check that the exisating cards value is compatible with the expected type of the new key.
-            if (newType == VALUE.NONE) {
-                e = new IllegalArgumentException(
-                        "comment-style " + newKey.key() + " cannot replace valued key " + oldKey.key());
-            } else if (Boolean.class.isAssignableFrom(type) && newType != VALUE.LOGICAL) {
-                e = new IllegalArgumentException(newKey.key() + " cannot not support the existing boolean value.");
-            } else if (String.class.isAssignableFrom(type) && newType != VALUE.STRING) {
-                e = new IllegalArgumentException(newKey.key() + " cannot not support the existing string value.");
-            } else if (ComplexValue.class.isAssignableFrom(type) && newType != VALUE.COMPLEX) {
-                e = new IllegalArgumentException(newKey.key() + " cannot not support the existing complex value.");
-            } else if (card.isDecimalType() && newType != VALUE.REAL && newType != VALUE.COMPLEX) {
-                e = new IllegalArgumentException(newKey.key() + " cannot not support the existing decimal values.");
-            } else if (Number.class.isAssignableFrom(type) && newType != VALUE.REAL && newType != VALUE.INTEGER
-                    && newType != VALUE.COMPLEX) {
-                e = new IllegalArgumentException(newKey.key() + " cannot not support the existing numerical value.");
-            }
-
-            if (e != null) {
-                LOG.log(Level.WARNING, e.getMessage(), e);
-            }
-        }
-
-        return replaceKey(oldKey.key(), newKey.key());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2883,19 +2436,7 @@ public class Header implements FitsElement {
      * @exception HeaderCardException If <CODE>newKey</CODE> is not a valid FITS keyword. TODO should be private
      */
     boolean replaceKey(String oldKey, String newKey) throws HeaderCardException {
-        HeaderCard oldCard = getCard(oldKey);
-        if (oldCard == null) {
-            return false;
-        }
-        if (!cards.replaceKey(oldKey, newKey)) {
-            throw new HeaderCardException("Duplicate key [" + newKey + "] in replace");
-        }
-        try {
-            oldCard.changeKey(newKey);
-        } catch (IllegalArgumentException e) {
-            throw new HeaderCardException("New key [" + newKey + "] is invalid or too long for existing value.", e);
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2904,7 +2445,6 @@ public class Header implements FitsElement {
      * @return the unpadded data segment size.
      */
     private long trueDataSize() {
-
         // AK: No need to be too strict here. We can get a data size even if the
         // header isn't 100% to spec,
         // as long as the necessary keys are present. So, just check for the
@@ -2912,43 +2452,31 @@ public class Header implements FitsElement {
         if (!containsKey(BITPIX.key()) || !containsKey(NAXIS.key())) {
             return 0L;
         }
-
         int naxis = getIntValue(NAXIS, 0);
-
         // If there are no axes then there is no data.
         if (naxis == 0) {
             return 0L;
         }
-
         int[] axes = new int[naxis];
-
         for (int axis = 1; axis <= naxis; axis++) {
             axes[axis - 1] = getIntValue(NAXISn.n(axis), 0);
         }
-
         boolean isGroup = getBooleanValue(GROUPS, false);
-
         int pcount = getIntValue(PCOUNT, 0);
         int gcount = getIntValue(GCOUNT, 1);
-
         int startAxis = 0;
-
         if (isGroup && naxis > 1 && axes[0] == 0) {
             startAxis = 1;
         }
-
         long size = 1;
         for (int i = startAxis; i < naxis; i++) {
             size *= axes[i];
         }
-
         size += pcount;
         size *= gcount;
-
         // Now multiply by the number of bits per pixel and
         // convert to bytes.
         size *= Math.abs(getIntValue(BITPIX, 0)) / FitsIO.BITS_OF_1_BYTE;
-
         return size;
     }
 
@@ -2975,9 +2503,7 @@ public class Header implements FitsElement {
      * @since       1.16
      */
     public static void setParserWarningsEnabled(boolean value) {
-        Level level = value ? Level.WARNING : Level.SEVERE;
-        HeaderCardParser.getLogger().setLevel(level);
-        Logger.getLogger(ComplexValue.class.getName()).setLevel(level);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2991,7 +2517,7 @@ public class Header implements FitsElement {
      * @since  1.16
      */
     public static boolean isParserWarningsEnabled() {
-        return !HeaderCardParser.getLogger().getLevel().equals(Level.SEVERE);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3001,11 +2527,11 @@ public class Header implements FitsElement {
      * @return The current alignment position for inline comments.
      *
      * @see    #setCommentAlignPosition(int)
-     * 
+     *
      * @since  1.17
      */
     public static int getCommentAlignPosition() {
-        return commentAlign;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -3017,19 +2543,18 @@ public class Header implements FitsElement {
      * @throws     IllegalArgumentException if the position is outside of the allowed range.
      *
      * @see                                 #getCommentAlignPosition()
-     * 
+     *
      * @deprecated                          Not recommended as it may violate the FITS standart for 'fixed-format'
      *                                          header entries, and make our FITS files unreadable by software that
      *                                          expects strict adherence to the standard. We will remove this feature in
      *                                          the future.
-     * 
+     *
      * @since                               1.17
      */
     @Deprecated
     public static void setCommentAlignPosition(int pos) throws IllegalArgumentException {
         if (pos < Header.MIN_COMMENT_ALIGN || pos > Header.MAX_COMMENT_ALIGN) {
-            throw new IllegalArgumentException(
-                    "Comment alignment " + pos + " out of range (" + MIN_COMMENT_ALIGN + ":" + MAX_COMMENT_ALIGN + ").");
+            throw new IllegalArgumentException("Comment alignment " + pos + " out of range (" + MIN_COMMENT_ALIGN + ":" + MAX_COMMENT_ALIGN + ").");
         }
         commentAlign = pos;
     }

@@ -30,9 +30,7 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.util.Date;
-
 import nom.tam.fits.header.IFitsHeader;
 
 /**
@@ -79,7 +77,7 @@ public class HeaderCardBuilder {
      * @return the current card
      */
     public HeaderCard card() {
-        return card;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -91,9 +89,7 @@ public class HeaderCardBuilder {
      * @return        this
      */
     public HeaderCardBuilder card(IFitsHeader newKey) {
-        key = newKey;
-        card = header.getCard(key);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -107,12 +103,7 @@ public class HeaderCardBuilder {
      * @throws HeaderCardException if the card creation failed.
      */
     public HeaderCardBuilder comment(String newComment) throws HeaderCardException {
-        if (card == null) {
-            card = new HeaderCard(key.key(), (String) null, null);
-            header.addLine(card);
-        }
-        card.setComment(newComment);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -125,13 +116,7 @@ public class HeaderCardBuilder {
      * @throws HeaderCardException if the card creation failed.
      */
     public HeaderCardBuilder value(boolean newValue) throws HeaderCardException {
-        if (card == null) {
-            card = new HeaderCard(key.key(), newValue, null);
-            header.addLine(card);
-        } else {
-            card.setValue(newValue);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -144,7 +129,7 @@ public class HeaderCardBuilder {
      * @throws HeaderCardException if the card creation failed.
      */
     public HeaderCardBuilder value(Date newValue) throws HeaderCardException {
-        return value(FitsDate.getFitsDateString(newValue));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,13 +144,7 @@ public class HeaderCardBuilder {
      *                                 80-character wide FITS header record.
      */
     public HeaderCardBuilder value(Number value) throws HeaderCardException, LongValueException {
-        if (card == null) {
-            card = new HeaderCard(key.key(), value, precision, null);
-            header.addLine(card);
-        } else {
-            card.setValue(value, precision);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,13 +159,7 @@ public class HeaderCardBuilder {
      *                                 80-character wide FITS header record.
      */
     public HeaderCardBuilder value(String newValue) throws HeaderCardException, LongValueException {
-        if (card == null) {
-            card = new HeaderCard(key.key(), newValue, null);
-            header.addLine(card);
-        } else {
-            card.setValue(newValue);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -215,8 +188,7 @@ public class HeaderCardBuilder {
      * @since           1.16
      */
     public HeaderCardBuilder precision(int decimals) {
-        precision = decimals;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,16 +212,15 @@ public class HeaderCardBuilder {
      * @since  1.16
      */
     public HeaderCardBuilder autoPrecision() {
-        precision = -1;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the FITS header object that this builder is used with
-     * 
+     *
      * @return the filled header.
      */
     public Header header() {
-        return header;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

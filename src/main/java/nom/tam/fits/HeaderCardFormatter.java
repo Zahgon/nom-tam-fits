@@ -28,12 +28,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.fits;
 
 import nom.tam.fits.FitsFactory.FitsSettings;
 import nom.tam.fits.header.hierarch.IHierarchKeyFormatter;
-
 import static nom.tam.fits.header.Standard.CONTINUE;
 
 /**
@@ -54,7 +52,9 @@ class HeaderCardFormatter {
      */
     private FitsSettings settings;
 
-    /** The length of two single quotes. */
+    /**
+     * The length of two single quotes.
+     */
     private static final int QUOTES_LENGTH = 2;
 
     /**
@@ -82,7 +82,9 @@ class HeaderCardFormatter {
      */
     private static final int MIN_STRING_END = 19;
 
-    /** whatever fits after "CONTINUE '' /" */
+    /**
+     * whatever fits after "CONTINUE '' /"
+     */
     private static final int MAX_LONG_END_COMMENT = 68 - LONG_COMMENT_PREFIX.length();
 
     /**
@@ -116,25 +118,8 @@ class HeaderCardFormatter {
      *
      * @see                                   FitsFactory#setLongStringsEnabled(boolean)
      */
-    String toString(HeaderCard card)
-            throws HierarchNotEnabledException, LongValueException, LongStringsNotEnabledException {
-        StringBuffer buf = new StringBuffer(HeaderCard.FITS_HEADER_CARD_SIZE);
-
-        appendKey(buf, card);
-
-        int valueStart = appendValue(buf, card);
-        int valueEnd = buf.length();
-
-        appendComment(buf, card);
-
-        if (!card.isCommentStyleCard()) {
-            // Strings must be left aligned with opening quote in byte 11 (counted from 1)
-            realign(buf, card.isStringValue() ? valueEnd : valueStart, valueEnd);
-        }
-
-        pad(buf);
-
-        return HeaderCard.sanitize(new String(buf));
+    String toString(HeaderCard card) throws HierarchNotEnabledException, LongValueException, LongStringsNotEnabledException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,18 +137,15 @@ class HeaderCardFormatter {
      */
     private void appendKey(StringBuffer buf, HeaderCard card) throws HierarchNotEnabledException, LongValueException {
         String key = card.getKey();
-
         if (card.hasHierarchKey()) {
             IHierarchKeyFormatter fmt = settings.getHierarchKeyFormatter();
             if (!settings.isUseHierarch()) {
                 throw new HierarchNotEnabledException(key);
             }
             key = fmt.toHeaderString(key);
-
             // Calculate the space needed after the keyword
             int need = fmt.getMinAssignLength();
             need += card.getHeaderValueSize();
-
             if (key.length() + need > HeaderCard.FITS_HEADER_CARD_SIZE) {
                 throw new LongValueException(key, HeaderCard.FITS_HEADER_CARD_SIZE - need);
             }
@@ -172,9 +154,7 @@ class HeaderCardFormatter {
             // were not already.
             key = key.toUpperCase();
         }
-
         buf.append(key);
-
         padTo(buf, HeaderCard.MAX_KEYWORD_LENGTH);
     }
 
@@ -198,12 +178,10 @@ class HeaderCardFormatter {
      */
     private int appendValue(StringBuffer buf, HeaderCard card) throws LongValueException, LongStringsNotEnabledException {
         String value = card.getValue();
-
         if (card.isCommentStyleCard()) {
             // comment-style card. Nothing to do here...
             return buf.length();
         }
-
         if (card.hasHierarchKey()) {
             // Flexible assignment sequence depending on space...
             int space = HeaderCard.FITS_HEADER_CARD_SIZE - buf.length();
@@ -218,14 +196,11 @@ class HeaderCardFormatter {
             // Add assignment sequence "= "
             buf.append(getAssignString());
         }
-
         if (value == null) {
             // 'null' value, nothing more to append.
             return buf.length();
         }
-
         int valueStart = buf.length();
-
         if (card.isStringValue()) {
             int from = appendQuotedValue(buf, card, 0);
             while (from < value.length()) {
@@ -239,7 +214,6 @@ class HeaderCardFormatter {
         } else {
             append(buf, value, 0);
         }
-
         return valueStart;
     }
 
@@ -253,17 +227,14 @@ class HeaderCardFormatter {
      */
     private int getMinTruncatedCommentSize(HeaderCard card) {
         String comment = card.getComment();
-
         // TODO We check for null before calling, so this is dead code here...
         // if (comment == null) {
         // return 0;
         // }
-
         int firstWordLength = comment.indexOf(' ');
         if (firstWordLength < 0) {
             firstWordLength = comment.length();
         }
-
         return COMMENT_PREFIX.length() + firstWordLength;
     }
 
@@ -282,10 +253,8 @@ class HeaderCardFormatter {
         if ((comment == null) || comment.isEmpty()) {
             return true;
         }
-
         int available = getAvailable(buf);
         boolean longCommentOK = FitsFactory.isLongStringsEnabled() && card.isStringValue();
-
         if (!card.isCommentStyleCard() && longCommentOK) {
             if (COMMENT_PREFIX.length() + card.getComment().length() > available) {
                 // No room for a complete regular comment, but we can do a long string comment...
@@ -293,7 +262,6 @@ class HeaderCardFormatter {
                 return true;
             }
         }
-
         if (card.isCommentStyleCard()) {
             // ' ' instead of '= '
             available--;
@@ -306,18 +274,15 @@ class HeaderCardFormatter {
                 }
             }
         }
-
         if (card.isCommentStyleCard()) {
             buf.append(' ');
         } else {
             buf.append(COMMENT_PREFIX);
         }
-
         if (available >= comment.length()) {
             buf.append(comment);
             return true;
         }
-
         buf.append(comment.substring(0, available));
         return false;
     }
@@ -338,7 +303,6 @@ class HeaderCardFormatter {
             // We are beyond the alignment point already...
             return false;
         }
-
         return realign(buf, at, from, Header.getCommentAlignPosition());
     }
 
@@ -356,19 +320,15 @@ class HeaderCardFormatter {
      */
     private boolean realign(StringBuffer buf, int at, int from, int to) {
         int spaces = to - from;
-
         if (spaces > getAvailable(buf)) {
             // No space left in card to align the the specified position.
             return false;
         }
-
         StringBuffer sBuf = new StringBuffer(spaces);
         while (--spaces >= 0) {
             sBuf.append(' ');
         }
-
         buf.insert(at, sBuf.toString());
-
         return true;
     }
 
@@ -384,7 +344,6 @@ class HeaderCardFormatter {
         // We can wrap the comment to our delight, with CONTINUE!
         int iLast = buf.length() - 1;
         String comment = card.getComment();
-
         // We need to amend the last string to end with '&'
         if (getAvailable(buf) >= LONG_COMMENT_PREFIX.length() + comment.length()) {
             // We can append the entire comment, easy...
@@ -392,16 +351,12 @@ class HeaderCardFormatter {
             append(buf, comment, 0);
             return;
         }
-
         // Add '&' to the end of the string value.
         // appendQuotedValue() must always leave space for it!
         buf.setCharAt(iLast, '&');
         buf.append("'");
-
         int from = 0;
-
         int available = getAvailable(buf);
-
         // If there is room for a standard inline comment, then go for it
         if (available < COMMENT_PREFIX.length()) {
             // Add a CONTINUE card with an empty string and try again...
@@ -411,9 +366,7 @@ class HeaderCardFormatter {
             return;
         }
         buf.append(COMMENT_PREFIX);
-
         from = append(buf, comment, 0);
-
         // Now add records as needed to write the comment fully...
         while (from < comment.length()) {
             pad(buf);
@@ -437,16 +390,13 @@ class HeaderCardFormatter {
      */
     private int append(StringBuffer buf, String text, int from) {
         int available = getAvailable(buf);
-
         int n = Math.min(available, text.length() - from);
         if (n < 1) {
             return 0;
         }
-
         for (int i = 0; i < n; i++) {
             buf.append(text.charAt(from + i));
         }
-
         return n;
     }
 
@@ -466,30 +416,24 @@ class HeaderCardFormatter {
     private int appendQuotedValue(StringBuffer buf, HeaderCard card, int from) {
         // Always leave room for an extra & character at the end...
         int available = getAvailable(buf) - QUOTES_LENGTH;
-
         // If long strings are enabled leave space for '&' at the end.
         if (FitsFactory.isLongStringsEnabled() && card.getComment() != null) {
             if (card.getComment().length() > 0) {
                 available--;
             }
         }
-
         String text = card.getValue();
-
         // TODO We check for null before calling, so this is dead code here...
         // if (text == null) {
         // return 0;
         // }
-
         // The the remaining part of the string fits in the space with the
         // quoted quotes, then it's easy...
         if (available >= text.length() - from) {
             String escaped = text.substring(from).replace("'", "''");
-
             if (escaped.length() <= available) {
                 buf.append('\'');
                 buf.append(escaped);
-
                 // Earlier versions of the FITS standard required that the closing quote
                 // does not come before byte 20. It's no longer required but older tools
                 // may still expect it, so let's conform. This only affects single
@@ -497,40 +441,31 @@ class HeaderCardFormatter {
                 if (buf.length() < MIN_STRING_END) {
                     padTo(buf, MIN_STRING_END);
                 }
-
                 buf.append('\'');
                 return text.length() - from;
             }
         }
-
         if (!FitsFactory.isLongStringsEnabled()) {
             throw new LongStringsNotEnabledException(card.getKey() + "= " + card.getValue());
         }
-
         // Now, we definitely need space for '&' at the end...
         available = getAvailable(buf) - QUOTES_LENGTH - 1;
-
         // We need room for an '&' character at the end also...
         // TODO Again we prevent this ever occuring before we reach this point, so it is dead code...
         // if (available < 1) {
         // return 0;
         // }
-
         // Opening quote
         buf.append("'");
-
         // For counting the characters consumed from the input
         int consumed = 0;
-
         for (int i = 0; i < available; i++, consumed++) {
             // TODO We already know we cannot show the whole string on one line, so this is dead code...
             // if (from + i >= text.length()) {
             // // Reached end of string;
             // break;
             // }
-
             char c = text.charAt(from + consumed);
-
             if (c == '\'') {
                 // Quoted quotes take up 2 spaces...
                 i++;
@@ -545,10 +480,8 @@ class HeaderCardFormatter {
                 buf.append(c);
             }
         }
-
         // & and Closing quote
         buf.append("&'");
-
         return consumed;
     }
 
@@ -559,7 +492,7 @@ class HeaderCardFormatter {
      * @param n   the number of empty spaces to add.
      */
     private void pad(StringBuffer buf, int n) {
-        for (int i = n; --i >= 0;) {
+        for (int i = n; --i >= 0; ) {
             buf.append(' ');
         }
     }
@@ -595,8 +528,7 @@ class HeaderCardFormatter {
      *                 records will return 0.
      */
     private int getAvailable(StringBuffer buf) {
-        return (HeaderCard.FITS_HEADER_CARD_SIZE - buf.length() % HeaderCard.FITS_HEADER_CARD_SIZE)
-                % HeaderCard.FITS_HEADER_CARD_SIZE;
+        return (HeaderCard.FITS_HEADER_CARD_SIZE - buf.length() % HeaderCard.FITS_HEADER_CARD_SIZE) % HeaderCard.FITS_HEADER_CARD_SIZE;
     }
 
     /**
@@ -610,7 +542,7 @@ class HeaderCardFormatter {
      */
     @SuppressWarnings("deprecation")
     static String getAssignString() {
-        return FitsFactory.isSkipBlankAfterAssign() ? "=" : "= ";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -623,10 +555,6 @@ class HeaderCardFormatter {
      */
     @SuppressWarnings("deprecation")
     static int getAssignLength() {
-        int n = 1;
-        if (!FitsFactory.isSkipBlankAfterAssign()) {
-            n++;
-        }
-        return n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

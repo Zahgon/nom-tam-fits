@@ -30,7 +30,6 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
 
 /**
@@ -44,6 +43,6 @@ class UnknownType extends ElementType<Buffer> {
 
     @Override
     public int size(Object instance) {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.Header;
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.header.Standard;
@@ -43,14 +42,14 @@ import nom.tam.fits.header.Standard;
  * values (4 bytes) discretized into 64k levels as 16-bit integers. The
  * conversion involves a linear transformation:
  * </p>
- * 
+ *
  * <pre>
  *   {float-value}= {scaling} * {int-value} + {offset}
  * </pre>
  * <p>
  * and the inverse transformation:
  * </p>
- * 
+ *
  * <pre>
  *   {int-value} = round(({float-value} - {offset}) / {scaling})
  * </pre>
@@ -71,7 +70,7 @@ import nom.tam.fits.header.Standard;
  * and BLANK keywords for images, and the TSCALn, TZEROn, and TNULLn keywords
  * for individual columns in a table.
  * </p>
- * 
+ *
  * @author Attila Kovacs
  * @since 1.20
  */
@@ -85,7 +84,7 @@ public class Quantizer {
 
     /**
      * Constructs a new decimal/integer conversion rule.
-     * 
+     *
      * @param scale
      *            The scaling value, that is the spacing of the qunatized levels
      * @param offset
@@ -101,7 +100,7 @@ public class Quantizer {
 
     /**
      * Constructs a new decimal/integer conversion rule.
-     * 
+     *
      * @param scale
      *            The scaling value, that is the spacing of the qunatized levels
      * @param offset
@@ -122,36 +121,27 @@ public class Quantizer {
     /**
      * Converts a floating point value to its integer representation using the
      * quantization.
-     * 
+     *
      * @param value
      *            the floating point value
      * @return the corresponding qunatized integer value
      * @see #toDouble(long)
      */
     public long toLong(double value) {
-        if (!Double.isFinite(value)) {
-            if (blankingValue == null) {
-                throw new IllegalStateException("No blanking value was defined.");
-            }
-            return blankingValue;
-        }
-        return Math.round((value - offset) / scale);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Converts an integer value to the floating-point value it represents under
      * the qunatization.
-     * 
+     *
      * @param value
      *            the integer value
      * @return the corresponding floating-point value, which may be NaN.
      * @see #toLong(double)
      */
     public double toDouble(long value) {
-        if (blankingValue != null && value == blankingValue) {
-            return Double.NaN;
-        }
-        return scale * value + offset;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,37 +150,30 @@ public class Quantizer {
      * into the FITS headers if these are irrelevant and/or not meaningful. So
      * this method might help us decide when quantization is necessary /
      * meaningful vs when it is irrelevant.
-     * 
+     *
      * @return <code>true</code> if the scaling is 1.0, the offset 0.0, and the
      *         blanking value is <code>null</code>. Otherwise <code>false</code>
      *         .
      */
     public boolean isDefault() {
-        return scale == 1.0 && offset == 0.0 && blankingValue == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Adds the quantization parameters to an image header,
-     * 
+     *
      * @param h
      *            the image header.
      * @see #fromImageHeader(Header)
      * @see #editTableHeader(Header, int)
      */
     public void editImageHeader(Header h) {
-        h.addValue(Standard.BSCALE, scale);
-        h.addValue(Standard.BZERO, offset);
-
-        if (blankingValue != null) {
-            h.addValue(Standard.BLANK, blankingValue);
-        } else {
-            h.deleteKey(Standard.BLANK);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Adds the quantization parameters to a binaty table header,
-     * 
+     *
      * @param h
      *            the binary table header.
      * @param col
@@ -199,22 +182,12 @@ public class Quantizer {
      * @see #editImageHeader(Header)
      */
     public void editTableHeader(Header h, int col) {
-        Cursor<String, HeaderCard> c = h.iterator();
-        c.setKey(Standard.TFORMn.n(col + 1).key());
-
-        c.add(HeaderCard.create(Standard.TSCALn.n(col + 1), scale));
-        c.add(HeaderCard.create(Standard.TZEROn.n(col + 1), offset));
-
-        if (blankingValue != null) {
-            c.add(HeaderCard.create(Standard.TNULLn.n(col + 1), blankingValue));
-        } else {
-            h.deleteKey(Standard.TNULLn.n(col + 1));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the quantizer that is described by an image header.
-     * 
+     *
      * @param h
      *            an image header
      * @return the quantizer that id described by the header. It may be the
@@ -225,13 +198,12 @@ public class Quantizer {
      * @see #isDefault()
      */
     public static Quantizer fromImageHeader(Header h) {
-        return new Quantizer(h.getDoubleValue(Standard.BSCALE, 1.0), h.getDoubleValue(Standard.BZERO, 0.0), //
-                h.containsKey(Standard.BLANK) ? h.getLongValue(Standard.BLANK) : null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the quantizer that is described by a binary table header.
-     * 
+     *
      * @param h
      *            a binary table header
      * @param col
@@ -244,8 +216,6 @@ public class Quantizer {
      * @see #isDefault()
      */
     public static Quantizer fromTableHeader(Header h, int col) {
-        return new Quantizer(h.getDoubleValue(Standard.TSCALn.n(col + 1), 1.0), //
-                h.getDoubleValue(Standard.TZEROn.n(col + 1), 0.0), //
-                h.containsKey(Standard.TNULLn.n(col + 1)) ? h.getLongValue(Standard.TNULLn.n(col + 1)) : null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

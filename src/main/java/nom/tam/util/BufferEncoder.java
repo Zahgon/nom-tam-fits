@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 
 /**
@@ -48,7 +47,7 @@ public abstract class BufferEncoder extends FitsEncoder {
 
     /**
      * Instantiates a new encoder for FITS data types.
-     * 
+     *
      * @param p Unused, but the position and length fields are set/reset as to pretend that the buffer is perpetually
      *              half filled with data, and with position at 0. However, at no point will there be any data actually
      *              in the buffer of this object. You should by all means avoid directly writing data from this buffer
@@ -59,26 +58,21 @@ public abstract class BufferEncoder extends FitsEncoder {
     @Deprecated
     public BufferEncoder(BufferPointer p) {
         super();
-
         this.p = p;
-
         pretendHalfPopulated();
-
         setOutput(new OutputWriter() {
 
             private byte[] b1 = new byte[1];
 
             @Override
             public void write(int b) throws IOException {
-                b1[0] = (byte) b;
-                BufferEncoder.this.write(b1, 0, 1);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             @Override
             public void write(byte[] b, int from, int length) throws IOException {
-                BufferEncoder.this.write(b, from, length);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
-
         });
     }
 
@@ -115,8 +109,7 @@ public abstract class BufferEncoder extends FitsEncoder {
     @Deprecated
     @Override
     protected synchronized void write(byte[] b, int from, int len) throws IOException {
-        throw new UnsupportedOperationException(
-                "You need to override this with an implementation that writes to the desired output.");
+        throw new UnsupportedOperationException("You need to override this with an implementation that writes to the desired output.");
     }
 
     /**

@@ -30,26 +30,22 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.PrintStream;
-
 import nom.tam.fits.header.Standard;
-
 import static nom.tam.fits.header.Standard.XTENSION;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * A HDU that holds a type of data we don't recognise. We can still access that data in its raw binary form, and the
  * user can interpret the headers to make sense of particular but not (yet) supported FITS HDU types.
- * 
+ *
  * @see UndefinedData
  */
 public class UndefinedHDU extends BasicHDU<UndefinedData> {
 
     @Override
     protected String getCanonicalXtension() {
-        return "UNKNOWN";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -136,16 +132,14 @@ public class UndefinedHDU extends BasicHDU<UndefinedData> {
      */
     @Deprecated
     public static Header manufactureHeader(Data d) throws FitsException {
-
         Header h = new Header();
         d.fillHeader(h);
-
         return h;
     }
 
     /**
      * Build an image HDU using the supplied data.
-     * 
+     *
      * @deprecated   (<i>for internal use</i>) Its visibility should be reduced to package level in the future.
      *
      * @param      h the header for this HDU
@@ -158,8 +152,6 @@ public class UndefinedHDU extends BasicHDU<UndefinedData> {
 
     @Override
     public void info(PrintStream stream) {
-        stream.println("  Unhandled/Undefined/Unknown Type");
-        stream.println("  XTENSION=" + myHeader.getStringValue(XTENSION).trim());
-        stream.println("  Apparent size:" + myData.getTrueSize());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

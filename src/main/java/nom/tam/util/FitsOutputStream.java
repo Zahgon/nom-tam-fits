@@ -49,10 +49,14 @@ import java.io.OutputStream;
 @SuppressWarnings("deprecation")
 public class FitsOutputStream extends ArrayOutputStream implements FitsOutput {
 
-    /** the output, as accessible via the <code>DataInput</code> interface */
+    /**
+     * the output, as accessible via the <code>DataInput</code> interface
+     */
     private final DataOutput data;
 
-    /** Unencoded output byte count */
+    /**
+     * Unencoded output byte count
+     */
     private int unencodedCount;
 
     /**
@@ -82,119 +86,117 @@ public class FitsOutputStream extends ArrayOutputStream implements FitsOutput {
 
     @Override
     protected FitsEncoder getEncoder() {
-        return (FitsEncoder) super.getEncoder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void write(int b) throws IOException {
-        super.write(b);
-        unencodedCount++;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void write(byte[] b, int start, int length) throws IOException {
-        super.write(b, start, length);
-        unencodedCount += length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(boolean[] b, int start, int length) throws IOException {
-        getEncoder().write(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(Boolean[] buf, int offset, int size) throws IOException {
-        getEncoder().write(buf, offset, size);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(char[] c, int start, int length) throws IOException {
-        getEncoder().write(c, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(short[] s, int start, int length) throws IOException {
-        getEncoder().write(s, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(int[] i, int start, int length) throws IOException {
-        getEncoder().write(i, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(long[] l, int start, int length) throws IOException {
-        getEncoder().write(l, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(float[] f, int start, int length) throws IOException {
-        getEncoder().write(f, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(double[] d, int start, int length) throws IOException {
-        getEncoder().write(d, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeBytes(String s) throws IOException {
-        getEncoder().writeBytes(s);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeChars(String s) throws IOException {
-        getEncoder().writeChars(s);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeUTF(String s) throws IOException {
-        data.writeUTF(s);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(String[] s, int start, int len) throws IOException {
-        getEncoder().write(s, start, len);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeByte(int b) throws IOException {
-        getEncoder().writeByte(b);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeBoolean(boolean b) throws IOException {
-        getEncoder().writeBoolean(b);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeChar(int c) throws IOException {
-        getEncoder().writeChar(c);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeShort(int s) throws IOException {
-        getEncoder().writeShort(s);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeInt(int i) throws IOException {
-        getEncoder().writeInt(i);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeLong(long l) throws IOException {
-        getEncoder().writeLong(l);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeFloat(float f) throws IOException {
-        getEncoder().writeFloat(f);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeDouble(double d) throws IOException {
-        getEncoder().writeDouble(d);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -213,7 +215,6 @@ public class FitsOutputStream extends ArrayOutputStream implements FitsOutput {
 
     @Override
     public boolean isAtStart() {
-        return (unencodedCount + getEncoder().getCount()) == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

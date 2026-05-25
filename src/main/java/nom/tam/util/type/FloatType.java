@@ -30,10 +30,8 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-
 import nom.tam.fits.header.Bitpix;
 
 /**
@@ -49,42 +47,36 @@ class FloatType extends ElementType<FloatBuffer> {
 
     @Override
     public void appendBuffer(FloatBuffer buffer, FloatBuffer dataToAppend) {
-        @SuppressWarnings("deprecation")
-        float[] temp = new float[Math.min(COPY_BLOCK_SIZE, dataToAppend.remaining())];
-        while (dataToAppend.hasRemaining()) {
-            int nrObBytes = Math.min(temp.length, dataToAppend.remaining());
-            dataToAppend.get(temp, 0, nrObBytes);
-            buffer.put(temp, 0, nrObBytes);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public FloatBuffer asTypedBuffer(ByteBuffer buffer) {
-        return buffer.asFloatBuffer();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getArray(FloatBuffer buffer, Object array, int offset, int length) {
-        buffer.get((float[]) array, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object newArray(int length) {
-        return new float[length];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void putArray(FloatBuffer buffer, Object array, int offset, int length) {
-        buffer.put((float[]) array, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public FloatBuffer sliceBuffer(FloatBuffer buffer) {
-        return buffer.slice();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public FloatBuffer wrap(Object array) {
-        return FloatBuffer.wrap((float[]) array);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

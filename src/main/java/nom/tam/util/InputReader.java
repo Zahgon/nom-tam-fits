@@ -30,13 +30,12 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
  * Interface for asic binary input reading functionality.
- * 
+ *
  * @author Attila Kovacs
  * @since 1.16
  * @see OutputWriter
@@ -46,7 +45,7 @@ public interface InputReader {
     /**
      * Reads a byte. See the general contract of
      * {@link java.io.DataInputStream#read()}.
-     * 
+     *
      * @return the (unsigned) byte value or -1 if there is nothing left to read.
      * @throws IOException
      *             if there was an underlying IO error
@@ -57,7 +56,7 @@ public interface InputReader {
     /**
      * Reads up to the specified number of bytes into a buffer. See the general
      * contract of {@link java.io.DataInputStream#read(byte[], int, int)}.
-     * 
+     *
      * @param b
      *            the buffer
      * @param from
@@ -74,24 +73,12 @@ public interface InputReader {
 
     /**
      * Wraps an input stream with this interface.
-     * 
+     *
      * @param i
      *            any input stream
      * @return the stream wrapped to this interface
      */
     static InputReader from(final InputStream i) {
-        return new InputReader() {
-
-            @Override
-            public int read() throws IOException {
-                return i.read();
-            }
-
-            @Override
-            public int read(byte[] b, int from, int length) throws IOException {
-                return i.read(b, from, length);
-            }
-
-        };
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

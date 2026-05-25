@@ -30,14 +30,13 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 /**
  * Stream interface for writing to a {@link ByteBuffer} (<i>primarily for internal use</i>)
- * 
+ *
  * @see ByteBufferOutputStream
  * @see ByteArrayIO
  */
@@ -50,7 +49,7 @@ public class ByteBufferOutputStream extends OutputStream {
      * position. Its <code>write()</code> methods can be intermixed with the <code>put()</code> methods of the buffer,
      * and also with {@link ByteBuffer#position(int)}, maintaining overall sequentiality of the calls. In other words,
      * the stream's output is not decopuled from direct access to the buffer.
-     * 
+     *
      * @param buffer the buffer to write to
      */
     public ByteBufferOutputStream(ByteBuffer buffer) {
@@ -59,12 +58,11 @@ public class ByteBufferOutputStream extends OutputStream {
 
     @Override
     public void write(int b) throws IOException {
-        buffer.put((byte) b);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
-        buffer.put(b, off, len);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

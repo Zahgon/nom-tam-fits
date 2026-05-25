@@ -30,9 +30,7 @@ package nom.tam.image.compression.tile.mask;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
 import nom.tam.image.tile.operation.buffer.TileBuffer;
 
@@ -47,7 +45,9 @@ public class AbstractNullPixelMask {
 
     private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-    /** Byte value signifying invalid / null data */
+    /**
+     * Byte value signifying invalid / null data
+     */
     protected static final byte NULL_INDICATOR = (byte) 1;
 
     private final TileBuffer tileBuffer;
@@ -62,16 +62,15 @@ public class AbstractNullPixelMask {
 
     /**
      * Creates a new pixel mask got a given image tile and designated null value.
-     * 
+     *
      * @param  tileBuffer            the buffer containing the tile data
      * @param  tileIndex             the tile index
      * @param  nullValue             the integer value representing <code>null</code> or invalid data
      * @param  compressorControl     The class managing the compression
-     * 
+     *
      * @throws IllegalStateException if the compressorControl argument is <code>null</code>
      */
-    protected AbstractNullPixelMask(TileBuffer tileBuffer, int tileIndex, long nullValue,
-            ICompressorControl compressorControl) throws IllegalStateException {
+    protected AbstractNullPixelMask(TileBuffer tileBuffer, int tileIndex, long nullValue, ICompressorControl compressorControl) throws IllegalStateException {
         this.tileBuffer = tileBuffer;
         this.tileIndex = tileIndex;
         this.nullValue = nullValue;
@@ -83,9 +82,9 @@ public class AbstractNullPixelMask {
 
     /**
      * Returns a byte array containing the mask
-     * 
+     *
      * @return     the byte array containing the pixel mask for the tile.
-     * 
+     *
      * @deprecated (<i>for internal use</i>) Visibility may be reduced to package level in the future.
      */
     @Deprecated
@@ -102,69 +101,66 @@ public class AbstractNullPixelMask {
 
     /**
      * Sets data for a new mask as a flattened buffer of data.
-     * 
+     *
      * @param mask the buffer containing the mask data in flattened format.
      */
     public void setMask(ByteBuffer mask) {
-        this.mask = mask;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the object that manages the compression, and which therefore handles the masking
-     * 
+     *
      * @return the object that manages the compression.
      */
     protected ICompressorControl getCompressorControl() {
-        return compressorControl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the mask data as a buffer in flattened format.
-     * 
+     *
      * @return the buffer containing the mask data in flattened format.
      */
     protected ByteBuffer getMask() {
-        return mask;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the value that represents a <code>null</code> or an undefined data point.
-     * 
+     *
      * @return the value that demarks an undefined datum.
      */
     protected long getNullValue() {
-        return nullValue;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the buffer that holds data for an image tile.
-     * 
+     *
      * @return the buffer that holds data for a single image tile.
      */
     protected TileBuffer getTileBuffer() {
-        return tileBuffer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Return the tile index for the image tile that is processed.
-     * 
+     *
      * @return the image tile index
      */
     protected int getTileIndex() {
-        return tileIndex;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Creates an internal buffer for holding the mask data, for the specified number of points.
-     * 
+     *
      * @param  remaining the number of points the mask should accomodate.
-     * 
+     *
      * @return           the internal buffer that may store the mask data for the specified number of data points.
      */
     protected ByteBuffer initializedMask(int remaining) {
-        if (mask == null) {
-            mask = ByteBuffer.allocate(remaining);
-        }
-        return mask;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

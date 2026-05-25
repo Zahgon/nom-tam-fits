@@ -30,7 +30,6 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.PrintStream;
 
 /**
@@ -40,7 +39,7 @@ import java.io.PrintStream;
  * @author Attila Kovacs
  *
  * @since  1.18
- * 
+ *
  * @see    NullData
  */
 @SuppressWarnings("deprecation")
@@ -56,7 +55,7 @@ public class NullDataHDU extends ImageHDU {
 
     @Override
     public NullData getData() {
-        return (NullData) super.getData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -71,6 +70,6 @@ public class NullDataHDU extends ImageHDU {
 
     @Override
     public void info(PrintStream stream) {
-        stream.println("  Header Only");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

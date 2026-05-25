@@ -7,7 +7,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressor;
 import nom.tam.util.type.ElementType;
 
@@ -41,7 +40,6 @@ import nom.tam.util.type.ElementType;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * (<i>for internal use</i>) This compression algorithm will just copy the input to the output and do nothing at all.
  *
@@ -54,13 +52,12 @@ public abstract class NoCompressCompressor<T extends Buffer> implements ICompres
 
         @Override
         public boolean compress(ByteBuffer pixelData, ByteBuffer compressed) {
-            compressed.put(pixelData);
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, ByteBuffer pixelData) {
-            pixelData.put(compressed);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -68,15 +65,12 @@ public abstract class NoCompressCompressor<T extends Buffer> implements ICompres
 
         @Override
         public boolean compress(DoubleBuffer pixelData, ByteBuffer compressed) {
-            int size = pixelData.remaining();
-            compressed.asDoubleBuffer().put(pixelData);
-            compressed.position(compressed.position() + size * ElementType.DOUBLE.size());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, DoubleBuffer pixelData) {
-            pixelData.put(compressed.asDoubleBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -84,16 +78,12 @@ public abstract class NoCompressCompressor<T extends Buffer> implements ICompres
 
         @Override
         public boolean compress(FloatBuffer pixelData, ByteBuffer compressed) {
-            int size = pixelData.remaining();
-            compressed.asFloatBuffer().put(pixelData);
-            compressed.position(compressed.position() + size * ElementType.FLOAT.size());
-
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, FloatBuffer pixelData) {
-            pixelData.put(compressed.asFloatBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -101,15 +91,12 @@ public abstract class NoCompressCompressor<T extends Buffer> implements ICompres
 
         @Override
         public boolean compress(IntBuffer pixelData, ByteBuffer compressed) {
-            int size = pixelData.remaining();
-            compressed.asIntBuffer().put(pixelData);
-            compressed.position(compressed.position() + size * ElementType.INT.size());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, IntBuffer pixelData) {
-            pixelData.put(compressed.asIntBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -117,15 +104,12 @@ public abstract class NoCompressCompressor<T extends Buffer> implements ICompres
 
         @Override
         public boolean compress(LongBuffer pixelData, ByteBuffer compressed) {
-            int size = pixelData.remaining();
-            compressed.asLongBuffer().put(pixelData);
-            compressed.position(compressed.position() + size * ElementType.LONG.size());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, LongBuffer pixelData) {
-            pixelData.put(compressed.asLongBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -133,16 +117,12 @@ public abstract class NoCompressCompressor<T extends Buffer> implements ICompres
 
         @Override
         public boolean compress(ShortBuffer pixelData, ByteBuffer compressed) {
-            int size = pixelData.remaining();
-            compressed.asShortBuffer().put(pixelData);
-            compressed.position(compressed.position() + size * ElementType.SHORT.size());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, ShortBuffer pixelData) {
-            pixelData.put(compressed.asShortBuffer());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
-
 }

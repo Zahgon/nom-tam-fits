@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-
 import nom.tam.fits.HeaderCard;
 
 /*
@@ -37,7 +36,6 @@ import nom.tam.fits.HeaderCard;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * A concrete implementation of standardized FITS header keywords. Users may instantiate this class or extend it to
@@ -50,30 +48,44 @@ import nom.tam.fits.HeaderCard;
  * lower-case 'a' to indicate that it may be used for/with alternate WCS coordinate systems. (We also allow '/' because
  * some STScI keywords use it even though it violates the FITS standard.)
  * </p>
- * 
+ *
  * @since 1.19
  */
 public class FitsKey implements IFitsHeader, Serializable {
 
-    /** Generated serial version ID */
+    /**
+     * Generated serial version ID
+     */
     private static final long serialVersionUID = -8312303744399173040L;
 
-    /** Standard header comment */
+    /**
+     * Standard header comment
+     */
     private final String comment;
 
-    /** The type of HDU in which this keyword may appear */
+    /**
+     * The type of HDU in which this keyword may appear
+     */
     private final HDU hdu;
 
-    /** The FITS keyword pattern that produces the actual keyword as it appears in the header. */
+    /**
+     * The FITS keyword pattern that produces the actual keyword as it appears in the header.
+     */
     private final String key;
 
-    /** Documentation source for the keyword */
+    /**
+     * Documentation source for the keyword
+     */
     private final SOURCE status;
 
-    /** The type of value expected for this keyword */
+    /**
+     * The type of value expected for this keyword
+     */
     private final VALUE valueType;
 
-    /** A list of known comment-style keyword, which do not take an assigned value */
+    /**
+     * A list of known comment-style keyword, which do not take an assigned value
+     */
     private static HashSet<String> commentStyleKeys = new HashSet<>();
 
     /**
@@ -82,7 +94,7 @@ public class FitsKey implements IFitsHeader, Serializable {
      * used as a place-holder for a numerical index, and the keyword name may end with a lower-case 'a' to indicate that
      * it may be used for/with alternate WCS coordinate systems. (We also allow '/' because some STScI keywords use it
      * even though it violates the FITS standard.)
-     * 
+     *
      * @param  headerName               The keyword as it will appear in the FITS headers, usually a string with up to 8
      *                                      characters, containing uppper case letters (A-Z), digits (0-9), and/or
      *                                      underscore (<code>_</code>) or hyphen (<code>-</code>) characters for
@@ -91,19 +103,15 @@ public class FitsKey implements IFitsHeader, Serializable {
      * @param  hdu                      the type of HDU this keyword may appear in
      * @param  valueType                the type of value that may be associated with this keyword
      * @param  comment                  the standard comment to include with this keyword
-     * 
+     *
      * @throws IllegalArgumentException if the keyword name is invalid.
      */
-    public FitsKey(String headerName, SOURCE status, HDU hdu, VALUE valueType, String comment)
-            throws IllegalArgumentException {
+    public FitsKey(String headerName, SOURCE status, HDU hdu, VALUE valueType, String comment) throws IllegalArgumentException {
         if (headerName.length() > HeaderCard.MAX_KEYWORD_LENGTH) {
-            throw new IllegalArgumentException(
-                    "Keyword " + headerName + " exceeeds the FITS " + HeaderCard.MAX_KEYWORD_LENGTH + " character limit");
+            throw new IllegalArgumentException("Keyword " + headerName + " exceeeds the FITS " + HeaderCard.MAX_KEYWORD_LENGTH + " character limit");
         }
-
         for (int i = 0; i < headerName.length(); i++) {
             char c = headerName.charAt(i);
-
             if (c >= 'A' && c <= 'Z') {
                 continue;
             }
@@ -119,16 +127,13 @@ public class FitsKey implements IFitsHeader, Serializable {
             if (c == 'a' && (i + 1) == headerName.length()) {
                 continue;
             }
-
             throw new IllegalArgumentException("Invalid FITS keyword: " + headerName);
         }
-
         this.key = headerName;
         this.status = status;
         this.hdu = hdu;
         this.valueType = valueType;
         this.comment = comment;
-
         if (valueType == VALUE.NONE) {
             commentStyleKeys.add(headerName);
         }
@@ -141,7 +146,7 @@ public class FitsKey implements IFitsHeader, Serializable {
      * and the keyword name may end with a lower-case 'a' to indicate that it may be used for/with alternate WCS
      * coordinate systems. (We also allow '/' because some STScI keywords use it even though it violates the FITS
      * standard.)
-     * 
+     *
      * @param  headerName               The keyword as it will appear in the FITS headers, usually a string with up to 8
      *                                      characters, containing uppper case letters (A-Z), digits (0-9), and/or
      *                                      underscore (<code>_</code>) or hyphen (<code>-</code>) characters for
@@ -149,9 +154,9 @@ public class FitsKey implements IFitsHeader, Serializable {
      * @param  hdu                      the type of HDU this keyword may appear in
      * @param  valueType                the type of value that may be associated with this keyword
      * @param  comment                  the standard comment to include with this keyword
-     * 
+     *
      * @throws IllegalArgumentException if the keyword name is invalid.
-     * 
+     *
      * @since                           1.19
      */
     public FitsKey(String headerName, HDU hdu, VALUE valueType, String comment) throws IllegalArgumentException {
@@ -165,16 +170,16 @@ public class FitsKey implements IFitsHeader, Serializable {
      * used as a place-holder for a numerical index, and the keyword name may end with a lower-case 'a' to indicate that
      * it may be used for/with alternate WCS coordinate systems. (We also allow '/' because some STScI keywords use it
      * even though it violates the FITS standard.)
-     * 
+     *
      * @param  headerName               The keyword as it will appear in the FITS headers, usually a string with up to 8
      *                                      characters, containing uppper case letters (A-Z), digits (0-9), and/or
      *                                      underscore (<code>_</code>) or hyphen (<code>-</code>) characters for
      *                                      standard FITS keywords.
      * @param  valueType                the type of value that may be associated with this keyword
      * @param  comment                  the standard comment to include with this keyword
-     * 
+     *
      * @throws IllegalArgumentException if the keyword name is invalid.
-     * 
+     *
      * @since                           1.19
      */
     public FitsKey(String headerName, VALUE valueType, String comment) throws IllegalArgumentException {
@@ -183,35 +188,32 @@ public class FitsKey implements IFitsHeader, Serializable {
 
     @Override
     public final FitsKey impl() {
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String comment() {
-        return comment;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public HDU hdu() {
-        return hdu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String key() {
-        if (key.endsWith("a")) {
-            return key.substring(0, key.length() - 1);
-        }
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public SOURCE status() {
-        return status;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public VALUE valueType() {
-        return valueType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -228,7 +230,7 @@ public class FitsKey implements IFitsHeader, Serializable {
      * @since      1.17
      */
     public static boolean isCommentStyleKey(String key) {
-        return commentStyleKeys.contains(key) || key.trim().isEmpty();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -238,61 +240,26 @@ public class FitsKey implements IFitsHeader, Serializable {
     private static final Map<String, IFitsHeader> STANDARD_KEYS = new HashMap<>();
 
     static void registerStandard(IFitsHeader key) throws IllegalArgumentException {
-        STANDARD_KEYS.put(key.key(), key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the standard FITS keyword that matches the specified actual key.
-     * 
+     *
      * @param  key The key as it may appear in a FITS header, e.g. "CTYPE1A"
-     * 
+     *
      * @return     The standard FITS keyword/pattern that matches, e.g. {@link WCS#CTYPEna}.
-     * 
+     *
      * @see        IFitsHeader#extractIndices(String)
-     * 
+     *
      * @since      1.19
      */
     static IFitsHeader matchStandard(String key) {
-        int i = 0, l = key.length();
-        StringBuilder pattern = new StringBuilder();
-
-        // If ends with digit + letter, then it must alt coordinate if standard...
-        if (l > 1 && Character.isAlphabetic(key.charAt(l - 1)) && Character.isDigit(key.charAt(l - 2))) {
-            key = key.substring(0, --l);
-        }
-
-        // If the first digit is a number it may be a coordinate index
-        if (i < l && Character.isDigit(key.charAt(i))) {
-            pattern.append('n');
-            i++;
-
-            // If the second digit is a number it may be a coordinate index
-            if (i < l && Character.isDigit(key.charAt(i))) {
-                pattern.append('n');
-                i++;
-            }
-        }
-
-        // Replace sequence of digits with 'n'
-        while (i < l) {
-            char c = key.charAt(i);
-
-            if (Character.isDigit(c)) {
-                pattern.append('n');
-
-                // Skip successive digits.
-                while (i < l && Character.isDigit(key.charAt(i))) {
-                    i++;
-                }
-            } else {
-                pattern.append(c);
-                i++;
-            }
-        }
-
-        return STANDARD_KEYS.get(pattern.toString());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** We define this here with package level visibility for IFitsHeader */
+    /**
+     * We define this here with package level visibility for IFitsHeader
+     */
     static final int BASE_10 = 10;
 }

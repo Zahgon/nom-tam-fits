@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.fits;
 
 import java.io.ByteArrayInputStream;
@@ -38,7 +37,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.logging.Logger;
-
 import nom.tam.fits.FitsFactory.FitsSettings;
 import nom.tam.fits.header.IFitsHeader;
 import nom.tam.fits.header.NonStandard;
@@ -51,7 +49,6 @@ import nom.tam.util.CursorValue;
 import nom.tam.util.FitsInputStream;
 import nom.tam.util.FlexFormat;
 import nom.tam.util.InputReader;
-
 import static nom.tam.fits.header.Standard.BLANKS;
 import static nom.tam.fits.header.Standard.COMMENT;
 import static nom.tam.fits.header.Standard.CONTINUE;
@@ -65,55 +62,89 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
 
     private static final Logger LOG = Logger.getLogger(HeaderCard.class.getName());
 
-    /** The number of characters per header card (line). */
+    /**
+     * The number of characters per header card (line).
+     */
     public static final int FITS_HEADER_CARD_SIZE = 80;
 
-    /** Maximum length of a FITS keyword field */
+    /**
+     * Maximum length of a FITS keyword field
+     */
     public static final int MAX_KEYWORD_LENGTH = 8;
 
-    /** The length of two single quotes that must surround string values. */
+    /**
+     * The length of two single quotes that must surround string values.
+     */
     public static final int STRING_QUOTES_LENGTH = 2;
 
-    /** Maximum length of a FITS value field. */
+    /**
+     * Maximum length of a FITS value field.
+     */
     public static final int MAX_VALUE_LENGTH = 70;
 
-    /** Maximum length of a comment-style card comment field. */
+    /**
+     * Maximum length of a comment-style card comment field.
+     */
     public static final int MAX_COMMENT_CARD_COMMENT_LENGTH = MAX_VALUE_LENGTH + 1;
 
-    /** Maximum length of a FITS string value field. */
+    /**
+     * Maximum length of a FITS string value field.
+     */
     public static final int MAX_STRING_VALUE_LENGTH = MAX_VALUE_LENGTH - 2;
 
-    /** Maximum length of a FITS long string value field. the &amp; for the continuation needs one char. */
+    /**
+     * Maximum length of a FITS long string value field. the &amp; for the continuation needs one char.
+     */
     public static final int MAX_LONG_STRING_VALUE_LENGTH = MAX_STRING_VALUE_LENGTH - 1;
 
-    /** if a commend needs the be specified 2 extra chars are needed to start the comment */
+    /**
+     * if a commend needs the be specified 2 extra chars are needed to start the comment
+     */
     public static final int MAX_LONG_STRING_VALUE_WITH_COMMENT_LENGTH = MAX_LONG_STRING_VALUE_LENGTH - 2;
 
-    /** Maximum HIERARCH keyword length (80 chars must fit [&lt;keyword&gt;=T] at minimum... */
+    /**
+     * Maximum HIERARCH keyword length (80 chars must fit [&lt;keyword&gt;=T] at minimum...
+     */
     public static final int MAX_HIERARCH_KEYWORD_LENGTH = FITS_HEADER_CARD_SIZE - 2;
 
-    /** The start and end quotes of the string and the ampasant to continue the string. */
+    /**
+     * The start and end quotes of the string and the ampasant to continue the string.
+     */
     public static final int MAX_LONG_STRING_CONTINUE_OVERHEAD = 3;
 
-    /** The first ASCII character that may be used in header records */
+    /**
+     * The first ASCII character that may be used in header records
+     */
     public static final char MIN_VALID_CHAR = 0x20;
 
-    /** The last ASCII character that may be used in header records */
+    /**
+     * The last ASCII character that may be used in header records
+     */
     public static final char MAX_VALID_CHAR = 0x7e;
 
-    /** The default keyword to use instead of null or any number of blanks. */
+    /**
+     * The default keyword to use instead of null or any number of blanks.
+     */
     public static final String EMPTY_KEY = "";
 
-    /** The string "HIERARCH." */
+    /**
+     * The string "HIERARCH."
+     */
     private static final String HIERARCH_WITH_DOT = NonStandard.HIERARCH.key() + ".";
 
-    /** The keyword part of the card (set to null if there's no keyword) */
+    /**
+     * The keyword part of the card (set to null if there's no keyword)
+     */
     private String key;
 
-    /** The keyword part of the card (set to null if there's no value / empty string) */
+    /**
+     * The keyword part of the card (set to null if there's no value / empty string)
+     */
     private String value;
 
-    /** The comment part of the card (set to null if there's no comment) */
+    /**
+     * The comment part of the card (set to null if there's no comment)
+     */
     private String comment;
 
     private IFitsHeader standardKey;
@@ -127,30 +158,39 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
 
     /**
      * Value type checking policies for when setting values for standardized keywords.
-     * 
+     *
      * @author Attila Kovacs
-     * 
+     *
      * @since  1.19
      */
     public enum ValueCheck {
-        /** No value type checking will be performed */
+
+        /**
+         * No value type checking will be performed
+         */
         NONE,
-        /** Attempting to set values of the wrong type for standardized keywords will log warnings */
+        /**
+         * Attempting to set values of the wrong type for standardized keywords will log warnings
+         */
         LOGGING,
-        /** Throw exception when setting a value of the wrong type for a standardized keyword */
+        /**
+         * Throw exception when setting a value of the wrong type for a standardized keyword
+         */
         EXCEPTION
     }
 
     /**
      * Default value type checking policy for cards with standardized {@link IFitsHeader} keywords.
-     * 
+     *
      * @since 1.19
      */
     public static final ValueCheck DEFAULT_VALUE_CHECK_POLICY = ValueCheck.EXCEPTION;
 
     private static ValueCheck valueCheck = DEFAULT_VALUE_CHECK_POLICY;
 
-    /** Private constructor for an empty card, used by other constructors. */
+    /**
+     * Private constructor for an empty card, used by other constructors.
+     */
     private HeaderCard() {
     }
 
@@ -179,7 +219,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * or more 80-character wide header 'lines'. If long string support is not enabled, then a new card is created from
      * the next 80-characters. When long string support is enabled, cunsecutive lines starting with
      * [<code>CONTINUE </code>] after the first line will be aggregated into a single new card.
-     * 
+     *
      * @deprecated                        (<i>for internal use</i>) Its visibility may be reduced or may be removed
      *                                        entirely in the future. Card counting should be internal to
      *                                        {@link HeaderCard}.
@@ -195,21 +235,17 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                               FitsFactory#setLongStringsEnabled(boolean)
      */
     @Deprecated
-    public HeaderCard(HeaderCardCountingArrayDataInput dis)
-            throws UnclosedQuoteException, TruncatedFileException, IOException {
+    public HeaderCard(HeaderCardCountingArrayDataInput dis) throws UnclosedQuoteException, TruncatedFileException, IOException {
         this();
         key = null;
         value = null;
         comment = null;
         type = null;
-
         String card = readOneHeaderLine(dis);
         HeaderCardParser parsed = new HeaderCardParser(card);
-
         // extract the key
         key = parsed.getKey();
         type = parsed.getInferredType();
-
         if (FitsFactory.isLongStringsEnabled() && parsed.isString() && parsed.getValue().endsWith("&")) {
             // Potentially a multi-record long string card...
             parseLongStringCard(dis, parsed);
@@ -218,7 +254,6 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
             type = parsed.getInferredType();
             comment = parsed.getTrimmedComment();
         }
-
     }
 
     /**
@@ -290,14 +325,12 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
             set(key, null, comment, Integer.class);
             return;
         }
-
         try {
             checkNumber(value);
         } catch (NumberFormatException e) {
             throw new HeaderCardException("FITS headers may not contain NaN or Infinite values", e);
         }
-        set(key, new FlexFormat().setWidth(spaceForValue(key)).setPrecision(decimals).format(value), comment,
-                value.getClass());
+        set(key, new FlexFormat().setWidth(spaceForValue(key)).setPrecision(decimals).format(value), comment, value.getClass());
     }
 
     /**
@@ -364,12 +397,10 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      */
     public HeaderCard(String key, ComplexValue value, String comment) throws HeaderCardException {
         this();
-
         if (value == null) {
             set(key, null, comment, ComplexValue.class);
             return;
         }
-
         if (!value.isFinite()) {
             throw new HeaderCardException("Cannot represent " + value + " in FITS headers.");
         }
@@ -393,12 +424,10 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      */
     public HeaderCard(String key, ComplexValue value, int decimals, String comment) throws HeaderCardException {
         this();
-
         if (value == null) {
             set(key, null, comment, ComplexValue.class);
             return;
         }
-
         if (!value.isFinite()) {
             throw new HeaderCardException("Cannot represent " + value + " in FITS headers.");
         }
@@ -515,16 +544,13 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
         if (key != null) {
             key = trimEnd(key);
         }
-
         if (key == null || key.isEmpty() || key.equals(Standard.COMMENT.key()) || key.equals(Standard.HISTORY.key())) {
             if (value != null) {
                 throw new HeaderCardException("Standard commentary keywords may not have an assigned value.");
             }
-
             // Force comment
             type = null;
         }
-
         set(key, value, comment, type);
         this.type = type;
     }
@@ -545,42 +571,33 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
         // if (aType == null && aValue != null) {
         // throw new HeaderCardException("Null type for value: [" + sanitize(aValue) + "]");
         // }
-
         type = aType;
-
         // Remove trailing spaces
         if (aKey != null) {
             aKey = trimEnd(aKey);
         }
-
         // AK: Map null and blank keys to BLANKS.key()
         // This simplifies things as we won't have to check for null keys separately!
         if ((aKey == null) || aKey.isEmpty()) {
             aKey = EMPTY_KEY;
         }
-
         try {
             validateKey(aKey);
         } catch (RuntimeException e) {
             throw new HeaderCardException("Invalid FITS keyword: [" + sanitize(aKey) + "]", e);
         }
-
         key = aKey;
-
         try {
             validateChars(aComment);
         } catch (IllegalArgumentException e) {
             throw new HeaderCardException("Invalid FITS comment: [" + sanitize(aComment) + "]", e);
         }
-
         comment = aComment;
-
         try {
             validateChars(aValue);
         } catch (IllegalArgumentException e) {
             throw new HeaderCardException("Invalid FITS value: [" + sanitize(aValue) + "]", e);
         }
-
         if (aValue == null) {
             value = null;
             return;
@@ -593,24 +610,17 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
             }
         } else {
             aValue = aValue.trim();
-
             // Check that the value fits in the space available for it.
             if (aValue.length() > spaceForValue()) {
-                throw new HeaderCardException("Value too long: [" + sanitize(aValue) + "]",
-                        new LongValueException(key, spaceForValue()));
+                throw new HeaderCardException("Value too long: [" + sanitize(aValue) + "]", new LongValueException(key, spaceForValue()));
             }
-
             value = aValue;
         }
     }
 
     @Override
     protected HeaderCard clone() {
-        try {
-            return (HeaderCard) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -620,12 +630,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      *             return more than one, provided support for long string is enabled.
      */
     public synchronized int cardSize() {
-        if (FitsFactory.isLongStringsEnabled() && isStringValue() && value != null) {
-            // this is very bad for performance but it is to difficult to
-            // keep the cardSize and the toString compatible at all times
-            return toString().length() / FITS_HEADER_CARD_SIZE;
-        }
-        return 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -635,8 +640,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @return a copy of this carf.
      */
     public HeaderCard copy() {
-        HeaderCard copy = clone();
-        return copy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -650,7 +654,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      */
     @Override
     public final synchronized String getKey() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -663,7 +667,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see    #getComment()
      */
     public final synchronized String getValue() {
-        return value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -675,7 +679,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see    #getValue()
      */
     public final synchronized String getComment() {
-        return comment;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -718,56 +722,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @throws IllegalArgumentException if the specified Java type of not one that is supported for use in FITS headers.
      */
     public synchronized <T> T getValue(Class<T> asType, T defaultValue) throws IllegalArgumentException {
-
-        if (value == null) {
-            return defaultValue;
-        }
-        if (String.class.isAssignableFrom(asType)) {
-            return asType.cast(value);
-        }
-        if (value.isEmpty()) {
-            return defaultValue;
-        }
-        if (Boolean.class.isAssignableFrom(asType)) {
-            return asType.cast(getBooleanValue((Boolean) defaultValue));
-        }
-        if (ComplexValue.class.isAssignableFrom(asType)) {
-            return asType.cast(new ComplexValue(value));
-        }
-        if (Number.class.isAssignableFrom(asType)) {
-            try {
-                BigDecimal big = new BigDecimal(value.toUpperCase().replace('D', 'E'));
-
-                if (Byte.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.byteValue());
-                }
-                if (Short.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.shortValue());
-                }
-                if (Integer.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.intValue());
-                }
-                if (Long.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.longValue());
-                }
-                if (Float.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.floatValue());
-                }
-                if (Double.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.doubleValue());
-                }
-                if (BigInteger.class.isAssignableFrom(asType)) {
-                    return asType.cast(big.toBigInteger());
-                }
-                // All possibilities have been exhausted, it must be a BigDecimal...
-                return asType.cast(big);
-            } catch (NumberFormatException e) {
-                // The value is not a decimal number, so return the default value by contract.
-                return defaultValue;
-            }
-        }
-
-        throw new IllegalArgumentException("unsupported class " + asType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -778,7 +733,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see    #isCommentStyleCard()
      */
     public synchronized boolean isKeyValuePair() {
-        return !isCommentStyleCard() && value != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -791,10 +746,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see    #valueType()
      */
     public synchronized boolean isStringValue() {
-        if (type == null) {
-            return false;
-        }
-        return String.class.isAssignableFrom(type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -810,11 +762,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since  1.16
      */
     public synchronized boolean isDecimalType() {
-        if (type == null) {
-            return false;
-        }
-        return Float.class.isAssignableFrom(type) || Double.class.isAssignableFrom(type)
-                || BigDecimal.class.isAssignableFrom(type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -829,10 +777,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since  1.16
      */
     public synchronized boolean isIntegerType() {
-        if (type == null) {
-            return false;
-        }
-        return Number.class.isAssignableFrom(type) && !isDecimalType();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -847,7 +792,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since  1.16
      */
     public final synchronized boolean isCommentStyleCard() {
-        return (type == null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -859,7 +804,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since  1.16
      */
     public final synchronized boolean hasHierarchKey() {
-        return isHierarchKey(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -869,7 +814,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @param comment the new comment text.
      */
     public synchronized void setComment(String comment) {
-        this.comment = sanitize(comment);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -887,7 +832,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                          #setValue(Number, int)
      */
     public final HeaderCard setValue(Number update) throws NumberFormatException, LongValueException {
-        return setValue(update, FlexFormat.AUTO_PRECISION);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -907,23 +852,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                          #setValue(Number)
      */
     public synchronized HeaderCard setValue(Number update, int decimals) throws NumberFormatException, LongValueException {
-
-        if (update instanceof Float || update instanceof Double || update instanceof BigDecimal
-                || update instanceof BigInteger) {
-            checkValueType(IFitsHeader.VALUE.REAL);
-        } else {
-            checkValueType(IFitsHeader.VALUE.INTEGER);
-        }
-
-        if (update == null) {
-            value = null;
-            type = Integer.class;
-        } else {
-            type = update.getClass();
-            checkNumber(update);
-            setUnquotedValue(new FlexFormat().forCard(this).setPrecision(decimals).format(update));
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void checkKeyword(IFitsHeader keyword) throws IllegalArgumentException {
@@ -938,19 +867,15 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
         }
     }
 
-    private static void checkValueType(String key, IFitsHeader.VALUE expect, IFitsHeader.VALUE valueType)
-            throws ValueTypeException {
+    private static void checkValueType(String key, IFitsHeader.VALUE expect, IFitsHeader.VALUE valueType) throws ValueTypeException {
         if (expect == IFitsHeader.VALUE.ANY || valueCheck == ValueCheck.NONE) {
             return;
         }
-
         if (valueType != expect) {
             if (expect == IFitsHeader.VALUE.REAL && valueType == IFitsHeader.VALUE.INTEGER) {
                 return;
             }
-
             ValueTypeException e = new ValueTypeException(key, valueType.name());
-
             if (valueCheck == ValueCheck.LOGGING) {
                 LOG.warning(e.getMessage());
             } else {
@@ -975,19 +900,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @return                    the card itself
      */
     public synchronized HeaderCard setValue(Boolean update) throws LongValueException, ValueTypeException {
-        checkValueType(IFitsHeader.VALUE.LOGICAL);
-
-        if (update == null) {
-            value = null;
-        } else if (spaceForValue() < 1) {
-            throw new LongValueException(key, spaceForValue());
-        } else {
-            // There is always room for a boolean value. :-)
-            value = update ? "T" : "F";
-        }
-
-        type = Boolean.class;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1007,7 +920,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since                        1.16
      */
     public final HeaderCard setValue(ComplexValue update) throws NumberFormatException, LongValueException {
-        return setValue(update, FlexFormat.AUTO_PRECISION);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1028,19 +941,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since                        1.16
      */
     public synchronized HeaderCard setValue(ComplexValue update, int decimals) throws LongValueException {
-        checkValueType(IFitsHeader.VALUE.COMPLEX);
-
-        if (update == null) {
-            value = null;
-        } else {
-            if (!update.isFinite()) {
-                throw new NumberFormatException("Cannot represent " + update + " in FITS headers.");
-            }
-            setUnquotedValue(update.toString(decimals));
-        }
-
-        type = ComplexValue.class;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1095,36 +996,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                                   FitsFactory#setLongStringsEnabled(boolean)
      * @see                                   #validateChars(String)
      */
-    public synchronized HeaderCard setValue(String update)
-            throws ValueTypeException, IllegalStateException, IllegalArgumentException, LongStringsNotEnabledException {
-        checkValueType(IFitsHeader.VALUE.STRING);
-
-        int space = spaceForValue(key);
-        if (space < STRING_QUOTES_LENGTH) {
-            throw new IllegalStateException("No space for string value for [" + key + "]");
-        }
-
-        if (update == null) {
-            // There is always room for a null string...
-            value = null;
-        } else {
-            validateChars(update);
-            update = trimEnd(update);
-            int l = getHeaderValueSize(update);
-
-            if (space < l) {
-                if (FitsFactory.isLongStringsEnabled()) {
-                    throw new IllegalStateException("No space for long string value for [" + key + "]");
-                }
-
-                throw new LongStringsNotEnabledException("New string value for [" + key + "] is too long."
-                        + "\n\n --> You can enable long string support by FitsFactory.setLongStringEnabled(true).\n");
-            }
-            value = update;
-        }
-
-        type = String.class;
-        return this;
+    public synchronized HeaderCard setValue(String update) throws ValueTypeException, IllegalStateException, IllegalArgumentException, LongStringsNotEnabledException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1145,7 +1018,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      */
     @Override
     public String toString() throws LongValueException, LongStringsNotEnabledException, HierarchNotEnabledException {
-        return toString(FitsFactory.current());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1164,9 +1037,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      *
      * @see                                   FitsFactory#setLongStringsEnabled(boolean)
      */
-    protected synchronized String toString(final FitsSettings settings)
-            throws LongValueException, LongStringsNotEnabledException, HierarchNotEnabledException {
-        return new HeaderCardFormatter(settings).toString(this);
+    protected synchronized String toString(final FitsSettings settings) throws LongValueException, LongStringsNotEnabledException, HierarchNotEnabledException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1180,7 +1052,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see    #isDecimalType()
      */
     public synchronized Class<?> valueType() {
-        return type;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1211,27 +1083,21 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @throws TruncatedFileException if the stream endedc ubnexpectedly in the middle of an 80-character record.
      */
     @SuppressWarnings("deprecation")
-    private synchronized void parseLongStringCard(HeaderCardCountingArrayDataInput dis, HeaderCardParser next)
-            throws IOException, TruncatedFileException {
-
+    private synchronized void parseLongStringCard(HeaderCardCountingArrayDataInput dis, HeaderCardParser next) throws IOException, TruncatedFileException {
         StringBuilder longValue = new StringBuilder();
         StringBuilder longComment = null;
-
         while (next != null) {
             if (!next.isString()) {
                 break;
             }
             String valuePart = next.getValue();
             String untrimmedComment = next.getUntrimmedComment();
-
             if (valuePart == null) {
                 // The card cannot have a null value. If it does it wasn't a string card...
                 break;
             }
-
             // The end point of the value
             int valueEnd = valuePart.length();
-
             // Check if there card continues into the next record. The value
             // must end with '&' and the next card must be a CONTINUE card.
             // If so, remove the '&' from the value part, and parse in the next
@@ -1239,10 +1105,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
             if (!dis.markSupported()) {
                 throw new IOException("InputStream does not support mark/reset");
             }
-
             // Peek at the next card.
             dis.mark();
-
             try {
                 // Check if we should continue parsing this card...
                 next = new HeaderCardParser(readOneHeaderLine(dis));
@@ -1259,10 +1123,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
                 // Nothing left to parse after the current one...
                 next = null;
             }
-
             // Append the value part from the record last parsed.
             longValue.append(valuePart, 0, valueEnd);
-
             // Append any comment from the card last parsed.
             if (untrimmedComment != null) {
                 if (longComment == null) {
@@ -1272,7 +1134,6 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
                 }
             }
         }
-
         comment = longComment == null ? null : longComment.toString().trim();
         value = trimEnd(longValue.toString());
         type = String.class;
@@ -1282,9 +1143,9 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * Removes the trailing spaces (if any) from a string. According to the FITS standard, trailing spaces in string are
      * not significant (but leading spaces are). As such we should remove trailing spaces when parsing header string
      * values.
-     * 
+     *
      * @param  s the string as it appears in the FITS header
-     * 
+     *
      * @return   the input string if it has no trailing spaces, or else a new string with the trailing spaces removed.
      */
     private String trimEnd(String s) {
@@ -1310,7 +1171,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see    #spaceForValue()
      */
     synchronized int getHeaderValueSize() {
-        return getHeaderValueSize(value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1319,9 +1180,9 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * does not come before byte 20). If the long string convention is enabled, this method returns the minimum number
      * of characters needed in the leading 80-character record only. The call assumes that the value has been
      * appropriately trimmed of trailing and leading spaces as appropriate.
-     * 
+     *
      * @param  aValue The proposed value for this card
-     * 
+     *
      * @return        the minimum number of bytes needed to represent this value in a header record.
      *
      * @since         1.16
@@ -1333,20 +1194,16 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
         if (aValue == null) {
             return 0;
         }
-
         if (!isStringValue()) {
             return aValue.length();
         }
-
         int n = STRING_QUOTES_LENGTH;
-
         if (FitsFactory.isLongStringsEnabled()) {
             // If not empty string we need to write at least &...
             return aValue.isEmpty() ? n : n + 1;
         }
-
         n += aValue.length();
-        for (int i = aValue.length(); --i >= 0;) {
+        for (int i = aValue.length(); --i >= 0; ) {
             if (aValue.charAt(i) == '\'') {
                 // Add the number of quotes that need escaping.
                 n++;
@@ -1364,7 +1221,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since  1.16
      */
     public final synchronized int spaceForValue() {
-        return spaceForValue(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1384,21 +1241,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                                   #spaceForValue()
      * @see                                   #getValue()
      */
-    public synchronized void changeKey(String newKey) throws HierarchNotEnabledException, LongValueException,
-            LongStringsNotEnabledException, IllegalArgumentException {
-
-        validateKey(newKey);
-        int l = getHeaderValueSize();
-        int space = spaceForValue(newKey);
-
-        if (l > space) {
-            if (isStringValue() && !FitsFactory.isLongStringsEnabled() && space > STRING_QUOTES_LENGTH) {
-                throw new LongStringsNotEnabledException(newKey);
-            }
-            throw new LongValueException(spaceForValue(newKey), newKey + "= " + value);
-        }
-        key = newKey;
-        standardKey = null;
+    public synchronized void changeKey(String newKey) throws HierarchNotEnabledException, LongValueException, LongStringsNotEnabledException, IllegalArgumentException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1407,42 +1251,36 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @return <code>true</code> if the card contains nothing but blank spaces.
      */
     public synchronized boolean isBlank() {
-        if (!isCommentStyleCard() || !key.isEmpty()) {
-            return false;
-        }
-        if (comment == null) {
-            return true;
-        }
-        return comment.isEmpty();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the current policy for checking if set values are of the allowed type for cards with standardized
      * {@link IFitsHeader} keywords.
-     * 
+     *
      * @return the current value type checking policy
-     * 
+     *
      * @since  1.19
-     * 
+     *
      * @see    #setValueCheckingPolicy(ValueCheck)
      */
     public static ValueCheck getValueCheckingPolicy() {
-        return valueCheck;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the policy to used for checking if set values conform to the expected types for cards that use standardized
      * FITS keywords via the {@link IFitsHeader} interface.
-     * 
+     *
      * @param policy the new polict to use for checking value types.
-     * 
+     *
      * @see          #getValueCheckingPolicy()
      * @see          Header#setKeywordChecking(nom.tam.fits.Header.KeywordCheck)
-     * 
+     *
      * @since        1.19
      */
     public static void setValueCheckingPolicy(ValueCheck policy) {
-        valueCheck = policy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1520,15 +1358,11 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                             nom.tam.fits.header.hierarch.IHierarchKeyFormatter#setCaseSensitive(boolean)
      */
     public static HeaderCard create(String line) throws IllegalArgumentException {
-        try (ArrayDataInput in = stringToArrayInputStream(line)) {
-            return new HeaderCard(in);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("card not legal", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     final IFitsHeader getStandardKey() {
-        return standardKey;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1548,16 +1382,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since                           1.16
      */
     public static HeaderCard create(IFitsHeader key, Boolean value) throws IllegalArgumentException {
-        checkKeyword(key);
-
-        try {
-            HeaderCard hc = new HeaderCard(key.key(), (Boolean) null, key.comment());
-            hc.standardKey = key;
-            hc.setValue(value);
-            return hc;
-        } catch (HeaderCardException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1585,16 +1410,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since                           1.16
      */
     public static HeaderCard create(IFitsHeader key, Number value) throws IllegalArgumentException {
-        checkKeyword(key);
-
-        try {
-            HeaderCard hc = new HeaderCard(key.key(), (Number) null, key.comment());
-            hc.standardKey = key;
-            hc.setValue(value);
-            return hc;
-        } catch (HeaderCardException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1613,16 +1429,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @since                           1.16
      */
     public static HeaderCard create(IFitsHeader key, ComplexValue value) throws IllegalArgumentException {
-        checkKeyword(key);
-
-        try {
-            HeaderCard hc = new HeaderCard(key.key(), (ComplexValue) null, key.comment());
-            hc.standardKey = key;
-            hc.setValue(value);
-            return hc;
-        } catch (HeaderCardException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1642,17 +1449,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      *                                      key was ill-defined.
      */
     public static HeaderCard create(IFitsHeader key, String value) throws IllegalArgumentException {
-        checkKeyword(key);
-        validateChars(value);
-
-        try {
-            HeaderCard hc = new HeaderCard(key.key(), (String) null, key.comment());
-            hc.standardKey = key;
-            hc.setValue(value);
-            return hc;
-        } catch (HeaderCardException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1673,16 +1470,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                        Header#insertCommentStyle(String, String)
      * @see                        Header#insertCommentStyleMultiline(String, String)
      */
-    public static HeaderCard createCommentStyleCard(String key, String comment)
-            throws HeaderCardException, LongValueException {
-        if (comment == null) {
-            comment = "";
-        } else if (comment.length() > MAX_COMMENT_CARD_COMMENT_LENGTH) {
-            throw new LongValueException(MAX_COMMENT_CARD_COMMENT_LENGTH, key, comment);
-        }
-        HeaderCard card = new HeaderCard();
-        card.set(key, null, comment, null);
-        return card;
+    public static HeaderCard createCommentStyleCard(String key, String comment) throws HeaderCardException, LongValueException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1703,7 +1492,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                        Header#insertUnkeyedComment(String)
      */
     public static HeaderCard createUnkeyedCommentCard(String text) throws HeaderCardException, LongValueException {
-        return createCommentStyleCard(BLANKS.key(), text);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1724,7 +1513,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                        Header#insertComment(String)
      */
     public static HeaderCard createCommentCard(String text) throws HeaderCardException, LongValueException {
-        return createCommentStyleCard(COMMENT.key(), text);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1745,7 +1534,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                        Header#insertHistory(String)
      */
     public static HeaderCard createHistoryCard(String text) throws HeaderCardException, LongValueException {
-        return createCommentStyleCard(HISTORY.key(), text);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1801,9 +1590,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      */
     private static String readRecord(InputReader in) throws IOException, TruncatedFileException {
         byte[] buffer = new byte[FITS_HEADER_CARD_SIZE];
-
         int got = 0;
-
         try {
             // Read as long as there is more available, even if it comes in a trickle...
             while (got < buffer.length) {
@@ -1816,18 +1603,14 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
         } catch (EOFException e) {
             // Just in case read throws EOFException instead of returning -1 by contract.
         }
-
         if (got == 0) {
             // Nothing left to read.
             throw new EOFException();
         }
-
         if (got < buffer.length) {
             // Got an incomplete header card...
-            throw new TruncatedFileException(
-                    "Got only " + got + " of " + buffer.length + " bytes expected for a header card");
+            throw new TruncatedFileException("Got only " + got + " of " + buffer.length + " bytes expected for a header card");
         }
-
         return AsciiFuncs.asciiString(buffer);
     }
 
@@ -1843,9 +1626,8 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @throws TruncatedFileException if there was not a complete line available in the input.
      * @throws IOException            if the input stream could not be read
      */
-    @SuppressWarnings({"resource", "deprecation"})
-    private static String readOneHeaderLine(HeaderCardCountingArrayDataInput dis)
-            throws IOException, TruncatedFileException {
+    @SuppressWarnings({ "resource", "deprecation" })
+    private static String readOneHeaderLine(HeaderCardCountingArrayDataInput dis) throws IOException, TruncatedFileException {
         String s = readRecord(dis.in());
         dis.cardRead();
         return s;
@@ -1925,13 +1707,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see        #validateChars(String)
      */
     public static String sanitize(String str) {
-        int nc = str.length();
-        char[] cbuf = new char[nc];
-        for (int ic = 0; ic < nc; ic++) {
-            char c = str.charAt(ic);
-            cbuf[ic] = isValidChar(c) ? c : '?';
-        }
-        return new String(cbuf);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1946,7 +1722,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see      #sanitize(String)
      */
     public static boolean isValidChar(char c) {
-        return (c >= MIN_VALID_CHAR && c <= MAX_VALID_CHAR);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1966,21 +1742,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                             #validateKey(String)
      */
     public static void validateChars(String text) throws IllegalArgumentException {
-        if (text == null) {
-            return;
-        }
-
-        for (int i = text.length(); --i >= 0;) {
-            char c = text.charAt(i);
-            if (c < MIN_VALID_CHAR) {
-                throw new IllegalArgumentException(
-                        "Non-printable character(s), e.g. 0x" + (int) c + ", in [" + sanitize(text) + "].");
-            }
-            if (c > MAX_VALID_CHAR) {
-                throw new IllegalArgumentException(
-                        "Extendeed ASCII character(s) in [" + sanitize(text) + "]. Only 0x20 through 0x7E are allowed.");
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1998,44 +1760,7 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      * @see                             FitsFactory#setUseHierarch(boolean)
      */
     public static void validateKey(String key) throws IllegalArgumentException {
-        int maxLength = MAX_KEYWORD_LENGTH;
-        if (isHierarchKey(key)) {
-            if (!FitsFactory.getUseHierarch()) {
-                throw new HierarchNotEnabledException(key);
-            }
-            maxLength = MAX_HIERARCH_KEYWORD_LENGTH;
-            validateHierarchComponents(key);
-        }
-
-        if (key.length() > maxLength) {
-            throw new IllegalArgumentException("Keyword is too long: [" + sanitize(key) + "]");
-        }
-
-        // Check the whole key for non-printable, non-standard ASCII
-        for (int i = key.length(); --i >= 0;) {
-            char c = key.charAt(i);
-            if (c < MIN_VALID_CHAR) {
-                throw new IllegalArgumentException(
-                        "Keyword contains non-printable character 0x" + (int) c + ": [" + sanitize(key) + "].");
-            }
-            if (c > MAX_VALID_CHAR) {
-                throw new IllegalArgumentException("Keyword contains extendeed ASCII characters: [" + sanitize(key)
-                        + "]. Only 0x20 through 0x7E are allowed.");
-            }
-        }
-
-        // Check if the first 8 characters conform to strict FITS specification...
-        for (int i = Math.min(MAX_KEYWORD_LENGTH, key.length()); --i >= 0;) {
-            char c = key.charAt(i);
-            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-                continue;
-            }
-            if ((c >= '0' && c <= '9') || (c == '-') || (c == '_')) {
-                continue;
-            }
-            throw new IllegalArgumentException(
-                    "Keyword [" + sanitize(key) + "] contains invalid characters. Only [A-Z][a-z][0-9][-][_] are allowed.");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -2049,13 +1774,11 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
      *                                      components
      */
     private static void validateHierarchComponents(String key) throws IllegalArgumentException {
-        for (int i = key.length(); --i >= 0;) {
+        for (int i = key.length(); --i >= 0; ) {
             if (Character.isSpaceChar(key.charAt(i))) {
-                throw new IllegalArgumentException(
-                        "No spaces allowed in HIERARCH keywords used internally: [" + sanitize(key) + "].");
+                throw new IllegalArgumentException("No spaces allowed in HIERARCH keywords used internally: [" + sanitize(key) + "].");
             }
         }
-
         if (key.indexOf("..") >= 0) {
             throw new IllegalArgumentException("HIERARCH keywords with empty component: [" + sanitize(key) + "].");
         }
@@ -2080,5 +1803,4 @@ public class HeaderCard implements CursorValue<String>, Cloneable {
             }
         }
     }
-
 }

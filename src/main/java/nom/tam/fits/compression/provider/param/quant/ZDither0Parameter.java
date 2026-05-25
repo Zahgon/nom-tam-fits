@@ -1,7 +1,6 @@
 package nom.tam.fits.compression.provider.param.quant;
 
 import nom.tam.fits.Header;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import nom.tam.fits.Header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.compression.algorithm.quant.QuantizeOption;
@@ -84,21 +82,12 @@ final class ZDither0Parameter extends CompressHeaderParameter<QuantizeOption> {
 
     @Override
     public void getValueFromHeader(Header header) throws HeaderCardException {
-        if (getOption() == null) {
-            return;
-        }
-
-        HeaderCard card = header.getCard(Compression.ZDITHER0);
-        getOption().setSeed(card == null ? 1L : card.getValue(Long.class, 1L));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValueInHeader(Header header) throws HeaderCardException {
-        if (getOption() == null) {
-            return;
-        }
-
-        header.addValue(Compression.ZDITHER0, (int) getOption().getSeed());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,7 +99,6 @@ final class ZDither0Parameter extends CompressHeaderParameter<QuantizeOption> {
      *                                  <code>null</code> was specified in the constructor).
      */
     void setTileIndex(int index) throws NullPointerException {
-        getOption().setTileIndex(index);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

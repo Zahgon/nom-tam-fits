@@ -30,7 +30,6 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.Closeable;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -46,7 +45,6 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.compress.CompressionManager;
 import nom.tam.fits.header.Standard;
 import nom.tam.fits.utilities.FitsCheckSum;
@@ -59,7 +57,6 @@ import nom.tam.util.FitsOutputStream;
 import nom.tam.util.RandomAccess;
 import nom.tam.util.RandomAccessFileIO;
 import nom.tam.util.SafeClose;
-
 import static nom.tam.fits.header.Standard.EXTNAME;
 import static nom.tam.fits.header.Standard.EXTVER;
 
@@ -76,34 +73,34 @@ import static nom.tam.fits.header.Standard.EXTVER;
  * <p>
  * <code>Fits</code> objects can be built-up HDU-by-HDU, and then written to a file (or stream), e.g.:
  * </p>
- * 
+ *
  * <pre>
  *   // Create a new empty Fits containe
- *   Fits fits = new Fits(); 
- *   
+ *   Fits fits = new Fits();
+ *
  *   // Create an image HDU, e.g. from a 2D array we have prepared earlier
  *   float[][] image = ...
  *   BasicHDU&lt;?&gt; imageHDU = Fits.makeHDU(image);
- *   
+ *
  *   // ... we can of course add data to the HDU's header as we like...
- *   
+ *
  *   // Make this image the first HDU...
- *   fits.addHDU(imageHDU); 
- *   
+ *   fits.addHDU(imageHDU);
+ *
  *   // Write the FITS to a file...
  *   fits.write("myimage.fits");
  * </pre>
  * <p>
  * Or, we may read a <code>Fits</code> object from the input, e.g. as:
  * </p>
- * 
+ *
  * <pre>
  *   // Create and empty Fits assigned to an input file
  *   Fits f = new Fits(new File("myimage.fits");
- *   
+ *
  *   // Read the entire FITS (skipping over the data for now...)
  *   f.read();
- *   
+ *
  *   // Get the image data from the first HDU (will actually read the image now)
  *   float[][] image = (float[][]) f.getHDU(0).getKernel();
  * </pre>
@@ -119,11 +116,11 @@ import static nom.tam.fits.header.Standard.EXTVER;
  * when using {@link #getHDU(int)} or {@link #getHDU(String)} methods, even if {@link #read()} was not called
  * previously, e.g.:
  * </p>
- * 
+ *
  * <pre>
  *   // Create and empty Fits assigned to an input
  *   Fits f = new Fits(new File("myimage.fits");
- *   
+ *
  *   // Get HDU index 2 (0-based, i.e. 3rd HDU) FITS. It will read (stream) or skim (file) the FITS up to the 3rd
  *   // HDU, returning it. If the FITS file or stream contains further HDUs they will not be accessed until we
  *   // need them later (if at all).
@@ -150,7 +147,7 @@ import static nom.tam.fits.header.Standard.EXTVER;
  * variety of formats. The {@link Data} class, and its concrete subclassses provide access to the specific data object
  * that the HDU encapsulates.
  * </p>
- * 
+ *
  * @see     FitsFactory
  *
  * @version 1.21
@@ -229,7 +226,7 @@ public class Fits implements Closeable {
      * {@link #readHDU()}/{@link #getHDU(int)} for select HDUs, which you can then add via {@link #addHDU(BasicHDU)} to
      * the container.
      * </p>
-     * 
+     *
      * @deprecated               Use {@link #Fits(File)} instead (compression is auto detected). Will remove in the
      *                               future.
      *
@@ -393,7 +390,7 @@ public class Fits implements Closeable {
      * @see                  #readHDU()
      * @see                  #skipHDU()
      * @see                  #addHDU(BasicHDU)
-     **/
+     */
     public Fits(String filename) throws FitsException {
         this(filename, CompressionManager.isCompressed(filename));
     }
@@ -421,7 +418,7 @@ public class Fits implements Closeable {
      *                               method in the future.
      *
      * @see                      #Fits(String)
-     **/
+     */
     @SuppressWarnings("resource")
     @Deprecated
     public Fits(String filename, boolean compressed) throws FitsException {
@@ -456,7 +453,6 @@ public class Fits implements Closeable {
             LOG.log(Level.FINE, "not a url " + filename, e);
             throw new FitsException("could not detect type of " + filename, e);
         }
-
     }
 
     /**
@@ -522,7 +518,7 @@ public class Fits implements Closeable {
 
     /**
      * Creates a new empty HDU for the given data type.
-     * 
+     *
      * @return               a newly created HDU from the given Data.
      *
      * @param  data          The data to be described in this HDU.
@@ -531,14 +527,12 @@ public class Fits implements Closeable {
      * @throws FitsException if the operation failed
      */
     public static <DataClass extends Data> BasicHDU<DataClass> makeHDU(DataClass data) throws FitsException {
-        Header hdr = new Header();
-        data.fillHeader(hdr);
-        return FitsFactory.hduFactory(hdr, data);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Creates a new empty HDU based on the header description of the data
-     * 
+     *
      * @return               a newly created HDU from the given header (and including the header).
      *
      * @param  h             The header which describes the FITS extension
@@ -546,8 +540,7 @@ public class Fits implements Closeable {
      * @throws FitsException if the header could not be converted to a HDU.
      */
     public static BasicHDU<?> makeHDU(Header h) throws FitsException {
-        Data d = FitsFactory.dataFactory(h);
-        return FitsFactory.hduFactory(h, d);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -573,39 +566,31 @@ public class Fits implements Closeable {
      * arises to create new random groups HDUs with this library, you may use
      * {@link RandomGroupsHDU#createFrom(Object[][])} instead.
      * </p>
-     * 
+     *
      * @return               a newly created HDU from the given data kernel.
      *
      * @param  o             The data to be described in this HDU.
      *
      * @throws FitsException if the parameter could not be converted to a HDU.
-     * 
+     *
      * @see                  RandomGroupsHDU#createFrom(Object[][])
      */
     public static BasicHDU<?> makeHDU(Object o) throws FitsException {
-        return FitsFactory.hduFactory(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the version sting of this FITS library
-     * 
+     *
      * @return the version of the library.
      */
     public static String version() {
-        Properties props = new Properties();
-        try (InputStream versionProperties = Fits.class
-                .getResourceAsStream("/META-INF/maven/gov.nasa.gsfc.heasarc/nom-tam-fits/pom.properties")) {
-            props.load(versionProperties);
-            return props.getProperty("version");
-        } catch (IOException e) {
-            LOG.log(Level.INFO, "reading version failed, ignoring", e);
-            return "unknown";
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * close the input stream, and ignore eventual errors.
-     * 
+     *
      * @deprecated    Use <b>try-with-resources</b> constructs in Java 8+ instead.
      *
      * @param      in the input stream to close.
@@ -626,7 +611,7 @@ public class Fits implements Closeable {
      * @see                  #readHDU()
      */
     public void addHDU(BasicHDU<?> myHDU) throws FitsException {
-        insertHDU(myHDU, getNumberOfHDUs());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -651,19 +636,7 @@ public class Fits implements Closeable {
      * @throws FitsException if the HDU could not be deleted.
      */
     public void deleteHDU(int n) throws FitsException {
-        int size = getNumberOfHDUs();
-        if (n < 0 || n >= size) {
-            throw new FitsException("Attempt to delete non-existent HDU:" + n);
-        }
-        hduList.remove(n);
-        if (n == 0 && size > 1) {
-            BasicHDU<?> newFirst = hduList.get(0);
-            if (newFirst.canBePrimary()) {
-                newFirst.setPrimaryHDU(true);
-            } else {
-                insertHDU(BasicHDU.getDummyHDU(), 0);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -706,13 +679,7 @@ public class Fits implements Closeable {
      * @see                              #getHDU(String, int)
      */
     public BasicHDU<?> getHDU(int n) throws FitsException, IOException, IndexOutOfBoundsException {
-        for (int i = getNumberOfHDUs(); i <= n; i++) {
-            BasicHDU<?> hdu = readHDU();
-            if (hdu == null) {
-                return null;
-            }
-        }
-        return hduList.get(n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -721,24 +688,19 @@ public class Fits implements Closeable {
      * configured as the primary HDU with all mandatory keywords, even if the HDU's header did not contain these entries
      * originally. (Subsequent calls to <code>getHDU(0).getHeader()</code> will also contain the populated mandatory
      * keywords).
-     * 
+     *
      * @return               The primary header of this FITS file/object.
-     * 
+     *
      * @throws FitsException If the Fits is empty (does not contain a primary HDU)
      * @throws IOException   if there was a problem accessing the FITS from the input
-     * 
+     *
      * @see                  #getCompleteHeader(int)
      * @see                  BasicHDU#getHeader()
-     * 
+     *
      * @since                1.19
      */
     public Header getPrimaryHeader() throws FitsException, IOException {
-        if (hduList.isEmpty()) {
-            throw new FitsException("Empty Fits object");
-        }
-        BasicHDU<?> primary = getHDU(0);
-        primary.setPrimaryHDU(true);
-        return primary.getHeader();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -751,31 +713,27 @@ public class Fits implements Closeable {
      * <li>If the header contains the {@link Standard#INHERIT} keyword, a new header object is returned, which merges
      * the non-conflicting primary header keys on top of the keywords explicitly defined in the HDU already.
      * </ul>
-     * 
+     *
      * @param  n                         The zero-based index of the HDU.
-     * 
+     *
      * @return                           The completed header of the HDU. If the HDU contains the INHERIT key this
      *                                       header will be a new header object constructed by this call to include also
      *                                       all non-conflicting primary header keywords. Otherwise it will simply
      *                                       return the HDUs header (after adding the mandatory keywords).
-     * 
+     *
      * @throws FitsException             If the FITS is empty
      * @throws IOException               If the HDU is not accessible from its source
      * @throws IndexOutOfBoundsException If the FITS does not contain a HDU by the specified index
-     * 
+     *
      * @see                              #getCompleteHeader(String)
      * @see                              #getCompleteHeader(String, int)
      * @see                              #getPrimaryHeader()
      * @see                              #getHDU(int)
-     * 
+     *
      * @since                            1.19
      */
     public Header getCompleteHeader(int n) throws FitsException, IOException, IndexOutOfBoundsException {
-        BasicHDU<?> hdu = getHDU(n);
-        if (hdu == null) {
-            throw new IndexOutOfBoundsException("FITS has no HDU index " + n);
-        }
-        return getCompleteHeader(hdu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -788,31 +746,27 @@ public class Fits implements Closeable {
      * <li>If the header contains the {@link Standard#INHERIT} keyword, a new header object is returned, which merges
      * the non-conflicting primary header keys on top of the keywords explicitly defined in the HDU already.
      * </ul>
-     * 
+     *
      * @param  name                   The HDU name
-     * 
+     *
      * @return                        The completed header of the HDU. If the HDU contains the INHERIT key this header
      *                                    will be a new header object constructed by this call to include also all
      *                                    non-conflicting primary header keywords. Otherwise it will simply return the
      *                                    HDUs header (after adding the mandatory keywords).
-     * 
+     *
      * @throws FitsException          If the FITS is empty
      * @throws IOException            If the HDU is not accessible from its source
      * @throws NoSuchElementException If the FITS does not contain a HDU by the specified name
-     * 
+     *
      * @see                           #getCompleteHeader(String, int)
      * @see                           #getCompleteHeader(int)
      * @see                           #getPrimaryHeader()
      * @see                           #getHDU(int)
-     * 
+     *
      * @since                         1.19
      */
     public Header getCompleteHeader(String name) throws FitsException, IOException, NoSuchElementException {
-        BasicHDU<?> hdu = getHDU(name);
-        if (hdu == null) {
-            throw new NoSuchElementException("Fits contains no HDU named " + name);
-        }
-        return getCompleteHeader(hdu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -825,32 +779,28 @@ public class Fits implements Closeable {
      * <li>If the header contains the {@link Standard#INHERIT} keyword, a new header object is returned, which merges
      * the non-conflicting primary header keys on top of the keywords explicitly defined in the HDU already.
      * </ul>
-     * 
+     *
      * @param  name                   The HDU name
      * @param  version                The HDU version
-     * 
+     *
      * @return                        The completed header of the HDU. If the HDU contains the INHERIT key this header
      *                                    will be a new header object constructed by this call to include also all
      *                                    non-conflicting primary header keywords. Otherwise it will simply return the
      *                                    HDUs header (after adding the mandatory keywords).
-     * 
+     *
      * @throws FitsException          If the FITS is empty
      * @throws IOException            If the HDU is not accessible from its source
      * @throws NoSuchElementException If the FITS does not contain a HDU by the specified name and version
-     * 
+     *
      * @see                           #getCompleteHeader(String)
      * @see                           #getCompleteHeader(int)
      * @see                           #getPrimaryHeader()
      * @see                           #getHDU(int)
-     * 
+     *
      * @since                         1.19
      */
     public Header getCompleteHeader(String name, int version) throws FitsException, IOException, NoSuchElementException {
-        BasicHDU<?> hdu = getHDU(name, version);
-        if (hdu == null) {
-            throw new NoSuchElementException("Fits contains no HDU named " + name);
-        }
-        return getCompleteHeader(hdu);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Header getCompleteHeader(BasicHDU<?> hdu) throws FitsException, IOException {
@@ -927,22 +877,7 @@ public class Fits implements Closeable {
      * @see                  #getHDU(int)
      */
     public BasicHDU<?> getHDU(String name) throws FitsException, IOException {
-        // Check HDUs we already read...
-        for (BasicHDU<?> hdu : hduList) {
-            if (isNameMatch(hdu, name)) {
-                return hdu;
-            }
-        }
-
-        // Read additional HDUs as necessary...
-        BasicHDU<?> hdu;
-        while ((hdu = readHDU()) != null) {
-            if (isNameMatch(hdu, name)) {
-                return hdu;
-            }
-        }
-
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -965,22 +900,7 @@ public class Fits implements Closeable {
      * @see                  #getHDU(int)
      */
     public BasicHDU<?> getHDU(String name, int version) throws FitsException, IOException {
-        // Check HDUs we already read...
-        for (BasicHDU<?> hdu : hduList) {
-            if (isNameVersionMatch(hdu, name, version)) {
-                return hdu;
-            }
-        }
-
-        // Read additional HDUs as necessary...
-        BasicHDU<?> hdu;
-        while ((hdu = readHDU()) != null) {
-            if (isNameVersionMatch(hdu, name, version)) {
-                return hdu;
-            }
-        }
-
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -990,12 +910,12 @@ public class Fits implements Closeable {
      * call {@link #read()} to register them all before calling this method.
      *
      * @return The number of HDU's in the object.
-     * 
+     *
      * @see    #read()
      * @see    #readHDU()
      */
     public int getNumberOfHDUs() {
-        return hduList.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1006,7 +926,7 @@ public class Fits implements Closeable {
      *             rea/wrte access to the FITS resource directly.
      */
     public ArrayDataInput getStream() {
-        return dataStr;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1018,40 +938,7 @@ public class Fits implements Closeable {
      * @throws FitsException if the HDU could not be inserted.
      */
     public void insertHDU(BasicHDU<?> myHDU, int position) throws FitsException {
-        if (myHDU == null) {
-            return;
-        }
-        if (position < 0 || position > getNumberOfHDUs()) {
-            throw new FitsException("Attempt to insert HDU at invalid location: " + position);
-        }
-        if (myHDU instanceof RandomGroupsHDU && position != 0) {
-            throw new FitsException("Random groups HDUs must be the first (primary) HDU. Requested pos: " + position);
-        }
-
-        try {
-            if (position == 0) {
-                // Note that the previous initial HDU is no longer the first.
-                // If we were to insert tables backwards from last to first,
-                // we could get a lot of extraneous DummyHDUs but we currently
-                // do not worry about that.
-                if (getNumberOfHDUs() > 0) {
-                    hduList.get(0).setPrimaryHDU(false);
-                }
-                if (myHDU.canBePrimary()) {
-                    myHDU.setPrimaryHDU(true);
-                    hduList.add(0, myHDU);
-                } else {
-                    insertHDU(BasicHDU.getDummyHDU(), 0);
-                    myHDU.setPrimaryHDU(false);
-                    hduList.add(1, myHDU);
-                }
-            } else {
-                myHDU.setPrimaryHDU(false);
-                hduList.add(position, myHDU);
-            }
-        } catch (NoSuchElementException e) {
-            throw new FitsException("hduList inconsistency in insertHDU", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1066,7 +953,6 @@ public class Fits implements Closeable {
     // TODO make private
     @Deprecated
     protected void randomInit(File file) throws FitsException {
-
         if (!file.exists() || !file.canRead()) {
             throw new FitsException("Non-existent or unreadable file");
         }
@@ -1095,12 +981,7 @@ public class Fits implements Closeable {
      * @see                  #randomInit(File)
      */
     protected void randomInit(RandomAccessFileIO src) throws FitsException {
-        try {
-            dataStr = new FitsFile(src, FitsIO.DEFAULT_BUFFER_SIZE);
-            ((FitsFile) dataStr).seek(0);
-        } catch (IOException e) {
-            throw new FitsException("Unable to open data " + src, e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1113,12 +994,7 @@ public class Fits implements Closeable {
      * @throws FitsException if the reading failed.
      */
     public BasicHDU<?>[] read() throws FitsException {
-        readToEnd();
-        int size = getNumberOfHDUs();
-        if (size == 0) {
-            return new BasicHDU<?>[0];
-        }
-        return hduList.toArray(new BasicHDU<?>[size]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1127,14 +1003,13 @@ public class Fits implements Closeable {
      * @param      is            The InputStream stream whence the FITS information is found.
      *
      * @throws     FitsException if the data read could not be interpreted
-     * 
+     *
      * @deprecated               Use {@link #Fits(InputStream)} constructor instead. We will remove this method in the
      *                               future.
      */
     @Deprecated
     public void read(InputStream is) throws FitsException {
         is = CompressionManager.decompress(is);
-
         if (is instanceof ArrayDataInput) {
             dataStr = (ArrayDataInput) is;
         } else {
@@ -1158,42 +1033,7 @@ public class Fits implements Closeable {
      * @see                  #addHDU(BasicHDU)
      */
     public BasicHDU<?> readHDU() throws FitsException, IOException {
-        if (dataStr == null || atEOF) {
-            if (dataStr == null) {
-                LOG.warning("trying to read a hdu, without an input source!");
-            }
-            return null;
-        }
-
-        if (dataStr instanceof RandomAccess && lastFileOffset > 0) {
-            FitsUtil.reposition(dataStr, lastFileOffset);
-        }
-
-        Header hdr = Header.readHeader(dataStr);
-        if (hdr == null) {
-            atEOF = true;
-            return null;
-        }
-
-        Data data = FitsFactory.dataFactory(hdr);
-        try {
-            data.read(dataStr);
-            if (Fits.checkTruncated(dataStr)) {
-                // Check for truncation even if we successfully skipped to the expected
-                // end since skip may allow going beyond the EOF.
-                LOG.warning("Missing padding after data segment");
-            }
-        } catch (PaddingException e) {
-            // Stream end before required padding after data...
-            LOG.warning(e.getMessage());
-        }
-
-        lastFileOffset = FitsUtil.findOffset(dataStr);
-        BasicHDU<Data> hdu = FitsFactory.hduFactory(hdr, data);
-
-        hduList.add(hdu);
-
-        return hdu;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1236,7 +1076,7 @@ public class Fits implements Closeable {
      * @since                1.17
      */
     public void setChecksum(int hduIndex) throws FitsException, IOException {
-        FitsCheckSum.setDatasum(getHDU(hduIndex).getHeader(), calcDatasum(hduIndex));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1259,24 +1099,7 @@ public class Fits implements Closeable {
      * @see                  #rewrite()
      */
     public void setChecksum() throws FitsException, IOException {
-        int i = 0;
-
-        // Start with HDU's already loaded, leaving deferred data in unloaded
-        // state
-        for (; i < getNumberOfHDUs(); i++) {
-            setChecksum(i);
-        }
-
-        // Check if Fits is read from an input of sorts, with potentially more
-        // HDUs there...
-        if (dataStr == null) {
-            return;
-        }
-
-        // Continue with unread HDUs (if any...)
-        while (readHDU() != null) {
-            setChecksum(i++);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1285,7 +1108,7 @@ public class Fits implements Closeable {
      * disk (in deferred read mode), the method will calculate the checksum directly from disk. Otherwise, it will
      * calculate the datasum from the data in memory.
      * </p>
-     * 
+     *
      * @param  hduIndex      The index of the HDU for which to calculate the data checksum
      *
      * @return               The data checksum. This may differ from the datasum or the original FITS input due to
@@ -1304,20 +1127,14 @@ public class Fits implements Closeable {
      * @since                1.17
      */
     public long calcDatasum(int hduIndex) throws FitsException, IOException {
-        BasicHDU<?> hdu = getHDU(hduIndex);
-        Data data = hdu.getData();
-        if (data.isDeferred()) {
-            // Compute datasum directly from file...
-            return FitsCheckSum.checksum((RandomAccess) dataStr, data.getFileOffset(), data.getSize());
-        }
-        return data.calcChecksum();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Calculates the FITS checksum for a given HDU in the Fits. If the HDU does not currently have data loaded from
      * disk (i.e. in deferred read mode), the method will compute the checksum directly from disk. Otherwise, it will
      * calculate the checksum from the data in memory and using the standard padding after it.
-     * 
+     *
      * @deprecated               Use {@link BasicHDU#verifyIntegrity()} instead when appropriate. It's not particularly
      *                               useful since integrity checking does not use or require knowledge of this sum. May
      *                               be removed from future releases.
@@ -1328,7 +1145,7 @@ public class Fits implements Closeable {
      *                               output. This may differ from the checksum recorded in the input, due to different
      *                               formating conventions used by this library vs the one that was used to generate the
      *                               input.
-     * 
+     *
      * @throws     FitsException if there was an error processing the HDU.
      * @throws     IOException   if there was an I/O error accessing the input.
      *
@@ -1345,30 +1162,19 @@ public class Fits implements Closeable {
 
     /**
      * Checks the integrity of all HDUs. HDUs that do not specify either CHECKSUM or DATASUM keyword will be ignored.
-     * 
+     *
      * @throws FitsIntegrityException if the FITS is corrupted, the message will inform about which HDU failed the
      *                                    integrity test first.
      * @throws FitsException          if the header or HDU is invalid or garbled.
      * @throws IOException            if the Fits object is not associated to a random-accessible input, or if there was
      *                                    an I/O error accessing the input.
-     * 
+     *
      * @see                           BasicHDU#verifyIntegrity()
-     * 
+     *
      * @since                         1.18.1
      */
     public void verifyIntegrity() throws FitsIntegrityException, FitsException, IOException {
-        for (int i = 0;; i++) {
-            BasicHDU<?> hdu = readHDU();
-            if (hdu == null) {
-                break;
-            }
-
-            try {
-                hdu.verifyIntegrity();
-            } catch (FitsIntegrityException e) {
-                throw new FitsIntegrityException(i, e);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1422,16 +1228,7 @@ public class Fits implements Closeable {
      * @see                  #readHDU()
      */
     public void skipHDU() throws FitsException, IOException {
-        if (atEOF) {
-            return;
-        }
-
-        Header hdr = new Header(dataStr);
-        int dataSize = (int) hdr.getDataSize();
-        dataStr.skipAllBytes(dataSize);
-        if (dataStr instanceof RandomAccess) {
-            lastFileOffset = ((RandomAccess) dataStr).getFilePointer();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1445,9 +1242,7 @@ public class Fits implements Closeable {
      * @see                  #skipHDU()
      */
     public void skipHDU(int n) throws FitsException, IOException {
-        for (int i = 0; i < n; i++) {
-            skipHDU();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1461,7 +1256,7 @@ public class Fits implements Closeable {
      * @throws FitsException if the initialization failed
      */
     protected void streamInit(InputStream inputStream) throws FitsException {
-        dataStr = new FitsInputStream(CompressionManager.decompress(inputStream));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1478,8 +1273,7 @@ public class Fits implements Closeable {
      * @see                  #write(FitsOutputStream)
      */
     public void write(FitsFile file) throws IOException, FitsException {
-        write((ArrayDataOutput) file);
-        file.setLength(file.getFilePointer());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1498,8 +1292,7 @@ public class Fits implements Closeable {
      * @see                  #write(String)
      */
     public void write(FitsOutputStream out) throws IOException, FitsException {
-        write((ArrayDataOutput) out);
-        out.flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1513,10 +1306,7 @@ public class Fits implements Closeable {
      * @see                  #write(FitsOutputStream)
      */
     public void write(File file) throws IOException, FitsException {
-        try (FileOutputStream o = new FileOutputStream(file); FitsOutputStream fo = new FitsOutputStream(o)) {
-            write(fo);
-            o.flush();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1534,15 +1324,7 @@ public class Fits implements Closeable {
      * @see                  BasicHDU#rewriteable()
      */
     public void rewrite() throws FitsException, IOException {
-        for (int i = 0; i < getNumberOfHDUs(); i++) {
-            if (!getHDU(i).rewriteable()) {
-                throw new FitsException("HDU[" + i + "] cannot be re-written in place. Aborting rewrite.");
-            }
-        }
-
-        for (int i = 0; i < getNumberOfHDUs(); i++) {
-            getHDU(i).rewrite();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1558,7 +1340,7 @@ public class Fits implements Closeable {
      * @see                  #write(File)
      */
     public void write(String fileName) throws IOException, FitsException {
-        write(new File(fileName));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     // TODO For DataOutputStream this one conflicts with write(DataOutput).
@@ -1567,7 +1349,6 @@ public class Fits implements Closeable {
     // public void write(OutputStream os) throws IOException, FitsException {
     // write(new FitsOutputStream(os));
     // }
-
     /**
      * Writes the contents to the specified output. This should not be exposed outside of this class, since the output
      * object must have FITS-specific encoding, and we can only make sure of that if this is called locally only.
@@ -1612,7 +1393,6 @@ public class Fits implements Closeable {
                 throw new FitsException("Error writing to FITS file: " + e, e);
             }
         }
-
         if (os instanceof FitsOutputStream) {
             try {
                 write((FitsOutputStream) os);
@@ -1621,11 +1401,9 @@ public class Fits implements Closeable {
                 throw new FitsException("Error writing to FITS output stream: " + e, e);
             }
         }
-
         if (!(os instanceof DataOutputStream)) {
             throw new FitsException("Cannot create FitsOutputStream from class " + os.getClass().getName());
         }
-
         try (FitsOutputStream fos = new FitsOutputStream((DataOutputStream) os)) {
             write(fos);
         } catch (IOException e) {
@@ -1635,9 +1413,7 @@ public class Fits implements Closeable {
 
     @Override
     public void close() throws IOException {
-        if (dataStr != null) {
-            dataStr.close();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1687,18 +1463,6 @@ public class Fits implements Closeable {
      * @since              1.16
      */
     static boolean checkTruncated(ArrayDataInput in) throws IOException {
-        if (!(in instanceof RandomAccess)) {
-            // We cannot skip more than is available in an input stream.
-            return false;
-        }
-
-        RandomAccess f = (RandomAccess) in;
-        long pos = f.getFilePointer();
-        long len = f.length();
-        if (pos > len) {
-            LOG.log(Level.WARNING, "Premature file end at " + len + " (expected " + pos + ")", new Throwable());
-            return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

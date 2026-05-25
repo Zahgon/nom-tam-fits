@@ -8,9 +8,7 @@ import java.io.InputStream;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.FitsException;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -41,7 +39,6 @@ import nom.tam.fits.FitsException;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.util.LoggerHelper.getLogger;
 
 /**
@@ -50,7 +47,7 @@ import static nom.tam.util.LoggerHelper.getLogger;
  * compressed input stream. When possible, preference will be given to perform the decompression using a system command
  * (<code>uncompress</code> or <code>bzip2</code>, which are likely faster for large files). If such a tool is not
  * available, then the Apache <b>common-compress</b> classes will be used to the same effect.
- * 
+ *
  * @see GZipCompressionProvider
  * @see BZip2CompressionProvider
  * @see ZCompressionProvider
@@ -63,7 +60,9 @@ public final class CompressionManager {
 
     private static final String GZIP_EXTENTION = ".gz";
 
-    /** bytes in a megabyte (MB) */
+    /**
+     * bytes in a megabyte (MB)
+     */
     public static final int ONE_MEGABYTE = 1024 * 1024;
 
     /**
@@ -86,25 +85,7 @@ public final class CompressionManager {
      * @throws FitsException when the stream could not be read or decompressed
      */
     public static InputStream decompress(InputStream compressed) throws FitsException {
-        BufferedInputStream pb = new BufferedInputStream(compressed, ONE_MEGABYTE);
-        pb.mark(2);
-        int mag1 = -1;
-        int mag2 = -1;
-
-        try {
-            mag1 = pb.read();
-            mag2 = pb.read();
-            // Push the data back into the stream
-            pb.reset();
-            ICompressProvider selectedProvider = selectCompressionProvider(mag1, mag2);
-            if (selectedProvider != null) {
-                return selectedProvider.decompress(pb);
-            }
-            return pb;
-        } catch (IOException e) {
-            // This is probably a prelude to failure...
-            throw new FitsException("Unable to analyze input stream", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -115,19 +96,7 @@ public final class CompressionManager {
      * @return      true if the file is compressed
      */
     public static boolean isCompressed(File file) {
-        if (!file.exists()) {
-            return false;
-        }
-
-        try (InputStream fis = new FileInputStream(file)) {
-            int mag1 = fis.read();
-            int mag2 = fis.read();
-            fis.close();
-            return selectCompressionProvider(mag1, mag2) != null;
-        } catch (IOException e) {
-            LOG.log(Level.FINEST, "Error while checking if file " + file + " is compressed", e);
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -140,28 +109,13 @@ public final class CompressionManager {
      * <p>
      * As of 1.18, all file extension are checked in a case insensitive manner
      * </p>
-     * 
+     *
      * @param  filename of the file to test for compression algorithms
      *
      * @return          true if the file is compressed
      */
     public static boolean isCompressed(String filename) {
-        if (filename == null) {
-            return false;
-        }
-        File test = new File(filename);
-        if (test.exists()) {
-            return isCompressed(test);
-        }
-
-        int iExt = filename.lastIndexOf('.');
-        if (iExt < 0) {
-            return false;
-        }
-
-        String ext = filename.substring(iExt);
-        return ext.equalsIgnoreCase(GZIP_EXTENTION) || ext.equalsIgnoreCase(COMPRESS_EXTENTION)
-                || ext.equalsIgnoreCase(BZIP2_EXTENTION);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static ICompressProvider selectCompressionProvider(int mag1, int mag2) {
@@ -171,30 +125,14 @@ public final class CompressionManager {
     /**
      * Returned the next highest priority decompression class, after the one we don't want, for the given type of
      * compressed file.
-     * 
+     *
      * @param  mag1 the first magic byte at the head of the compressed file
      * @param  mag2 the second magic byte at the head of the compressed file
      * @param  old  the last decompression class we tried for this type of file
-     * 
+     *
      * @return      the next lower priority decompression class we might use.
      */
     protected static ICompressProvider nextCompressionProvider(int mag1, int mag2, ICompressProvider old) {
-        ICompressProvider selectedProvider = null;
-        int priority = 0;
-        int maxPriority = Integer.MAX_VALUE;
-        if (old != null) {
-            maxPriority = old.priority();
-        }
-        ServiceLoader<ICompressProvider> compressionProviders = ServiceLoader.load(ICompressProvider.class,
-                Thread.currentThread().getContextClassLoader());
-
-        for (ICompressProvider provider : compressionProviders) {
-            if (provider.priority() > Math.max(0, priority) && provider.priority() < maxPriority && provider != old && //
-                    provider.provides(mag1, mag2)) {
-                priority = provider.priority();
-                selectedProvider = provider;
-            }
-        }
-        return selectedProvider;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,7 +30,6 @@ package nom.tam.fits.compression.algorithm.hcompress;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.provider.param.api.ICompressParameters;
 import nom.tam.fits.compression.provider.param.hcompress.HCompressParameters;
@@ -39,16 +38,20 @@ import nom.tam.fits.compression.provider.param.hcompress.HCompressParameters;
  * Options to the HCompress compression algorithm. When compressing tables and images using the HCompress algorithm,
  * users can control how exactly the compression is perfomed. When reading compressed FITS files, these options will be
  * set automatically based on the header values recorded in the compressed HDU.
- * 
+ *
  * @see nom.tam.image.compression.hdu.CompressedImageHDU#setCompressAlgorithm(String)
  * @see nom.tam.image.compression.hdu.CompressedImageHDU#getCompressOption(Class)
  */
 public class HCompressorOption implements ICompressOption {
 
-    /** Shared configuration across copies. */
+    /**
+     * Shared configuration across copies.
+     */
     private final Config config;
 
-    /** The parameters that represent settings for this option in the FITS headers and/or compressed data columns */
+    /**
+     * The parameters that represent settings for this option in the FITS headers and/or compressed data columns
+     */
     private HCompressParameters parameters;
 
     private int tileHeight;
@@ -65,120 +68,101 @@ public class HCompressorOption implements ICompressOption {
 
     @Override
     public HCompressorOption copy() {
-        try {
-            HCompressorOption copy = (HCompressorOption) clone();
-            copy.parameters = parameters.copy(copy);
-            return copy;
-        } catch (CloneNotSupportedException e) {
-            throw new IllegalStateException("option could not be cloned", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public HCompressParameters getCompressionParameters() {
-        return parameters;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the scale parameter value
-     * 
+     *
      * @return the value of the scale parameter.
-     * 
+     *
      * @see    #setScale(double)
      */
     public int getScale() {
-        return config.scale;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getTileHeight() {
-        return tileHeight;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getTileWidth() {
-        return tileWidth;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isLossyCompression() {
-        return config.scale > 0 || config.smooth;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if smoothing is enabled
-     * 
+     *
      * @return <code>true</code> if smoothing is enabled, otherwise <code>false</code>.
-     * 
+     *
      * @see    #setSmooth(boolean)
      */
     public boolean isSmooth() {
-        return config.smooth;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setParameters(ICompressParameters parameters) {
-        if (!(parameters instanceof HCompressParameters)) {
-            throw new IllegalArgumentException("Wrong type of parameters: " + parameters.getClass().getName());
-        }
-        this.parameters = (HCompressParameters) parameters;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the scale parameter
-     * 
+     *
      * @param  value                    the new scale parameter, which will be rounded to the nearest integer value for
      *                                      the actual implementation.
-     * 
+     *
      * @return                          itself
-     * 
+     *
      * @throws IllegalArgumentException if the scale value is negative
-     * 
+     *
      * @see                             #getScale()
      */
     public HCompressorOption setScale(double value) throws IllegalArgumentException {
-        if (value < 0.0) {
-            throw new IllegalArgumentException("Scale value cannot be negative: " + value);
-        }
-        config.scale = (int) Math.round(value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Enabled or disables smoothing.
-     * 
+     *
      * @param  value <code>true</code> to enable smoothing, or <code>false</code> to disable.
-     * 
+     *
      * @return       itself
      */
     public HCompressorOption setSmooth(boolean value) {
-        config.smooth = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> T unwrap(Class<T> clazz) {
-        if (clazz.isAssignableFrom(this.getClass())) {
-            return clazz.cast(this);
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public HCompressorOption setTileHeight(int value) {
-        tileHeight = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public HCompressorOption setTileWidth(int value) {
-        tileWidth = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Stores configuration in a way that can be shared and modified across enclosing option copies.
-     * 
+     *
      * @author Attila Kovacs
      *
      * @since  1.18
@@ -188,6 +172,5 @@ public class HCompressorOption implements ICompressOption {
         private int scale;
 
         private boolean smooth;
-
     }
 }

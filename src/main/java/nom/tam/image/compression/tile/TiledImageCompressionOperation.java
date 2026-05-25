@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
-
 import nom.tam.fits.BinaryTable;
 import nom.tam.fits.BinaryTableHDU;
 import nom.tam.fits.FitsException;
@@ -23,7 +22,6 @@ import nom.tam.image.compression.tile.mask.ImageNullPixelMask;
 import nom.tam.image.tile.operation.AbstractTiledImageOperation;
 import nom.tam.image.tile.operation.TileArea;
 import nom.tam.util.type.ElementType;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -54,7 +52,6 @@ import nom.tam.util.type.ElementType;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Compression.COMPRESSED_DATA_COLUMN;
 import static nom.tam.fits.header.Compression.GZIP_COMPRESSED_DATA_COLUMN;
 import static nom.tam.fits.header.Compression.NULL_PIXEL_MASK_COLUMN;
@@ -80,7 +77,7 @@ import static nom.tam.image.compression.tile.TileCompressionType.UNCOMPRESSED;
  * complete compression of a tiled describing an image ordered from left to right and top down. the tiles all have the
  * same geometry only the tiles at the right and bottom sides can have different (truncated) sizes.
  */
-@SuppressWarnings({"javadoc", "deprecation"})
+@SuppressWarnings({ "javadoc", "deprecation" })
 public class TiledImageCompressionOperation extends AbstractTiledImageOperation<TileCompressionOperation> {
 
     /**
@@ -135,79 +132,39 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
     }
 
     public void compress(BinaryTableHDU hdu) throws FitsException {
-        processAllTiles();
-        writeColumns(hdu);
-        writeHeader(hdu.getHeader());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized ICompressOption compressOptions() {
-        if (compressorControl == null) {
-            getCompressorControl();
-            compressOptions = compressorControl.option();
-            if (quantAlgorithm != null) {
-                Header h = new Header();
-                h.addLine(HeaderCard.create(ZQUANTIZ, quantAlgorithm));
-                compressOptions.getCompressionParameters().getValuesFromHeader(h);
-            }
-            compressOptions.getCompressionParameters().initializeColumns(getNumberOfTileOperations());
-        }
-        return compressOptions;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Buffer decompress() {
-        Buffer decompressedWholeArea = getBaseType().newBuffer(getBufferSize());
-        for (TileCompressionOperation tileOperation : getTileOperations()) {
-            tileOperation.setWholeImageBuffer(decompressedWholeArea);
-        }
-        processAllTiles();
-        decompressedWholeArea.rewind();
-        return decompressedWholeArea;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void forceNoLoss(int x, int y, int width, int heigth) {
-        TileArea tileArea = new TileArea().start(x, y).end(x + width, y + heigth);
-        for (TileCompressionOperation operation : getTileOperations()) {
-            if (operation.getArea().intersects(tileArea)) {
-                operation.forceNoLoss(true);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public ByteBuffer getCompressedWholeArea() {
-        return compressedWholeArea;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized ICompressorControl getCompressorControl() {
-        if (compressorControl == null) {
-            compressorControl = CompressorProvider.findCompressorControl(quantAlgorithm, compressAlgorithm,
-                    getBaseType().primitiveClass());
-            if (compressorControl == null) {
-                throw new IllegalStateException(
-                        "Found no compressor control for compression algorithm:" + compressAlgorithm + //
-                                " (quantize algorithm = " + quantAlgorithm + ", base type = "
-                                + getBaseType().primitiveClass() + ")");
-            }
-        }
-        return compressorControl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized ICompressorControl getGzipCompressorControl() {
-        if (gzipCompressorControl == null) {
-            gzipCompressorControl = CompressorProvider.findCompressorControl(null, ZCMPTYPE_GZIP_1,
-                    getBaseType().primitiveClass());
-        }
-        return gzipCompressorControl;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public TiledImageCompressionOperation prepareUncompressedData(final Buffer buffer) throws FitsException {
-        compressedWholeArea = ByteBuffer.wrap(new byte[getBaseType().size() * getBufferSize()]);
-        createTiles(new TileCompressorInitialisation(this, buffer));
-        compressedWholeArea.rewind();
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -220,29 +177,20 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
      * @return                      the created null pixel mask
      */
     public ImageNullPixelMask preserveNulls(long nullValue, String compressionAlgorithm) {
-        imageNullPixelMask = new ImageNullPixelMask(getTileOperations().length, nullValue, compressionAlgorithm);
-        for (TileCompressionOperation tileOperation : getTileOperations()) {
-            tileOperation.createImageNullPixelMask(getImageNullPixelMask());
-        }
-        return imageNullPixelMask;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private synchronized void setQuantAlgorithm(final Header header) {
         setQuantAlgorithm(header.getCard(ZQUANTIZ));
-
         if (quantAlgorithm != null) {
             return;
         }
-
         // AK: If no ZQUANTIZ keyword, but has ZSCALE and ZZERO columns, then use NO_DITHER quantiz...
         boolean hasScale = false;
         boolean hasZero = false;
-
         int nFields = header.getIntValue(TFIELDS);
-
         for (int i = 1; i <= nFields; i++) {
             String type = header.getStringValue(TTYPEn.n(i));
-
             if (ZSCALE_COLUMN.equals(type)) {
                 hasScale = true;
             } else if (ZZERO_COLUMN.equals(type)) {
@@ -250,7 +198,6 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
             } else {
                 continue;
             }
-
             if (hasScale && hasZero) {
                 setQuantAlgorithm(HeaderCard.create(ZQUANTIZ, Compression.ZQUANTIZ_NO_DITHER));
                 break;
@@ -259,27 +206,11 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
     }
 
     public TiledImageCompressionOperation read(final Header header) throws FitsException {
-        readPrimaryHeaders(header);
-        setCompressAlgorithm(header.getCard(ZCMPTYPE));
-        setQuantAlgorithm(header);
-
-        createTiles(new TileDecompressorInitialisation(this, //
-                getNullableColumn(header, Object[].class, UNCOMPRESSED_DATA_COLUMN), //
-                getNullableColumn(header, Object[].class, COMPRESSED_DATA_COLUMN), //
-                getNullableColumn(header, Object[].class, GZIP_COMPRESSED_DATA_COLUMN), //
-                header));
-        byte[][] nullPixels = getNullableColumn(header, byte[][].class, NULL_PIXEL_MASK_COLUMN);
-        if (nullPixels != null) {
-            preserveNulls(0L, header.getStringValue(ZMASKCMP)).setColumn(nullPixels);
-        }
-        readCompressionHeaders(header);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void readPrimaryHeaders(Header header) throws FitsException {
-        readBaseType(header);
-        readAxis(header);
-        readTileAxis(header);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -296,29 +227,7 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
      * @see                          #setQuantAlgorithm(HeaderCard)
      */
     public TiledImageCompressionOperation setCompressAlgorithm(HeaderCard compressAlgorithmCard) {
-        compressAlgorithm = null;
-
-        if (compressAlgorithmCard == null) {
-            return this;
-        }
-
-        String algo = compressAlgorithmCard.getValue().toUpperCase(Locale.US);
-        compressAlgorithm = algo;
-
-        if (algo.equals(Compression.ZCMPTYPE_RICE_ONE) && FitsFactory.isAllowHeaderRepairs()) {
-            compressAlgorithm = Compression.ZCMPTYPE_RICE_1;
-            Logger.getLogger(HeaderCard.class.getName()).warning("Repaired non-standard ZCMPTYPE value: "
-                    + Compression.ZCMPTYPE_RICE_ONE + " to " + Compression.ZCMPTYPE_RICE_1);
-            return this;
-        }
-
-        if (algo.equals(Compression.ZCMPTYPE_GZIP_1) || algo.equals(Compression.ZCMPTYPE_GZIP_2)
-                || algo.equals(Compression.ZCMPTYPE_RICE_1) || algo.equals(Compression.ZCMPTYPE_PLIO_1)
-                || algo.equals(Compression.ZCMPTYPE_HCOMPRESS_1) || algo.equals(Compression.ZCMPTYPE_NOCOMPRESS)) {
-            return this;
-        }
-
-        throw new FitsException("Invalid ZCMPTYPE value: " + algo);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -335,22 +244,7 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
      * @see                       #setCompressAlgorithm(HeaderCard)
      */
     public synchronized TiledImageCompressionOperation setQuantAlgorithm(HeaderCard quantAlgorithmCard) {
-        quantAlgorithm = null;
-
-        if (quantAlgorithmCard == null) {
-            return this;
-        }
-
-        String algo = quantAlgorithmCard.getValue().toUpperCase();
-
-        if (algo.equals(Compression.ZQUANTIZ_NO_DITHER) || algo.equals(Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_1)
-                || algo.equals(Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_2)) {
-            quantAlgorithm = algo;
-        } else {
-            Logger.getLogger(HeaderCard.class.getName()).warning("Ignored invalid ZQUANTIZ value: " + algo);
-        }
-
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -366,7 +260,7 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
      * @since  1.18
      */
     public synchronized String getQuantAlgorithm() {
-        return quantAlgorithm;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -382,7 +276,7 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
      * @since  1.18
      */
     public String getCompressAlgorithm() {
-        return compressAlgorithm;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <T> T getNullableColumn(Header header, Class<T> class1, String columnName) throws FitsException {
@@ -441,7 +335,6 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
         if (hasTileAxes()) {
             return;
         }
-
         int naxes = getNAxes();
         int[] tileAxes = new int[naxes];
         // TODO
@@ -450,12 +343,10 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
         for (int i = 1; i <= naxes; i++) {
             tileAxes[naxes - i] = header.getIntValue(ZTILEn.n(i), i == 1 ? header.getIntValue(ZNAXISn.n(1)) : 1);
         }
-
         setTileAxes(tileAxes);
     }
 
-    private <T> Object setInColumn(Object column, boolean predicate, TileCompressionOperation tileOperation, Class<T> clazz,
-            T value) {
+    private <T> Object setInColumn(Object column, boolean predicate, TileCompressionOperation tileOperation, Class<T> clazz, T value) {
         if (predicate) {
             if (column == null) {
                 column = Array.newInstance(clazz, getNumberOfTileOperations());
@@ -472,13 +363,9 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
         for (TileCompressionOperation tileOperation : getTileOperations()) {
             TileCompressionType compression = tileOperation.getCompressionType();
             byte[] compressedData = tileOperation.getCompressedData();
-
-            compressedColumn = setInColumn(compressedColumn, compression == COMPRESSED, tileOperation, byte[].class,
-                    compressedData);
-            gzipColumn = setInColumn(gzipColumn, compression == GZIP_COMPRESSED, tileOperation, byte[].class,
-                    compressedData);
-            uncompressedColumn = setInColumn(uncompressedColumn, compression == UNCOMPRESSED, tileOperation, byte[].class,
-                    compressedData);
+            compressedColumn = setInColumn(compressedColumn, compression == COMPRESSED, tileOperation, byte[].class, compressedData);
+            gzipColumn = setInColumn(gzipColumn, compression == GZIP_COMPRESSED, tileOperation, byte[].class, compressedData);
+            uncompressedColumn = setInColumn(uncompressedColumn, compression == UNCOMPRESSED, tileOperation, byte[].class, compressedData);
         }
         setNullEntries(compressedColumn, new byte[0]);
         setNullEntries(gzipColumn, new byte[0]);
@@ -494,9 +381,9 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
     }
 
     private void writeHeader(Header header) throws FitsException {
-        HeaderCardBuilder cardBuilder = header//
-                .card(ZBITPIX).value(getBaseType().bitPix())//
-                .card(ZCMPTYPE).value(compressAlgorithm);
+        HeaderCardBuilder cardBuilder = //
+        header.card(ZBITPIX).value(//
+        getBaseType().bitPix()).card(ZCMPTYPE).value(compressAlgorithm);
         int[] tileAxes = getTileAxes();
         int naxes = tileAxes.length;
         for (int i = 1; i <= naxes; i++) {
@@ -509,11 +396,10 @@ public class TiledImageCompressionOperation extends AbstractTiledImageOperation<
     }
 
     protected BinaryTable getBinaryTable() {
-        return binaryTable;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ImageNullPixelMask getImageNullPixelMask() {
-        return imageNullPixelMask;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

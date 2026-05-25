@@ -3,11 +3,9 @@ package nom.tam.fits;
 import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.header.Standard;
 import nom.tam.image.StandardImageTiler;
 import nom.tam.util.ArrayFuncs;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -38,7 +36,6 @@ import nom.tam.util.ArrayFuncs;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Standard.BITPIX;
 import static nom.tam.fits.header.Standard.GROUPS;
 import static nom.tam.fits.header.Standard.NAXIS;
@@ -46,7 +43,6 @@ import static nom.tam.fits.header.Standard.NAXISn;
 import static nom.tam.fits.header.Standard.SIMPLE;
 import static nom.tam.fits.header.Standard.XTENSION;
 import static nom.tam.util.LoggerHelper.getLogger;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -54,7 +50,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * dimensions, such as a <code>double[]</code>, <code>float[][]</code>, or <code>short[][][]</code>. ((FITS supports up
  * to 999 dimensions, but Java support maxes at at 255 -- however it's unlikely you'll find this to be a serious
  * limitation.)
- * 
+ *
  * @see ImageData
  */
 @SuppressWarnings("deprecation")
@@ -64,7 +60,7 @@ public class ImageHDU extends BasicHDU<ImageData> {
 
     @Override
     protected final String getCanonicalXtension() {
-        return Standard.XTENSION_IMAGE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -160,16 +156,14 @@ public class ImageHDU extends BasicHDU<ImageData> {
         if (d == null) {
             return null;
         }
-
         Header h = new Header();
         d.fillHeader(h);
-
         return h;
     }
 
     /**
      * Build an image HDU using the supplied data.
-     * 
+     *
      * @deprecated   (<i>for internal use</i>) Its visibility should be reduced to package level in the future.
      *
      * @param      h the header for the image.
@@ -183,96 +177,68 @@ public class ImageHDU extends BasicHDU<ImageData> {
     /**
      * Returns the class that can be used to divide this image into tiles that may be processed separately (and in
      * parallel).
-     * 
+     *
      * @return image tiler for this image instance.
-     * 
+     *
      * @see    ImageData#getTiler()
      */
     public StandardImageTiler getTiler() {
-        return myData.getTiler();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void info(PrintStream stream) {
-        if (isHeader(myHeader)) {
-            stream.println("  Image");
-        } else {
-            stream.println("  Image (bad header)");
-        }
-
-        stream.println("      Header Information:");
-        stream.println("         BITPIX=" + myHeader.getIntValue(BITPIX, -1));
-        int naxis = myHeader.getIntValue(NAXIS, -1);
-        stream.println("         NAXIS=" + naxis);
-        for (int i = 1; i <= naxis; i++) {
-            stream.println("         NAXIS" + i + "=" + myHeader.getIntValue(NAXISn.n(i), -1));
-        }
-
-        stream.println("      Data information:");
-        try {
-            if (myData.getData() == null) {
-                stream.println("        No Data");
-            } else {
-                stream.println("         " + ArrayFuncs.arrayDescription(myData.getData()));
-            }
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Unable to get image data", e);
-            stream.println("      Unable to get data");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the name of the physical unit in which images are represented.
-     * 
+     *
      * @return the standard name of the physical unit in which the image is expressed, e.g. <code>"Jy beam^{-1}"</code>.
      */
     @Override
     public String getBUnit() {
-        return super.getBUnit();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the integer value that signifies blank (missing or <code>null</code>) data in an integer image.
      *
      * @return               the integer value used for identifying blank / missing data in integer images.
-     * 
+     *
      * @throws FitsException if the header does not specify a blanking value or if it is not appropriate for the type of
      *                           imge (that is not an integer type image)
      */
     @Override
     public long getBlankValue() throws FitsException {
-        if (getBitpix().getHeaderValue() < 0) {
-            throw new FitsException("No integer blanking value in floating-point images.");
-        }
-        return super.getBlankValue();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the floating-point increment between adjacent integer values in the image. Strictly speaking, only
      * integer-type images should define a quantization scaling, but there is no harm in having this value in
      * floating-point images also -- which may be interpreted as a hint for quantization, perhaps.
-     * 
+     *
      * @return the floating-point quantum that corresponds to the increment of 1 in the integer data representation.
-     * 
+     *
      * @see    #getBZero()
      */
     @Override
     public double getBScale() {
-        return super.getBScale();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the floating-point value that corresponds to an 0 integer value in the image. Strictly speaking, only
      * integer-type images should define a quantization offset, but there is no harm in having this value in
      * floating-point images also -- which may be interpreted as a hint for quantization, perhaps.
-     * 
+     *
      * @return the floating point value that correspond to the integer 0 in the image data.
-     * 
+     *
      * @see    #getBScale()
      */
     @Override
     public double getBZero() {
-        return super.getBZero();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

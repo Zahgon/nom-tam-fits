@@ -30,7 +30,6 @@ package nom.tam.fits.compression.provider;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.header.Compression;
 
 /**
@@ -66,8 +65,8 @@ public class CompressorControlNameComputer {
     }
 
     private static String standardizeCompressionAlgorithm(String compressionAlgorithm) {
-        if (Compression.ZCMPTYPE_RICE_1.equalsIgnoreCase(compressionAlgorithm) || //
-                Compression.ZCMPTYPE_RICE_ONE.equalsIgnoreCase(compressionAlgorithm)) {
+        if (//
+        Compression.ZCMPTYPE_RICE_1.equalsIgnoreCase(compressionAlgorithm) || Compression.ZCMPTYPE_RICE_ONE.equalsIgnoreCase(compressionAlgorithm)) {
             return "Rice";
         }
         if (Compression.ZCMPTYPE_PLIO_1.equalsIgnoreCase(compressionAlgorithm)) {
@@ -90,9 +89,9 @@ public class CompressorControlNameComputer {
 
     private static String standardizeQuantAlgorithm(String quantAlgorithm) {
         if (quantAlgorithm != null) {
-            if (Compression.ZQUANTIZ_NO_DITHER.equalsIgnoreCase(quantAlgorithm) || //
-                    Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_1.equalsIgnoreCase(quantAlgorithm) || //
-                    Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_2.equalsIgnoreCase(quantAlgorithm)) {
+            if (//
+            Compression.ZQUANTIZ_NO_DITHER.equalsIgnoreCase(quantAlgorithm) || //
+            Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_1.equalsIgnoreCase(quantAlgorithm) || Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_2.equalsIgnoreCase(quantAlgorithm)) {
                 return "Quant";
             }
             return "Unknown";
@@ -105,13 +104,6 @@ public class CompressorControlNameComputer {
     }
 
     public String createCompressorClassName(String quantAlgorithm, String compressionAlgorithm, Class<?> baseType) {
-        StringBuilder className = new StringBuilder();
-        className.append(standardizeBaseType(baseType.getSimpleName()));
-        if (className.indexOf(Float.class.getSimpleName()) < 0 && className.indexOf(Double.class.getSimpleName()) < 0) {
-            className.append(standardizeQuantAlgorithm(quantAlgorithm));
-        }
-        className.append(standardizeCompressionAlgorithm(compressionAlgorithm));
-        className.append(COMPRESSOR_CLASS_SUFFIX);
-        return className.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

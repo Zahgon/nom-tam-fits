@@ -1,7 +1,6 @@
 package nom.tam.fits;
 
 import java.nio.Buffer;
-
 /*-
  * #%L
  * nom.tam FITS library
@@ -32,11 +31,9 @@ import java.nio.Buffer;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.header.Bitpix;
 import nom.tam.util.ArrayDataInput;
 import nom.tam.util.ArrayDataOutput;
-
 import static nom.tam.fits.header.Standard.EXTEND;
 import static nom.tam.fits.header.Standard.GCOUNT;
 import static nom.tam.fits.header.Standard.PCOUNT;
@@ -47,7 +44,7 @@ import static nom.tam.fits.header.Standard.PCOUNT;
  * @author Attila Kovacs
  *
  * @since  1.18
- * 
+ *
  * @see    NullDataHDU
  */
 public final class NullData extends ImageData {
@@ -61,43 +58,36 @@ public final class NullData extends ImageData {
     @SuppressWarnings("deprecation")
     @Override
     protected void fillHeader(Header head) {
-        head.setSimple(true);
-        head.setBitpix(Bitpix.INTEGER);
-        head.setNaxes(0);
-
-        // Just in case!
-        head.addValue(EXTEND, true);
-        head.addValue(GCOUNT, 1);
-        head.addValue(PCOUNT, 0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected void loadData(ArrayDataInput in) {
-        return;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected Void getCurrentData() {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected long getTrueSize() {
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void read(ArrayDataInput in) {
-        setFileOffset(in);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(ArrayDataOutput o) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setBuffer(Buffer data) {
-        // Nothing to do.
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

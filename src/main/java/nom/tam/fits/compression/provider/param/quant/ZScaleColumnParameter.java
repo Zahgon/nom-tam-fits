@@ -30,7 +30,6 @@ package nom.tam.fits.compression.provider.param.quant;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.quant.QuantizeOption;
 import nom.tam.fits.compression.provider.param.base.CompressColumnParameter;
 import nom.tam.fits.header.Compression;
@@ -46,18 +45,11 @@ final class ZScaleColumnParameter extends CompressColumnParameter<double[], Quan
 
     @Override
     public void getValueFromColumn(int index) {
-        getOption().setBScale(getColumnData() == null ? 1.0 : getColumnData()[index]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValueInColumn(int index) {
-        if (getColumnData() == null) {
-            return;
-        }
-
-        if (!Double.isNaN(getOption().getBScale())) {
-            getColumnData()[index] = getOption().getBScale();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

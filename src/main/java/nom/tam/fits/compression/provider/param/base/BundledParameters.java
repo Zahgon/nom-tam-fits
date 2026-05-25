@@ -30,9 +30,7 @@ package nom.tam.fits.compression.provider.param.base;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.util.ArrayList;
-
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.provider.param.api.ICompressColumnParameter;
 import nom.tam.fits.compression.provider.param.api.ICompressHeaderParameter;
@@ -78,7 +76,7 @@ public class BundledParameters extends CompressParameters {
      * @see    #get(int)
      */
     public int size() {
-        return bundle.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -93,45 +91,26 @@ public class BundledParameters extends CompressParameters {
      * @see                              #size()
      */
     public ICompressParameters get(int index) {
-        return bundle.get(index);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public BundledParameters copy(ICompressOption option) {
-        throw new UnsupportedOperationException("Cannot copy parameter bundle");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected ICompressColumnParameter[] columnParameters() {
-        ArrayList<ICompressColumnParameter> list = new ArrayList<>();
-
-        for (ICompressParameters parms : bundle) {
-            for (ICompressColumnParameter p : ((CompressParameters) parms).columnParameters()) {
-                list.add(p);
-            }
-        }
-
-        ICompressColumnParameter[] array = new ICompressColumnParameter[list.size()];
-        return list.toArray(array);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected ICompressHeaderParameter[] headerParameters() {
-        ArrayList<ICompressHeaderParameter> list = new ArrayList<>();
-        for (ICompressParameters parms : bundle) {
-            for (ICompressHeaderParameter p : ((CompressParameters) parms).headerParameters()) {
-                list.add(p);
-            }
-        }
-
-        ICompressHeaderParameter[] array = new ICompressHeaderParameter[list.size()];
-        return list.toArray(array);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setTileIndex(int index) {
-        for (ICompressParameters parms : bundle) {
-            parms.setTileIndex(index);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

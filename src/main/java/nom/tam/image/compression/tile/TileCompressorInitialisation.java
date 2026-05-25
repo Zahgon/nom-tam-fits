@@ -30,9 +30,7 @@ package nom.tam.image.compression.tile;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
-
 import nom.tam.image.tile.operation.ITileOperationInitialisation;
 import nom.tam.image.tile.operation.TileArea;
 
@@ -51,18 +49,16 @@ final class TileCompressorInitialisation implements ITileOperationInitialisation
 
     @Override
     public TileCompressionOperation createTileOperation(int tileIndex, TileArea area) {
-        return new TileCompressor(imageTilesOperation, tileIndex, area);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void init(TileCompressionOperation tileOperation) {
-        tileOperation.setCompressedOffset(compressedOffset);
-        tileOperation.setWholeImageBuffer(buffer);
-        tileOperation.setWholeImageCompressedBuffer(imageTilesOperation.getCompressedWholeArea());
-        compressedOffset += tileOperation.getPixelSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void tileCount(int tileCount) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

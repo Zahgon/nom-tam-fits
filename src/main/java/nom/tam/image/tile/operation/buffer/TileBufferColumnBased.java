@@ -30,9 +30,7 @@ package nom.tam.image.tile.operation.buffer;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
-
 import nom.tam.util.type.ElementType;
 
 /**
@@ -45,7 +43,7 @@ import nom.tam.util.type.ElementType;
  * row. in that case the buffer describing the image does not match the buffer describing the tile. That is why a
  * temporary buffer is needed to make the buffer continuous.
  * </p>
- * 
+ *
  * @see TileBufferRowBased
  */
 class TileBufferColumnBased extends TileBuffer {
@@ -69,15 +67,12 @@ class TileBufferColumnBased extends TileBuffer {
 
     @Override
     public void finish() {
-        desolveGapLessBuffer();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Buffer getBuffer() {
-        if (packed == null) {
-            createPackedBuffer();
-        }
-        return packed;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -85,15 +80,11 @@ class TileBufferColumnBased extends TileBuffer {
      */
     private void createPackedBuffer() {
         final int gap = imageWidth - getWidth();
-
         Buffer raw = getImageBuffer();
         final int imLength = Math.min(raw.capacity(), getPixelSizeInData());
-
         raw.position(0);
-
         ElementType<Buffer> type = elementType();
         packed = type.newBuffer(getPixelSize());
-
         for (int i = 0; i < getHeight(); i++) {
             raw.limit(raw.position() + getWidth());
             type.appendBuffer(packed, raw);
@@ -113,9 +104,7 @@ class TileBufferColumnBased extends TileBuffer {
         raw.position(0);
         raw.limit(getPixelSizeInData());
         packed.rewind();
-
         ElementType<Buffer> type = elementType();
-
         for (int i = 0; i < getHeight(); i++) {
             packed.limit(packed.position() + getWidth());
             type.appendBuffer(raw, packed);
@@ -135,5 +124,4 @@ class TileBufferColumnBased extends TileBuffer {
     private ElementType<Buffer> elementType() {
         return ElementType.forBuffer(getImageBuffer());
     }
-
 }

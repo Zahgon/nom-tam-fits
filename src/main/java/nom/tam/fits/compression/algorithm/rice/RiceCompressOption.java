@@ -30,7 +30,6 @@ package nom.tam.fits.compression.algorithm.rice;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.provider.param.api.ICompressParameters;
 import nom.tam.fits.compression.provider.param.rice.RiceCompressParameters;
@@ -40,28 +39,40 @@ import nom.tam.util.type.ElementType;
  * Options to the Rice compression algorithm. When compressing tables and images using the Rice algorithm, users can
  * control how exactly the compression is perfomed. When reading compressed FITS files, these options will be set
  * automatically based on the header values recorded in the compressed HDU.
- * 
+ *
  * @see nom.tam.image.compression.hdu.CompressedImageHDU#setCompressAlgorithm(String)
  * @see nom.tam.image.compression.hdu.CompressedImageHDU#getCompressOption(Class)
  */
 public class RiceCompressOption implements ICompressOption {
 
-    /** the default block size to use in bytes */
+    /**
+     * the default block size to use in bytes
+     */
     public static final int DEFAULT_RICE_BLOCKSIZE = 32;
 
-    /** the default BYTEPIX value */
+    /**
+     * the default BYTEPIX value
+     */
     public static final int DEFAULT_RICE_BYTEPIX = ElementType.INT.size();
 
-    /** Set of valid BYTEPIX values */
-    private static final int[] VALID_BYTEPIX = {1, 2, 4, 8};
+    /**
+     * Set of valid BYTEPIX values
+     */
+    private static final int[] VALID_BYTEPIX = { 1, 2, 4, 8 };
 
-    /** Set of valid BLOCKSIZE values */
-    private static final int[] VALID_BLOCKSIZE = {16, 32};
+    /**
+     * Set of valid BLOCKSIZE values
+     */
+    private static final int[] VALID_BLOCKSIZE = { 16, 32 };
 
-    /** The parameters that represent settings for this option in the FITS headers and/or compressed data columns */
+    /**
+     * The parameters that represent settings for this option in the FITS headers and/or compressed data columns
+     */
     private RiceCompressParameters parameters;
 
-    /** Shared configuration across copies */
+    /**
+     * Shared configuration across copies
+     */
     private final Config config;
 
     /**
@@ -74,124 +85,101 @@ public class RiceCompressOption implements ICompressOption {
 
     @Override
     public RiceCompressOption copy() {
-        try {
-            RiceCompressOption copy = (RiceCompressOption) clone();
-            copy.parameters = parameters.copy(copy);
-            return copy;
-        } catch (CloneNotSupportedException e) {
-            throw new IllegalStateException("option could not be cloned", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the currently set block size.
-     * 
+     *
      * @return the block size in bytes.
-     * 
+     *
      * @see    #setBlockSize(int)
      */
     public final int getBlockSize() {
-        return config.blockSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * REturns the currently set BYTEPIX value
-     * 
+     *
      * @return the BYTEPIX value.
-     * 
+     *
      * @see    #setBytePix(int)
      */
     public final int getBytePix() {
-        return config.bytePix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public RiceCompressParameters getCompressionParameters() {
-        return parameters;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isLossyCompression() {
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets a new block size to use
-     * 
+     *
      * @param  value                    the new block size in bytes
-     * 
+     *
      * @return                          itself
-     * 
+     *
      * @throws IllegalArgumentException if the value is not 16 or 32.
-     * 
+     *
      * @see                             #getBlockSize()
      */
     public RiceCompressOption setBlockSize(int value) throws IllegalArgumentException {
-        for (int i : VALID_BLOCKSIZE) {
-            if (value == i) {
-                config.blockSize = value;
-                return this;
-            }
-        }
-        throw new IllegalArgumentException("Invalid BYTEPIX value: " + value + " (must be 16 or 32)");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets a new BYTEPIX value to use.
-     * 
+     *
      * @param  value                    the new BYTEPIX value. It is currently not checked for validity, so use
      *                                      carefully.
-     * 
+     *
      * @return                          itself
-     * 
+     *
      * @throws IllegalArgumentException if the value is not 1, 2, 4, or 8.
-     * 
+     *
      * @see                             #getBytePix()
      */
     public RiceCompressOption setBytePix(int value) throws IllegalArgumentException {
-        for (int i : VALID_BYTEPIX) {
-            if (value == i) {
-                config.bytePix = value;
-                return this;
-            }
-        }
-        throw new IllegalArgumentException("Invalid BYTEPIX value: " + value + " (must be 1, 2, 4, or 8)");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setParameters(ICompressParameters parameters) {
-        if (!(parameters instanceof RiceCompressParameters)) {
-            throw new IllegalArgumentException("Wrong type of parameters: " + parameters.getClass().getName());
-        }
-        this.parameters = (RiceCompressParameters) parameters.copy(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public RiceCompressOption setTileHeight(int value) {
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public RiceCompressOption setTileWidth(int value) {
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> T unwrap(Class<T> clazz) {
-        if (clazz.isAssignableFrom(this.getClass())) {
-            return clazz.cast(this);
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Stores configuration in a way that can be shared and modified across enclosing option copies.
-     * 
+     *
      * @author Attila Kovacs
      *
      * @since  1.18
      */
     private static final class Config {
+
         private int bytePix = DEFAULT_RICE_BYTEPIX;
 
         private int blockSize = DEFAULT_RICE_BLOCKSIZE;

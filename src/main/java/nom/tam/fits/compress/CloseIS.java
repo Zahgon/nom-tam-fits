@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -40,7 +39,6 @@ import java.util.logging.Logger;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.util.LoggerHelper.getLogger;
 
 /**
@@ -50,7 +48,7 @@ import static nom.tam.util.LoggerHelper.getLogger;
  * <b>commons-compress</b> classes. The system tools are not portable, whereas the <b>commons-compress</b>
  * implementation is. Therefore, you should neer really need to use this class, which is provided only for compatibility
  * with earlier versions of this library.
- * 
+ *
  * @deprecated Needed only by deprecated compression classes. And it should not have visibility outside of this package
  *                 anyway.
  */
@@ -77,7 +75,7 @@ public class CloseIS extends FilterInputStream {
 
     /**
      * Instantiates a new thread that will watch and close the input stream whenever the process using it compeletes.
-     * 
+     *
      * @param proc       The process that is using the input stream
      * @param compressed the compressed input stream that is used by the process.
      */
@@ -96,18 +94,7 @@ public class CloseIS extends FilterInputStream {
 
             @Override
             public void run() {
-                try {
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    byte[] buffer = new byte[COPY_BUFFER_SIZE];
-                    int len;
-                    while ((len = error.read(buffer, 0, buffer.length)) >= 0) {
-                        bytes.write(buffer, 0, len);
-                    }
-                    error.close();
-                    errorText = new String(bytes.toByteArray(), Charset.defaultCharset());
-                } catch (IOException e) {
-                    exception = e;
-                }
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         });
         // Now copy everything in a separate thread.
@@ -115,23 +102,7 @@ public class CloseIS extends FilterInputStream {
 
             @Override
             public void run() {
-                try {
-                    byte[] buffer = new byte[COPY_BUFFER_SIZE];
-                    int len;
-                    while ((len = compressed.read(buffer, 0, buffer.length)) >= 0) {
-                        input.write(buffer, 0, len);
-                    }
-                    input.close();
-                } catch (IOException e) {
-                    exception = e;
-                }
-                try {
-                    compressed.close();
-                } catch (IOException e) {
-                    if (exception == null) {
-                        exception = e;
-                    }
-                }
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         });
         start();
@@ -203,5 +174,4 @@ public class CloseIS extends FilterInputStream {
         input.close();
         output.close();
     }
-
 }

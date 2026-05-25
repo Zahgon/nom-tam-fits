@@ -28,16 +28,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.EOFException;
 import java.io.IOException;
 import java.lang.reflect.Array;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.util.type.ElementType;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -87,7 +84,7 @@ public class FitsDecoder extends InputDecoder {
      * @see      #booleanObjectFor(int)
      */
     public static final boolean booleanFor(int c) {
-        return c == FITS_TRUE || c == 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -106,10 +103,7 @@ public class FitsDecoder extends InputDecoder {
      */
     @SuppressFBWarnings(value = "NP_BOOLEAN_RETURN_NULL", justification = "null values are explicitly allowed by FITS, so we want to support them.")
     public static final Boolean booleanObjectFor(int c) {
-        if (c == 0) {
-            return null;
-        }
-        return booleanFor(c);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -278,7 +272,7 @@ public class FitsDecoder extends InputDecoder {
     @Deprecated
     protected synchronized String readAsciiLine() throws EOFException, IOException {
         StringBuffer str = new StringBuffer();
-        for (;;) {
+        for (; ; ) {
             int c = read();
             if (c < 0) {
                 if (str.length() > 0) {
@@ -309,22 +303,7 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(boolean[] b, int start, int length) throws EOFException, IOException {
-        if (length == 0) {
-            return 0;
-        }
-
-        byte[] ascii = new byte[length];
-        length = read(ascii, 0, length);
-
-        if (length < 0) {
-            throw new EOFException();
-        }
-
-        for (int i = 0; i < length; i++) {
-            b[start + i] = booleanFor(ascii[i]);
-        }
-
-        return length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -342,22 +321,7 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(Boolean[] b, int start, int length) throws EOFException, IOException {
-        if (length == 0) {
-            return 0;
-        }
-
-        byte[] ascii = new byte[length];
-        length = read(ascii, 0, length);
-
-        if (length < 0) {
-            throw new EOFException();
-        }
-
-        for (int i = 0; i < length; i++) {
-            b[start + i] = booleanObjectFor(ascii[i]);
-        }
-
-        return length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -379,31 +343,7 @@ public class FitsDecoder extends InputDecoder {
      * @see                 FitsFactory#setUseUnicodeChars(boolean)
      */
     protected synchronized int read(char[] c, int start, int length) throws EOFException, IOException {
-        if (length == 0) {
-            return 0;
-        }
-
-        if (ElementType.CHAR.size() == 1) {
-            byte[] ascii = new byte[length];
-            length = read(ascii, 0, length);
-
-            if (length < 0) {
-                throw new EOFException();
-            }
-
-            for (int i = 0; i < length; i++) {
-                c[start + i] = (char) (ascii[i] & FitsIO.BYTE_MASK);
-            }
-        } else {
-            getInputBuffer().loadBytes(length, Short.BYTES);
-            short[] s = new short[length];
-            length = getInputBuffer().get(s, 0, length);
-            for (int i = 0; i < length; i++) {
-                c[start + i] = (char) (s[i] & FitsIO.SHORT_MASK);
-            }
-        }
-
-        return length * ElementType.CHAR.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -419,8 +359,7 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(short[] s, int start, int length) throws EOFException, IOException {
-        getInputBuffer().loadBytes(length, Short.BYTES);
-        return getInputBuffer().get(s, start, length) * Short.BYTES;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -436,8 +375,7 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(int[] j, int start, int length) throws EOFException, IOException {
-        getInputBuffer().loadBytes(length, Integer.BYTES);
-        return getInputBuffer().get(j, start, length) * Integer.BYTES;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -453,8 +391,7 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(long[] l, int start, int length) throws EOFException, IOException {
-        getInputBuffer().loadBytes(length, Long.BYTES);
-        return getInputBuffer().get(l, start, length) * Long.BYTES;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -470,8 +407,7 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(float[] f, int start, int length) throws EOFException, IOException {
-        getInputBuffer().loadBytes(length, Float.BYTES);
-        return getInputBuffer().get(f, start, length) * Float.BYTES;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -487,67 +423,11 @@ public class FitsDecoder extends InputDecoder {
      * @throws IOException  if there was an IO error before, before requested number of bytes could be read
      */
     protected synchronized int read(double[] d, int start, int length) throws EOFException, IOException {
-        getInputBuffer().loadBytes(length, Double.BYTES);
-        return getInputBuffer().get(d, start, length) * Double.BYTES;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized long readArray(Object o) throws IOException, IllegalArgumentException {
-        if (o == null) {
-            return 0L;
-        }
-        if (!o.getClass().isArray()) {
-            throw new IllegalArgumentException("Not an array: " + o.getClass().getName());
-        }
-
-        int length = Array.getLength(o);
-        if (length == 0) {
-            return 0L;
-        }
-
-        // This is a 1-d array. Process it using our special
-        // functions.
-        if (o instanceof byte[]) {
-            readFully((byte[]) o, 0, length);
-            return length;
-        }
-        if (o instanceof boolean[]) {
-            return read((boolean[]) o, 0, length);
-        }
-        if (o instanceof char[]) {
-            return read((char[]) o, 0, length);
-        }
-        if (o instanceof short[]) {
-            return read((short[]) o, 0, length);
-        }
-        if (o instanceof int[]) {
-            return read((int[]) o, 0, length);
-        }
-        if (o instanceof float[]) {
-            return read((float[]) o, 0, length);
-        }
-        if (o instanceof long[]) {
-            return read((long[]) o, 0, length);
-        }
-        if (o instanceof double[]) {
-            return read((double[]) o, 0, length);
-        }
-        if (o instanceof Boolean[]) {
-            return read((Boolean[]) o, 0, length);
-        }
-
-        Object[] array = (Object[]) o;
-        long count = 0L;
-
-        // Process multidim arrays recursively.
-        for (int i = 0; i < length; i++) {
-            try {
-                count += readArray(array[i]);
-            } catch (EOFException e) {
-                return eofCheck(e, count, -1L);
-            }
-        }
-        return count;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

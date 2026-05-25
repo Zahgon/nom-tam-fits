@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util.array;
 
 import java.util.Collections;
@@ -38,7 +37,7 @@ import java.util.Map;
 /**
  * @deprecated               (<i>for internal use</i>) use {@link MultiArrayCopier} instead. Make copies of
  *                               multi-dimensional arrays.
- * 
+ *
  * @param      <Source>      The generic type of array from which we want to copy elements
  * @param      <Destination> The generic type of array to which we want to copy elements.
  */
@@ -52,9 +51,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(byte[] src, int srcPos, char[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (char) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -62,9 +59,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(byte[] src, int srcPos, double[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -72,9 +67,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(byte[] src, int srcPos, float[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -82,9 +75,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(byte[] src, int srcPos, int[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -92,9 +83,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(byte[] src, int srcPos, long[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -102,9 +91,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(byte[] src, int srcPos, short[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -112,9 +99,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(char[] src, int srcPos, byte[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (byte) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -122,9 +107,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(char[] src, int srcPos, double[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -132,9 +115,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(char[] src, int srcPos, float[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -142,9 +123,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(char[] src, int srcPos, int[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -152,9 +131,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(char[] src, int srcPos, long[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -162,9 +139,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(char[] src, int srcPos, short[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (short) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -172,9 +147,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(double[] src, int srcPos, byte[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (byte) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -182,9 +155,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(double[] src, int srcPos, char[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (char) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -192,9 +163,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(double[] src, int srcPos, float[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (float) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -202,9 +171,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(double[] src, int srcPos, int[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (int) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -212,9 +179,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(double[] src, int srcPos, long[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -222,9 +187,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(double[] src, int srcPos, short[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (short) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -232,9 +195,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(float[] src, int srcPos, byte[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (byte) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -242,9 +203,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(float[] src, int srcPos, char[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (char) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -252,9 +211,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(float[] src, int srcPos, double[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -262,9 +219,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(float[] src, int srcPos, int[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -272,9 +227,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(float[] src, int srcPos, long[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -282,9 +235,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(float[] src, int srcPos, short[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (short) Math.round(src[index + srcPos]);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -292,7 +243,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(Object srcO, int srcPos, Object destO, int destPos, int length) {
-            System.arraycopy(srcO, srcPos, destO, destPos, length);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -300,9 +251,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(int[] src, int srcPos, byte[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (byte) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -310,9 +259,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(int[] src, int srcPos, char[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (char) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -320,9 +267,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(int[] src, int srcPos, double[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -330,9 +275,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(int[] src, int srcPos, float[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -340,9 +283,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(int[] src, int srcPos, long[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -350,9 +291,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(int[] src, int srcPos, short[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (short) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -360,9 +299,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(long[] src, int srcPos, byte[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (byte) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -370,9 +307,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(long[] src, int srcPos, char[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (char) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -380,9 +315,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(long[] src, int srcPos, double[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -390,9 +323,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(long[] src, int srcPos, float[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -400,9 +331,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(long[] src, int srcPos, int[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (int) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -410,9 +339,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(long[] src, int srcPos, short[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (short) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -420,9 +347,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(short[] src, int srcPos, byte[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (byte) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -430,9 +355,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(short[] src, int srcPos, char[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = (char) src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -440,9 +363,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(short[] src, int srcPos, double[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -450,9 +371,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(short[] src, int srcPos, float[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -460,9 +379,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(short[] src, int srcPos, int[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -470,9 +387,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
         @Override
         public void arraycopy(short[] src, int srcPos, long[] dest, int destPos, int length) {
-            for (int index = 0; index < length; index++) {
-                dest[index + destPos] = src[index + srcPos];
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -482,7 +397,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
     static {
         Map<Class<?>, Map<Class<?>, MultiArrayCopyFactory<?, ?>>> factories = new HashMap<>();
-
         Map<Class<?>, MultiArrayCopyFactory<byte[], ?>> byteMap = new HashMap<>();
         byteMap.put(byte.class, new MultiArrayCopyFactory<>());
         byteMap.put(char.class, new ByteToChar());
@@ -492,7 +406,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
         byteMap.put(float.class, new ByteToFloat());
         byteMap.put(double.class, new ByteToDouble());
         factories.put(byte.class, Collections.unmodifiableMap(byteMap));
-
         Map<Class<?>, MultiArrayCopyFactory<char[], ?>> charMap = new HashMap<>();
         charMap.put(byte.class, new CharToByte());
         charMap.put(char.class, new MultiArrayCopyFactory<>());
@@ -502,7 +415,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
         charMap.put(float.class, new CharToFloat());
         charMap.put(double.class, new CharToDouble());
         factories.put(char.class, Collections.unmodifiableMap(charMap));
-
         Map<Class<?>, MultiArrayCopyFactory<short[], ?>> shortMap = new HashMap<>();
         shortMap.put(byte.class, new ShortToByte());
         shortMap.put(char.class, new ShortToChar());
@@ -512,7 +424,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
         shortMap.put(float.class, new ShortToFloat());
         shortMap.put(double.class, new ShortToDouble());
         factories.put(short.class, Collections.unmodifiableMap(shortMap));
-
         Map<Class<?>, MultiArrayCopyFactory<int[], ?>> intMap = new HashMap<>();
         intMap.put(byte.class, new IntToByte());
         intMap.put(char.class, new IntToChar());
@@ -522,7 +433,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
         intMap.put(float.class, new IntToFloat());
         intMap.put(double.class, new IntToDouble());
         factories.put(int.class, Collections.unmodifiableMap(intMap));
-
         Map<Class<?>, MultiArrayCopyFactory<long[], ?>> longMap = new HashMap<>();
         longMap.put(byte.class, new LongToByte());
         longMap.put(char.class, new LongToChar());
@@ -532,7 +442,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
         longMap.put(float.class, new LongToFloat());
         longMap.put(double.class, new LongToDouble());
         factories.put(long.class, Collections.unmodifiableMap(longMap));
-
         Map<Class<?>, MultiArrayCopyFactory<float[], ?>> floatMap = new HashMap<>();
         floatMap.put(byte.class, new FloatToByte());
         floatMap.put(char.class, new FloatToChar());
@@ -542,7 +451,6 @@ public class MultiArrayCopyFactory<Source, Destination> {
         floatMap.put(float.class, new MultiArrayCopyFactory<>());
         floatMap.put(double.class, new FloatToDouble());
         factories.put(float.class, Collections.unmodifiableMap(floatMap));
-
         Map<Class<?>, MultiArrayCopyFactory<double[], ?>> doubleMap = new HashMap<>();
         doubleMap.put(byte.class, new DoubleToByte());
         doubleMap.put(char.class, new DoubleToChar());
@@ -552,16 +460,15 @@ public class MultiArrayCopyFactory<Source, Destination> {
         doubleMap.put(float.class, new DoubleToFloat());
         doubleMap.put(double.class, new MultiArrayCopyFactory<>());
         factories.put(double.class, Collections.unmodifiableMap(doubleMap));
-
         FACTORIES = Collections.unmodifiableMap(factories);
     }
 
     /**
      * @deprecated                for internal use only. This ought to be private.
-     * 
+     *
      * @param      primitiveType  the primitive class of the elements in the source array
      * @param      primitiveType2 the primitive class of the elements in the destination array
-     * 
+     *
      * @return                    A suitable copier instance.
      */
     @Deprecated
@@ -578,7 +485,7 @@ public class MultiArrayCopyFactory<Source, Destination> {
 
     /**
      * See {@link System#arraycopy(Object, int, Object, int, int)}.
-     * 
+     *
      * @param src     the source array
      * @param srcPos  starting position in the source array
      * @param dest    the destination array
@@ -589,5 +496,4 @@ public class MultiArrayCopyFactory<Source, Destination> {
     public void arraycopy(Source src, int srcPos, Destination dest, int destPos, int length) {
         System.arraycopy(src, srcPos, dest, destPos, length);
     }
-
 }

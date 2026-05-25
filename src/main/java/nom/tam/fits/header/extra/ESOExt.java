@@ -30,7 +30,6 @@ package nom.tam.fits.header.extra;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.header.FitsKey;
 import nom.tam.fits.header.IFitsHeader;
 
@@ -44,11 +43,11 @@ import nom.tam.fits.header.IFitsHeader;
  * <p>
  * HIERARCH-type keywords are not currently included in this enumeration.
  * </p>
- * 
+ *
  * @author Attila Kovacs
  *
  * @see    CommonExt
- * 
+ *
  * @since  1.20.1
  */
 public enum ESOExt implements IFitsHeader {
@@ -57,13 +56,11 @@ public enum ESOExt implements IFitsHeader {
      * Provides the name under which the file is stored in the archive
      */
     ARCFILE(VALUE.STRING, "archive file name"),
-
     /**
      * If applicable, the string containing the designation of the dispersing element (grating, grism) used during the
      * observation
      */
     DISPELEM(VALUE.STRING, "Dispersing element used"),
-
     /**
      * Modification timestamp. Imay be added to files downloaded for the ESO archive by the delivery software. It shall
      * be present in the primary HDU of the delivered file if the metadata of the frame have been updated/modified after
@@ -74,22 +71,18 @@ public enum ESOExt implements IFitsHeader {
      * removed prior to ingestion from the headers of products.
      */
     HDRVER(VALUE.STRING, "header modification timestamp"),
-
     /**
      * UTC seconds since midnight.
      */
     LST(VALUE.REAL, "[s] Local Sidereal Time"),
-
     /**
      * Records the original file name, as assigned at the instrument workstation.
      */
     ORIGFILE(VALUE.STRING, "original file name"),
-
     /**
      * The PI or Co-I’s initials followed by their surname. The primary keyword should repeat the value OBS.PI-COI.NAME.
      */
     PI_COI("PI-COI", VALUE.STRING, "PI and CoIs"),
-
     /**
      * UTC seconds since midnight.
      */
@@ -107,6 +100,6 @@ public enum ESOExt implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

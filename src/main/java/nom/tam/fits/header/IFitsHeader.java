@@ -1,7 +1,6 @@
 package nom.tam.fits.header;
 
 import java.util.NoSuchElementException;
-
 import nom.tam.fits.HeaderCard;
 
 /*
@@ -34,52 +33,75 @@ import nom.tam.fits.HeaderCard;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * Interface for standardized header keyword implementations. Standardized header keys help with proper usage, with
  * restricted use and value types as appropriate. Using keywords that implement this interface make it less likely for
  * one to end up with inproperly constructed FITS files. Therefore, their usage is highly encouranged when possible.
- * 
+ *
  * @see HeaderCard#setValueCheckingPolicy(nom.tam.fits.HeaderCard.ValueCheck)
  * @see nom.tam.fits.Header#setKeywordChecking(nom.tam.fits.Header.KeywordCheck)
  */
 public interface IFitsHeader {
 
-    /** Max numeric index we may use to replace <i>n</i> in the Java name of indexed variables. */
+    /**
+     * Max numeric index we may use to replace <i>n</i> in the Java name of indexed variables.
+     */
     int MAX_INDEX = 999;
 
-    /** An enumeration of HDU types in which a header keyword may be used. */
+    /**
+     * An enumeration of HDU types in which a header keyword may be used.
+     */
     enum HDU {
-        /** keyword may be used in any HDU */
-        ANY,
-        /** image and/or random groups keywords */
-        IMAGE,
-        /** keyword for random groups only */
-        GROUPS,
-        /** Generic table keyword, can be used both in ASCII and binary tables */
-        TABLE,
-        /** keyword for ASCII tables only */
-        ASCII_TABLE,
-        /** keyword for binary tables */
-        BINTABLE,
-        /** keyword must appear in the primary HDU only */
-        PRIMARY,
-        /** keyword must appear in extension HDUs only */
-        EXTENSION,
-        /** @deprecated Use {@link #ANY} instead. */
-        @Deprecated
-        PRIMARY_EXTENSION;
 
+        /**
+         * keyword may be used in any HDU
+         */
+        ANY,
+        /**
+         * image and/or random groups keywords
+         */
+        IMAGE,
+        /**
+         * keyword for random groups only
+         */
+        GROUPS,
+        /**
+         * Generic table keyword, can be used both in ASCII and binary tables
+         */
+        TABLE,
+        /**
+         * keyword for ASCII tables only
+         */
+        ASCII_TABLE,
+        /**
+         * keyword for binary tables
+         */
+        BINTABLE,
+        /**
+         * keyword must appear in the primary HDU only
+         */
+        PRIMARY,
+        /**
+         * keyword must appear in extension HDUs only
+         */
+        EXTENSION,
+        /**
+         * @deprecated Use {@link #ANY} instead.
+         */
+        @Deprecated
+        PRIMARY_EXTENSION
     }
 
-    /** Documentation sources for the various known conventions. */
+    /**
+     * Documentation sources for the various known conventions.
+     */
     enum SOURCE {
+
         /**
          * Checksum keywords. See
          * <a href="http://heasarc.gsfc.nasa.gov/docs/heasarc/ofwg/docs/general/checksum/checksum.html">checksum doc</a>
          */
         CHECKSUM("http://heasarc.gsfc.nasa.gov/docs/heasarc/ofwg/docs/general/checksum/checksum.html"),
-
         /**
          * CXC keywords. See <a href=
          * "http://cxc.harvard.edu/contrib/arots/fits/content.txt">http://cxc.harvard.edu/contrib/arots/fits/content.txt</a>
@@ -148,72 +170,83 @@ public interface IFitsHeader {
 
         /**
          * Returns the URL that defines this particular header value, which may be <code>null</code>.
-         * 
+         *
          * @return The URL that contains the keyword specification or <code>null</code> if unknown or undefined.
          */
         public String url() {
-            return url;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** Values types to which implementing keywords can be restricted to. */
+    /**
+     * Values types to which implementing keywords can be restricted to.
+     */
     enum VALUE {
-        /** The keyword takes no value (i.e. END or comment-style keywords */
+
+        /**
+         * The keyword takes no value (i.e. END or comment-style keywords
+         */
         NONE,
-
-        /** keyword expects a logical 'T' or 'F' value */
+        /**
+         * keyword expects a logical 'T' or 'F' value
+         */
         LOGICAL,
-
-        /** keyword expects a String value */
+        /**
+         * keyword expects a String value
+         */
         STRING,
-
-        /** keyword expects an integer type value */
+        /**
+         * keyword expects an integer type value
+         */
         INTEGER,
-
-        /** keyword expects a floating-point value (integers allowed). */
+        /**
+         * keyword expects a floating-point value (integers allowed).
+         */
         REAL,
-
-        /** keyword expects a complex value */
+        /**
+         * keyword expects a complex value
+         */
         COMPLEX,
-
-        /** The keyword may be used with any value type */
+        /**
+         * The keyword may be used with any value type
+         */
         ANY
     }
 
     /**
      * (<i>primarily for internal use</i>) Returns the concrete implementation of this header entry, which provides
      * implementation of access methods.
-     * 
+     *
      * @return the implementation of this keyword, which provides the actual access methods. Implementations of this
      *             interface should simply return themselves.
-     * 
+     *
      * @since  1.19
      */
     default FitsKey impl() {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the comment associated to this FITS header entry. The comment is entirely optional, and it may not be
      * appear in full (or at all) in the FITS header. Comments should thus never contain essential information. Their
      * purpose is only to provide non-essential extra information for human use.
-     * 
+     *
      * @return the associated standard comment.
-     * 
+     *
      * @see    HeaderCard#getComment()
      * @see    HeaderCard#setComment(String)
      */
     default String comment() {
-        return impl().comment();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the type of HDU(s) in which this header entry may be used.
-     * 
+     *
      * @return the HDU type(s) that this keyword may support.
      */
     default HDU hdu() {
-        return impl().hdu();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,17 +256,17 @@ public interface IFitsHeader {
      * characters may be included as placeholders for indexing conventions that must be filled before the keyword may be
      * used in headers and/or header cards.
      * </p>
-     * 
+     *
      * @return the FITS header keyword for this entry. The returned keyword may include an indexing pattern (lower-case
      *             'n' characters), which may need to be filled via {@link #n(int...)} before the keyword may be used to
      *             construct header cards or be used in FITS headers. (Alternative coordinate markers, via lower case
      *             'a' at the end of the keyword definition, are stripped and should not be included in the returned
      *             keyword name pattern.)
-     * 
+     *
      * @see    #n(int...)
      */
     default String key() {
-        return impl().key();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -242,113 +275,61 @@ public interface IFitsHeader {
      * 1, and should never exceed 999. Note, that for keywords that have multiple indices, you may specify them all in a
      * single call, or may use successive calls to fill indices in the order they appear (the latter is somewhat less
      * efficient, but still entirely legal).
-     * 
+     *
      * @param  numbers                   the 1-based indices to add to the stem, in the order they appear in the the
      *                                       enum name.
-     * 
+     *
      * @return                           an indexed instance of this FITS header entry
-     * 
+     *
      * @throws IndexOutOfBoundsException if the index is less than 0 or exceeds 999. (In truth we should throw an
      *                                       exception for 0 as well, but seems to be common not-quite-legal FITS usage
      *                                       with 0 indices. Hence we relax the condition).
      * @throws IllegalStateException     if the resulting indexed keyword exceeds the maximum 8-bytes allowed for
      *                                       standard FITS keywords.
      * @throws NoSuchElementException    If more indices were supplied than can be filled for this keyword.
-     * 
+     *
      * @see                              #extractIndices(String)
      */
     default IFitsHeader n(int... numbers) throws IndexOutOfBoundsException, NoSuchElementException, IllegalStateException {
-        StringBuffer headerName = new StringBuffer(key());
-        for (int number : numbers) {
-            if (number < 0 || number > MAX_INDEX) {
-                throw new IndexOutOfBoundsException(key() + ": index " + number + " is out of bounds.");
-            }
-
-            int indexOfN = headerName.indexOf("n");
-
-            if (indexOfN < 0) {
-                throw new NoSuchElementException("Too many indices (" + numbers.length + ") supplied for " + key());
-            }
-
-            headerName.replace(indexOfN, indexOfN + 1, Integer.toString(number));
-        }
-
-        if (headerName.length() > HeaderCard.MAX_KEYWORD_LENGTH) {
-            throw new IllegalStateException("indexed keyword " + headerName.toString() + " is too long.");
-        }
-
-        return new FitsKey(headerName.toString(), status(), hdu(), valueType(), comment());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the standard convention, which defines this FITS header entry
-     * 
+     *
      * @return the standard or convention that specifies this FITS heacer keyword
      */
     default SOURCE status() {
-        return impl().status();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * The type(s) of value(s) this FITS header entry might take.
-     * 
+     *
      * @return the value type(s) for this FITS header entry
      */
     default VALUE valueType() {
-        return impl().valueType();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Extracts the indices for this stndardized key from an actual keyword realization. The keyword realization must be
      * match the indexing and/or alternative coordinate system pattern for this key, or else an exception will be
      * thrown.
-     * 
+     *
      * @param  key                      The actual keyword as it appears in a FITS header
-     * 
+     *
      * @return                          An array of indices that appear in the key, or <code>null</code> if the keyword
      *                                      is not one that can be indexed.
-     * 
+     *
      * @throws IllegalArgumentException if the keyword does not match the pattern of this standardized FITS key
-     * 
+     *
      * @see                             #n(int...)
      * @see                             Standard#match(String)
-     * 
+     *
      * @since                           1.19
      */
     default int[] extractIndices(String key) throws IllegalArgumentException {
-        String pattern = key();
-        int i, j = 0, lp = pattern.length(), lk = key.length();
-        int n = 0;
-
-        for (i = 0; i < lp; i++) {
-            if (pattern.charAt(i) == 'n') {
-                n++;
-            }
-        }
-
-        if (n == 0) {
-            return null;
-        }
-
-        int[] idx = new int[n];
-
-        for (i = 0, n = 0; i < lp; i++) {
-            if (pattern.charAt(i) == 'n') {
-                if (i + 1 < lp && pattern.charAt(i + 1) == 'n') {
-                    idx[n++] = key.charAt(j++) - '0';
-                } else {
-                    int value = 0;
-                    while (j < lk && Character.isDigit(key.charAt(j))) {
-                        value = FitsKey.BASE_10 * value + key.charAt(j++) - '0';
-                    }
-                    idx[n++] = value;
-                }
-            } else if (key.charAt(j++) != pattern.charAt(i)) {
-                throw new IllegalArgumentException("Key " + key + " does no match pattern " + pattern);
-            }
-        }
-
-        return idx;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

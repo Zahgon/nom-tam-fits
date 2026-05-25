@@ -30,9 +30,7 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
-
 import nom.tam.fits.header.Bitpix;
 import nom.tam.fits.header.Standard;
 import nom.tam.util.ArrayDataInput;
@@ -45,19 +43,24 @@ import nom.tam.util.FitsEncoder;
  * A container for unknown binary data types. We can still retrieve the data as a <code>byte[]</code> array, we just
  * don't know how to interpret it ourselves. This class makes sure we don't break when we encouter HDUs that we don't
  * (yet) support, such as HDU types defined by future FITS standards.
- * 
+ *
  * @see UndefinedHDU
  */
 public class UndefinedData extends Data {
 
     private static final String XTENSION_UNKNOWN = "UNKNOWN";
-    // private static final Logger LOG = getLogger(UndefinedData.class);
 
+    // private static final Logger LOG = getLogger(UndefinedData.class);
     private Bitpix bitpix = Bitpix.BYTE;
+
     private int[] dims;
+
     private int byteSize = 0;
+
     private byte[] data;
+
     private int pCount = 0;
+
     private int gCount = 1;
 
     private String extensionType = XTENSION_UNKNOWN;
@@ -66,46 +69,39 @@ public class UndefinedData extends Data {
      * Creates a new empty container for data of unknown type based on the provided FITS header information.
      *
      * @param      h             The FITS header corresponding to the data segment in the HDU
-     * 
+     *
      * @throws     FitsException if there wan an error accessing or interpreting the provided header information.
-     * 
+     *
      * @deprecated               (<i>for internal use</i>). Visibility will be reduced to the package level in the
      *                               future.
      */
     @Deprecated
     public UndefinedData(Header h) throws FitsException {
         extensionType = h.getStringValue(Standard.XTENSION, XTENSION_UNKNOWN);
-
         int naxis = h.getIntValue(Standard.NAXIS);
-
         dims = new int[naxis];
-
         int size = naxis > 0 ? 1 : 0;
         for (int i = 1; i <= naxis; i++) {
             dims[naxis - i] = h.getIntValue(Standard.NAXISn.n(i));
             size *= dims[naxis - i];
         }
-
         pCount = h.getIntValue(Standard.PCOUNT);
         size += pCount;
-
         gCount = h.getIntValue(Standard.GCOUNT);
         if (gCount > 1) {
             size *= h.getIntValue(Standard.GCOUNT);
         }
-
         bitpix = Bitpix.fromHeader(h);
         size *= bitpix.byteSize();
-
         byteSize = size;
     }
 
     /**
      * @deprecated                          (<i>for internal use</i>). Users should always construct known data types.
      *                                          Reduce visibility to the package level.
-     * 
+     *
      * @param      x                        object to create the hdu from
-     * 
+     *
      * @throws     IllegalArgumentException If the object is not an array or contains elements that do not have a known
      *                                          binary size.
      */
@@ -120,131 +116,94 @@ public class UndefinedData extends Data {
     @SuppressWarnings("deprecation")
     @Override
     protected void fillHeader(Header head) {
-        // We'll assume it's a primary image, until we know better...
-        // Just in case, we don't want an XTENSION key lingering around...
-        head.deleteKey(Standard.SIMPLE);
-        head.deleteKey(Standard.EXTEND);
-
-        Standard.context(UndefinedData.class);
-
-        Cursor<String, HeaderCard> c = head.iterator();
-        c.add(HeaderCard.create(Standard.XTENSION, extensionType));
-        c.add(HeaderCard.create(Standard.BITPIX, bitpix.getHeaderValue()));
-
-        c.add(HeaderCard.create(Standard.NAXIS, dims.length));
-
-        for (int i = 1; i <= dims.length; i++) {
-            c.add(HeaderCard.create(Standard.NAXISn.n(i), dims[dims.length - i]));
-        }
-
-        c.add(HeaderCard.create(Standard.PCOUNT, pCount));
-        c.add(HeaderCard.create(Standard.GCOUNT, gCount));
-
-        Standard.context(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected byte[] getCurrentData() {
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected long getTrueSize() {
-        return byteSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the FITS extension type as stored by the XTENSION keyword in the FITS header.
-     * 
+     *
      * @return The value used for the XTENSION keyword in the FITS header
-     * 
+     *
      * @since  1.19
      */
     public final String getXtension() {
-        return extensionType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the FITS element type as a Bitpux value.
-     * 
+     *
      * @return The FITS Bitpix value for the type of primitive data element used by this data
-     * 
+     *
      * @since  1.19
      */
     public final Bitpix getBitpix() {
-        return bitpix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the size of the optional parameter space as stored by the PCOUNT keyword in the FITS header.
-     * 
+     *
      * @return The element count of the optional parameter space accompanying the main data, as stored by the PCOUNT
      *             header value.
-     * 
+     *
      * @since  1.19
      */
     public final int getParameterCount() {
-        return pCount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the number of repeated (data + parameter) groups in this data object
-     * 
+     *
      * @return The number of repeated data + parameter blocks, as stored by the GCOUNT header value.
-     * 
+     *
      * @since  1.19
      */
     public final int getGroupCount() {
-        return gCount;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the dimensionality of the data (if any), in Java array index order. That is, The value for NAXIS1 is the
      * last value in the returned array
-     * 
+     *
      * @return the regular dimensions of the data in Java index order (that is NAXIS1 is the last entry in the array),
      *             or possibly <code>null</code> if no dimensions have been defined.
      */
     public final int[] getDimensions() {
-        return dims;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public byte[] getData() throws FitsException {
-        byte[] bytes = (byte[]) super.getData();
-        if (bytes != null) {
-            return bytes;
-        }
-
-        data = new byte[byteSize];
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected void loadData(ArrayDataInput in) throws IOException {
-        data = new byte[byteSize];
-        in.readFully(data);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @SuppressWarnings({"resource", "deprecation"})
+    @SuppressWarnings({ "resource", "deprecation" })
     @Override
     public void write(ArrayDataOutput o) throws FitsException {
-        if (o != getRandomAccessInput()) {
-            ensureData();
-        }
-        try {
-            o.write(data);
-        } catch (IOException e) {
-            throw new FitsException("IO Error on unknown data write", e);
-        }
-        FitsUtil.pad(o, getTrueSize());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     @SuppressWarnings("deprecation")
     public UndefinedHDU toHDU() {
-        Header h = new Header();
-        fillHeader(h);
-        return new UndefinedHDU(h, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

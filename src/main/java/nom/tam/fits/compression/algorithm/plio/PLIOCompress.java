@@ -3,7 +3,6 @@ package nom.tam.fits.compression.algorithm.plio;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressor;
 
 /*
@@ -36,7 +35,6 @@ import nom.tam.fits.compression.algorithm.api.ICompressor;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * (<i>for internal use</i>) The PLIO compression algorithm. The original decompression code was written by Doug Tody,
  * NRAO and included (ported to c and adapted) in cfitsio by William Pence, NASA/GSFC. That code was then ported to Java
@@ -56,25 +54,22 @@ public abstract class PLIOCompress {
 
         @Override
         public boolean compress(ByteBuffer buffer, ByteBuffer compressed) {
-            pixelData = buffer;
-            compress(compressed.asShortBuffer(), pixelData.limit());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, ByteBuffer buffer) {
-            pixelData = buffer;
-            decompress(compressed.asShortBuffer(), pixelData.limit());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int nextPixel() {
-            return pixelData.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void put(int index, int pixel) {
-            pixelData.put(index, (byte) pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -84,25 +79,22 @@ public abstract class PLIOCompress {
 
         @Override
         public boolean compress(ShortBuffer buffer, ByteBuffer compressed) {
-            pixelData = buffer;
-            super.compress(compressed.asShortBuffer(), pixelData.limit());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, ShortBuffer buffer) {
-            pixelData = buffer;
-            decompress(compressed.asShortBuffer(), pixelData.limit());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int nextPixel() {
-            return pixelData.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void put(int index, int pixel) {
-            pixelData.put(index, (short) pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -115,25 +107,22 @@ public abstract class PLIOCompress {
 
         @Override
         public boolean compress(IntBuffer buffer, ByteBuffer compressed) {
-            pixelData = buffer;
-            super.compress(compressed.asShortBuffer(), pixelData.limit());
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, IntBuffer buffer) {
-            pixelData = buffer;
-            decompress(compressed.asShortBuffer(), pixelData.limit());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int nextPixel() {
-            return pixelData.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void put(int index, int pixel) {
-            pixelData.put(index, (short) pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -176,8 +165,7 @@ public abstract class PLIOCompress {
 
     private static final int OPCODE_8 = 8;
 
-    private static final short[] PLIO_HEADER = {(short) 0, (short) 7, (short) -100, (short) 0, (short) 0, (short) 0,
-            (short) 0};
+    private static final short[] PLIO_HEADER = { (short) 0, (short) 7, (short) -100, (short) 0, (short) 0, (short) 0, (short) 0 };
 
     private static final int SHIFT_12_BITS = 12;
 
@@ -193,85 +181,7 @@ public abstract class PLIOCompress {
      * @param npix           number of pixels to convert
      */
     protected void compress(ShortBuffer compressedData, int npix) {
-        compressedData.put(PLIO_HEADER);
-        final int xe = npix - 1;
-        int op = PLIO_HEADER.length;
-        /* Computing MAX */
-        int pv = Math.max(0, nextPixel());
-        int x1 = 0;
-        int iz = 0;
-        int hi = 1;
-        int nv = 0;
-        for (int ip = 0; ip <= xe; ++ip) {
-            if (ip < xe) {
-                /* Computing MAX */
-                nv = Math.max(0, nextPixel());
-                if (nv == pv) {
-                    continue;
-                }
-                if (pv == 0) {
-                    pv = nv;
-                    x1 = ip + 1;
-                    continue;
-                }
-            } else if (pv == 0) {
-                x1 = xe + 1;
-            }
-
-            int np = ip - x1 + 1;
-            int nz = x1 - iz;
-            boolean skip = false;
-            if (pv > 0) {
-                int dv = pv - hi;
-                if (dv != 0) {
-                    hi = pv;
-                    if (Math.abs(dv) > LAST_VALUE_FITTING_IN_12_BIT) {
-                        compressedData.put(op, (short) ((pv & LAST_VALUE_FITTING_IN_12_BIT) + FIRST_VALUE_WITH_13_BIT));
-                        ++op;
-                        compressedData.put(op, (short) (pv / FIRST_VALUE_WITH_13_BIT));
-                        ++op;
-                    } else {
-                        if (dv < 0) {
-                            compressedData.put(op, (short) (-dv + VALUE_OF_BIT_13_AND14_ON));
-                        } else {
-                            compressedData.put(op, (short) (dv + FIRST_VALUE_WITH_14_BIT));
-                        }
-                        ++op;
-                        if (np == 1 && nz == 0) {
-                            int v = compressedData.get(op - 1);
-                            compressedData.put(op - 1, (short) (v | FIRST_VALUE_WITH_15_BIT));
-                            skip = true;
-                        }
-                    }
-                }
-            }
-            if (!skip) {
-                if (nz > 0) {
-                    while (nz > 0) {
-                        compressedData.put(op, (short) Math.min(LAST_VALUE_FITTING_IN_12_BIT, nz));
-                        ++op;
-                        nz += -LAST_VALUE_FITTING_IN_12_BIT;
-                    }
-                    if (np == 1 && pv > 0) {
-                        compressedData.put(op - 1, (short) (compressedData.get(op - 1) + N20481));
-                        skip = true;
-                    }
-                }
-            }
-            if (!skip) {
-                while (np > 0) {
-                    compressedData.put(op, (short) (Math.min(LAST_VALUE_FITTING_IN_12_BIT, np) + FIRST_VALUE_WITH_15_BIT));
-                    ++op;
-                    np += -LAST_VALUE_FITTING_IN_12_BIT;
-                }
-            }
-            x1 = ip + 1;
-            iz = x1;
-            pv = nv;
-        }
-        compressedData.put(HEADER_SIZE_FIELD1, (short) (op % FIRST_VALUE_WITH_16_BIT));
-        compressedData.put(HEADER_SIZE_FIELD2, (short) (op / FIRST_VALUE_WITH_16_BIT));
-        compressedData.position(op);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -284,78 +194,10 @@ public abstract class PLIOCompress {
      * @return                number of pixels converted
      */
     protected int decompress(ShortBuffer compressedData, int npix) {
-        int llfirt;
-        int lllen;
-        if (!(compressedData.get(2) > 0)) {
-            lllen = (compressedData.get(HEADER_SIZE_FIELD2) << SHIFT_15_BITS) + compressedData.get(HEADER_SIZE_FIELD1);
-            llfirt = compressedData.get(1);
-        } else {
-            lllen = compressedData.get(MINI_HEADER_SIZE_FIELD);
-            llfirt = MINI_HEADER_SIZE;
-        }
-        final int xe = npix;
-        int op = 0;
-        int x1 = 1;
-        int pv = 1;
-        for (int ip = llfirt; ip <= lllen; ++ip) {
-            final int opcode = compressedData.get(ip) / FIRST_VALUE_WITH_13_BIT;
-            final int data = compressedData.get(ip) & LAST_VALUE_FITTING_IN_12_BIT;
-            final int sw0001 = opcode + 1;
-            if (sw0001 == OPCODE_1 || sw0001 == OPCODE_5 || sw0001 == OPCODE_6) {
-                final int x2 = x1 + data - 1;
-                final int i2 = Math.min(x2, xe);
-                final int np = i2 - Math.max(x1, 0) + 1;
-                if (np > 0) {
-                    final int otop = op + np - 1;
-                    if (!(opcode == OPCODE_4)) {
-                        for (int index = op; index <= otop; ++index) {
-                            put(index, 0);
-                        }
-                        if (opcode == OPCODE_5 && i2 == x2) {
-                            put(otop, pv);
-                        }
-                    } else {
-                        for (int index = op; index <= otop; ++index) {
-                            put(index, pv);
-                        }
-                    }
-                    op = otop + 1;
-                }
-                x1 = x2 + 1;
-            } else if (sw0001 == OPCODE_2) {
-                pv = (compressedData.get(ip + 1) << SHIFT_12_BITS) + data;
-                ++ip;
-            } else if (sw0001 == OPCODE_3) {
-                pv += data;
-            } else if (sw0001 == OPCODE_4) {
-                pv -= data;
-            } else if (sw0001 == OPCODE_7) {
-                pv += data;
-                if (x1 >= 0 && x1 <= xe) {
-                    put(op, pv);
-                    ++op;
-                }
-                ++x1;
-            } else if (sw0001 == OPCODE_8) {
-                pv -= data;
-                if (x1 >= 0 && x1 <= xe) {
-                    put(op, pv);
-                    ++op;
-                }
-                ++x1;
-            }
-            if (x1 > xe) {
-                break;
-            }
-        }
-        for (int index = op; index < npix; ++index) {
-            put(index, 0);
-        }
-        return npix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected abstract int nextPixel();
 
     protected abstract void put(int index, int pixel);
-
 }

@@ -32,7 +32,6 @@ import java.io.IOException;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * Interface that combines file-based random acesss with high-throughput array IO
  */
@@ -40,7 +39,7 @@ public interface RandomAccess extends ReadWriteAccess, ArrayDataInput {
 
     /**
      * Returns the current offset from the beginning of the input.
-     * 
+     *
      * @return the current position in the stream.
      */
     long getFilePointer();
@@ -56,12 +55,11 @@ public interface RandomAccess extends ReadWriteAccess, ArrayDataInput {
 
     @Override
     default long position() throws IOException {
-        return getFilePointer();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     default void position(long pos) throws IOException {
-        seek(pos);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

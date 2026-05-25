@@ -30,7 +30,6 @@ package nom.tam.fits.header.extra;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.header.FitsKey;
 import nom.tam.fits.header.IFitsHeader;
 
@@ -49,6 +48,7 @@ import nom.tam.fits.header.IFitsHeader;
  * @author Richard van Nieuwenhoven.
  */
 public enum NOAOExt implements IFitsHeader {
+
     /**
      * <p>
      * default value = none
@@ -5447,7 +5447,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     MINNSCAN(HDU.EXTENSION, VALUE.INTEGER, "Minimum number of scanned lines"),
-
     /**
      * Modified Julian date when the image header was created by the software. The fractional part of the date is given
      * to better than a second of time. Many header keywords may be sampled or computed at this time and this keyword is
@@ -6341,7 +6340,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     RADECEQ(HDU.ANY, VALUE.REAL, "Default coordinate equinox"),
-
     /**
      * Projected position angle of the positive right ascension axis on the detector. The position angle is measured
      * clockwise from the image y axis.
@@ -7474,7 +7472,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITENER(HDU.PRIMARY, VALUE.STRING, "Energy unit"),
-
     /**
      * Event unit.
      * <p>
@@ -7485,7 +7482,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITEVNT(HDU.PRIMARY, VALUE.STRING, "Event unit"),
-
     /**
      * Flux unit.
      * <p>
@@ -7496,7 +7492,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITFLUX(HDU.PRIMARY, VALUE.STRING, "Flux unit"),
-
     /**
      * Force unit.
      * <p>
@@ -7507,7 +7502,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITFORC(HDU.PRIMARY, VALUE.STRING, "Force unit"),
-
     /**
      * Frequency unit.
      * <p>
@@ -7518,7 +7512,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITFREQ(HDU.PRIMARY, VALUE.STRING, "Frequency unit"),
-
     /**
      * Time of day unit.
      * <p>
@@ -7529,7 +7522,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITHOUR(HDU.PRIMARY, VALUE.STRING, "Time of day unit"),
-
     /**
      * Illuminance unit.
      * <p>
@@ -7540,7 +7532,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITILLU(HDU.PRIMARY, VALUE.STRING, "Illuminance unit"),
-
     /**
      * Inductance unit.
      * <p>
@@ -7551,7 +7542,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITINDU(HDU.PRIMARY, VALUE.STRING, "Inductance unit"),
-
     /**
      * Latitude unit.
      * <p>
@@ -7562,7 +7552,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITLAT(HDU.PRIMARY, VALUE.STRING, "Latitude unit"),
-
     /**
      * Length unit. A wavelength unit is also provided so this unit is primarily used to instrumental descriptions.
      * <p>
@@ -7573,7 +7562,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITLEN(HDU.PRIMARY, VALUE.STRING, "Length unit"),
-
     /**
      * Luminous flux unit.
      * <p>
@@ -7584,7 +7572,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITLFLX(HDU.PRIMARY, VALUE.STRING, "Luminous flux unit"),
-
     /**
      * Luminous intensity unit.
      * <p>
@@ -7595,7 +7582,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITLINT(HDU.PRIMARY, VALUE.STRING, "Luminous intensity unit"),
-
     /**
      * Longitude unit.
      * <p>
@@ -7606,7 +7592,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITLONG(HDU.PRIMARY, VALUE.STRING, "Longitude unit"),
-
     /**
      * Mass unit.
      * <p>
@@ -7617,7 +7602,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITMASS(HDU.PRIMARY, VALUE.STRING, "Mass unit"),
-
     /**
      * Magnetic density unit.
      * <p>
@@ -7628,7 +7612,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITMDEN(HDU.PRIMARY, VALUE.STRING, "Magnetic density unit"),
-
     /**
      * Magnetic field unit.
      * <p>
@@ -7639,7 +7622,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITMFLD(HDU.PRIMARY, VALUE.STRING, "Magnetic field unit"),
-
     /**
      * Magnetic flux unit.
      * <p>
@@ -7650,7 +7632,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITMFLX(HDU.PRIMARY, VALUE.STRING, "Magnetic flux unit"),
-
     /**
      * Position angle unit.
      * <p>
@@ -7661,7 +7642,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITPA(HDU.PRIMARY, VALUE.STRING, "Position angle unit"),
-
     /**
      * Power unit.
      * <p>
@@ -7672,7 +7652,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITPOW(HDU.PRIMARY, VALUE.STRING, "Wavelength unit"),
-
     /**
      * Pressure unit.
      * <p>
@@ -7683,7 +7662,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITPRES(HDU.PRIMARY, VALUE.STRING, "Pressure unit"),
-
     /**
      * Right ascension unit.
      * <p>
@@ -7694,7 +7672,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITRA(HDU.PRIMARY, VALUE.STRING, "Right ascension unit"),
-
     /**
      * Celestial rate of motion.
      * <p>
@@ -7705,7 +7682,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITRATE(HDU.PRIMARY, VALUE.STRING, "Celestial rate of motion unit"),
-
     /**
      * Resistance unit.
      * <p>
@@ -7716,7 +7692,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITRES(HDU.PRIMARY, VALUE.STRING, "Resistance unit"),
-
     /**
      * Solid angle unit.
      * <p>
@@ -7727,7 +7702,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITSANG(HDU.PRIMARY, VALUE.STRING, "Solid angle unit"),
-
     /**
      * Celestial separation unit.
      * <p>
@@ -7738,7 +7712,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITSEP(HDU.PRIMARY, VALUE.STRING, "Angular separation unit"),
-
     /**
      * Temperature unit.
      * <p>
@@ -7749,7 +7722,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITTEMP(HDU.PRIMARY, VALUE.STRING, "Temperature unit"),
-
     /**
      * Time unit.
      * <p>
@@ -7760,7 +7732,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITTIME(HDU.PRIMARY, VALUE.STRING, "Time unit"),
-
     /**
      * Velocity unit.
      * <p>
@@ -7771,7 +7742,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITVEL(HDU.PRIMARY, VALUE.STRING, "Velocity unit"),
-
     /**
      * Voltage unit.
      * <p>
@@ -7782,7 +7752,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UNITVOLT(HDU.PRIMARY, VALUE.STRING, "Voltage unit"),
-
     /**
      * UTC time at the start of the exposure.
      * <p>
@@ -7796,7 +7765,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UTC_OBS("UTC-OBS", HDU.ANY, VALUE.STRING, "UTC of exposure start"),
-
     /**
      * UTC at the end of the exposure.
      * <p>
@@ -7810,7 +7778,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UTCEND(HDU.ANY, VALUE.STRING, "UTC at end of exposure"),
-
     /**
      * UTC of header creation.
      * <p>
@@ -7824,7 +7791,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     UTCHDR(HDU.ANY, VALUE.STRING, "UTC of header creation"),
-
     /**
      * Default UTC time for the observation. This keyword is generally not used and is UTC-OBS keyword for the start of
      * the exposure on the detector is used.
@@ -7849,7 +7815,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WAT_nnn(HDU.ANY, VALUE.STRING, ""),
-
     /**
      * IRAF WCS attribute strings. These are defined by the IRAF WCS system.
      * <p>
@@ -7860,7 +7825,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WATn_nnn(HDU.ANY, VALUE.STRING, ""),
-
     /**
      * Descriptive string identifying the source of the astrometry used to derive the WCS. One example is the exposure
      * used to derive a WCS apart from the reference coordinate.
@@ -7872,7 +7836,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSAnnn(HDU.ANY, VALUE.STRING, "WCS Source"),
-
     /**
      * Descriptive string identifying the source of the astrometry used to derive the WCS. One example is the exposure
      * used to derive a WCS apart from the reference coordinate.
@@ -7884,7 +7847,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSASTRM(HDU.ANY, VALUE.STRING, "WCS Source"),
-
     /**
      * Dimensionality of the WCS physical system. In IRAF a WCS can have a higher dimensionality than the image.
      * <p>
@@ -7895,7 +7857,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSDIM(HDU.ANY, VALUE.INTEGER, "WCS dimensionality"),
-
     /**
      * Epoch of the coordinates used in the world coordinate system.
      * <p>
@@ -7909,7 +7870,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSEnnn(HDU.ANY, VALUE.REAL, "[yr] WCS coordinate epoch"),
-
     /**
      * Equinox when equatorial coordinates are used in the world coordinate system. A value before 1984 is Besselian
      * otherwise it is Julian.
@@ -7924,7 +7884,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSEPOCH(HDU.ANY, VALUE.REAL, "[yr] WCS coordinate epoch"),
-
     /**
      * Coordinate system type when equatorial coordinates are used in the world coordinate system.
      * <p>
@@ -7935,7 +7894,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSRADEC(HDU.ANY, VALUE.STRING, "WCS coordinate system"),
-
     /**
      * Coordinate system type when equatorial coordinates are used in the world coordinate system.
      * <p>
@@ -7946,7 +7904,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WCSRnnn(HDU.ANY, VALUE.STRING, "WCS coordinate system"),
-
     /**
      * Weather condition description. Generally this would be either 'clear' or 'partly cloudy'.
      * <p>
@@ -7957,7 +7914,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     WEATHER(HDU.PRIMARY, VALUE.STRING, "Weather conditions"),
-
     /**
      * Zenith distance of telescope pointing at TELMJD.
      * <p>
@@ -7971,7 +7927,6 @@ public enum NOAOExt implements IFitsHeader {
      * </p>
      */
     ZD(HDU.PRIMARY, VALUE.REAL, "Zenith distance"),
-
     /**
      * Modified Julian date at the start of the exposure. The fractional part of the date is given to better than a
      * second of time.
@@ -7999,7 +7954,6 @@ public enum NOAOExt implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

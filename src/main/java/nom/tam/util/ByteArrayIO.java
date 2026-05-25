@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,19 +43,29 @@ import java.util.Arrays;
  */
 public class ByteArrayIO implements ReadWriteAccess {
 
-    /** Mask for 1-byte */
+    /**
+     * Mask for 1-byte
+     */
     private static final int BYTE_MASK = 0xFF;
 
-    /** The underlying buffer */
+    /**
+     * The underlying buffer
+     */
     private byte[] buf;
 
-    /** Whether the buffer is allowed to grow as needed to contain more data */
+    /**
+     * Whether the buffer is allowed to grow as needed to contain more data
+     */
     private boolean isGrowable;
 
-    /** The current pointer position, for the next read or write in the buffer */
+    /**
+     * The current pointer position, for the next read or write in the buffer
+     */
     private int pos;
 
-    /** The current end of the buffer, that is the total number of bytes available for reading from the buffer */
+    /**
+     * The current end of the buffer, that is the total number of bytes available for reading from the buffer
+     */
     private int end;
 
     /**
@@ -82,7 +91,6 @@ public class ByteArrayIO implements ReadWriteAccess {
         if (initialCapacity <= 0) {
             throw new IllegalArgumentException("Illegal buffer size:" + initialCapacity);
         }
-
         buf = new byte[initialCapacity];
         end = 0;
         isGrowable = true;
@@ -94,13 +102,7 @@ public class ByteArrayIO implements ReadWriteAccess {
      * @return a deep copy of this byte array with an IO interface instance.
      */
     public synchronized ByteArrayIO copy() {
-        ByteArrayIO copy = new ByteArrayIO(Arrays.copyOf(buf, buf.length));
-        synchronized (copy) {
-            copy.isGrowable = isGrowable;
-            copy.pos = pos;
-            copy.end = end;
-        }
-        return copy;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -109,7 +111,7 @@ public class ByteArrayIO implements ReadWriteAccess {
      * @return the backing array of this buffer.
      */
     public synchronized byte[] getBuffer() {
-        return buf;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -119,12 +121,12 @@ public class ByteArrayIO implements ReadWriteAccess {
      * @return the current size of the backing array.
      */
     public final synchronized int capacity() {
-        return buf.length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized long length() {
-        return end;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,30 +135,17 @@ public class ByteArrayIO implements ReadWriteAccess {
      * @return the number of bytes that can be read from this buffer from the current position.
      */
     public final synchronized int getRemaining() {
-        if (pos >= end) {
-            return 0;
-        }
-        return end - pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized long position() {
-        return pos;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void position(long offset) throws IOException {
-        if (offset < 0) {
-            throw new EOFException("Negative buffer index: " + offset);
-        }
-
-        if (offset > buf.length) {
-            if (!isGrowable) {
-                throw new EOFException("Position " + offset + " beyond fixed buffer size " + buf.length);
-            }
-        }
-
-        pos = (int) offset;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -176,23 +165,7 @@ public class ByteArrayIO implements ReadWriteAccess {
      * @see                             #capacity()
      */
     public synchronized void setLength(int length) throws IllegalArgumentException {
-        if (length < 0) {
-            throw new IllegalArgumentException("Buffer set to negative length: " + length);
-        }
-
-        if (length > capacity()) {
-            if (!isGrowable) {
-                throw new IllegalArgumentException(
-                        "the new length " + length + " is larger than the fixed capacity " + capacity());
-            }
-            grow(length - capacity());
-        }
-        end = length;
-
-        // If the pointer is beyond the new size, move it back to the new end...
-        if (pos > end) {
-            pos = end;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -214,66 +187,21 @@ public class ByteArrayIO implements ReadWriteAccess {
 
     @Override
     public final synchronized void write(int b) throws IOException {
-        if (pos + 1 > buf.length) {
-            if (!isGrowable) {
-                throw new EOFException("buffer is full (size=" + length() + ")");
-            }
-            grow(pos + 1 - buf.length);
-        }
-        buf[pos++] = (byte) b;
-        if (pos > end) {
-            end = pos;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized void write(byte[] b, int from, int length) throws IOException {
-        if (length <= 0) {
-            return;
-        }
-
-        if (pos > buf.length || (isGrowable && pos + length > buf.length)) {
-            // This may only happen in a growable buffer...
-            grow(buf.length + length - pos);
-        }
-
-        int l = Math.min(length, buf.length - pos);
-
-        System.arraycopy(b, from, buf, pos, l);
-        pos += l;
-        if (pos > end) {
-            end = pos;
-        }
-
-        if (l < length) {
-            throw new EOFException("Incomplete write of " + l + " of " + length + " bytes in buffer of size " + length());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized int read() throws IOException {
-        if (getRemaining() <= 0) {
-            return -1;
-        }
-        return buf[pos++] & BYTE_MASK;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized int read(byte[] b, int from, int length) {
-        if (length <= 0) {
-            return 0;
-        }
-
-        int remaining = getRemaining();
-
-        if (remaining <= 0) {
-            return -1;
-        }
-
-        int n = Math.min(remaining, length);
-        System.arraycopy(buf, pos, b, from, n);
-        pos += n;
-
-        return n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

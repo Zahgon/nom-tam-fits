@@ -30,26 +30,24 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * The following keywords are defined by the compression convention for use in the header of the FITS binary table
  * extension to describe the structure of the compressed image.
  */
 public enum Compression implements IFitsHeader {
+
     /**
      * (required keyword) This keyword must have the logical value T. The value field of this keyword shall be ’T’ to
      * indicate that the FITS binary table extension contains a compressed BINTABLE, and that logically this extension
      * should be interpreted as a tile-compressed binary table.
      */
     ZTABLE(VALUE.LOGICAL, "whether this is a compressed table"),
-
     /**
      * (required keyword) This keyword must have the logical value T. It indicates that the FITS binary table extension
      * contains a compressed image and that logically this extension should be interpreted as an image and not as a
      * table.
      */
     ZIMAGE(VALUE.LOGICAL, "whether this is a compressed image"),
-
     /**
      * (required keyword) The value field of this keyword shall contain a character string giving the name of the
      * algorithm that must be used to decompress the image. Currently, values of GZIP 1 , GZIP 2 , RICE 1 , PLIO 1 , and
@@ -57,25 +55,21 @@ public enum Compression implements IFitsHeader {
      * The value RICE ONE is also reserved as an alias for RICE 1 .
      */
     ZCMPTYPE(VALUE.STRING, "compression algorithm"),
-
     /**
      * (required keyword) The value field of this keyword shall contain an integer that gives the value of the BITPIX
      * keyword in the uncompressed FITS image.
      */
     ZBITPIX(VALUE.INTEGER, "original BITPIX value", Standard.BITPIX),
-
     /**
      * (required keyword) The value field of this keyword shall contain an integer that gives the value of the NAXIS
      * keyword in the uncompressed FITS image.
      */
     ZNAXIS(VALUE.INTEGER, "original NAXIS value", Standard.NAXIS),
-
     /**
      * (required keywords) The value field of these keywords shall contain a positive integer that gives the value of
      * the NAXISn keywords in the uncompressed FITS image.
      */
     ZNAXISn(VALUE.INTEGER, "original NAXISn value", Standard.NAXISn),
-
     /**
      * (optional keywords) The value of these indexed keywords (where n ranges from 1 to ZNAXIS ) shall contain a
      * positive integer representing the number of pixels along axis n of the compression tiles. Each tile of pixels is
@@ -89,7 +83,6 @@ public enum Compression implements IFitsHeader {
      * image appears in the last row of the binary table.
      */
     ZTILEn(VALUE.INTEGER, "image tile size along dimension"),
-
     /**
      * (optional keywords) These pairs of optional array keywords (where n is an integer index number starting with 1)
      * supply the name and value, respectively, of any algorithm-specific parameters that are needed to compress o r
@@ -98,7 +91,6 @@ public enum Compression implements IFitsHeader {
      * algorithm.
      */
     ZNAMEn(VALUE.STRING, "indexed compression parameter name"),
-
     /**
      * (optional keywords) These pairs of optional array keywords (where n is an integer index number starting with 1)
      * supply the name and value, respectively, of any algorithm-specific parameters that are needed to compress o r
@@ -107,14 +99,12 @@ public enum Compression implements IFitsHeader {
      * algorithm.
      */
     ZVALn(VALUE.ANY, "indexed compression parameter value"),
-
     /**
      * (optional keyword) Used to record the name of the image compression algorithm that was used to compress the
      * optional null pixel data mask. See the “Preserving undefined pixels with lossy compression” section for more
      * details.
      */
     ZMASKCMP(VALUE.STRING, "mask compression algorithm"),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
@@ -122,7 +112,6 @@ public enum Compression implements IFitsHeader {
      * only be used if the original uncompressed image was contained in the primary array of the FITS file.
      */
     ZSIMPLE(VALUE.LOGICAL, "original SIMPLE value", Standard.SIMPLE),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
@@ -130,7 +119,6 @@ public enum Compression implements IFitsHeader {
      * keyword.may only be used if the original uncompressed image was contained in in IMAGE extension.
      */
     ZTENSION(VALUE.STRING, "original XTENSION value", Standard.XTENSION),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
@@ -138,7 +126,6 @@ public enum Compression implements IFitsHeader {
      * only be used if the original uncompressed image was contained in the primary array of the FITS file.
      */
     ZEXTEND(VALUE.LOGICAL, "original EXTEND value", Standard.EXTEND),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
@@ -147,7 +134,6 @@ public enum Compression implements IFitsHeader {
      */
     @Deprecated
     ZBLOCKED(VALUE.LOGICAL, "original BLOCKED value", Standard.BLOCKED),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
@@ -155,7 +141,6 @@ public enum Compression implements IFitsHeader {
      * keyword.may only be used if the original uncompressed image was contained in in IMAGE extension.
      */
     ZPCOUNT(VALUE.INTEGER, "original PCOUNT value", Standard.PCOUNT),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
@@ -163,34 +148,29 @@ public enum Compression implements IFitsHeader {
      * keyword.may only be used if the original uncompressed image was contained in in IMAGE extension.
      */
     ZGCOUNT(VALUE.INTEGER, "original GCOUNTvalue", Standard.GCOUNT),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
      * identical copy o f the original FITS file when the image is uncompressed.preserves the original CHECKSUM keyword.
      */
     ZHECKSUM(VALUE.STRING, "original CHECKSUM string", Checksum.CHECKSUM),
-
     /**
      * The following optional keyword is defined to store a verbatim copy of the the value and comment field of the
      * corresponding keyword in the original uncompressed FITS image. These keywords can be used to reconstruct an
      * identical copy o f the original FITS file when the image is uncompressed.preserves the original DATASUM
      */
     ZDATASUM(VALUE.STRING, "original DATASUM value", Checksum.DATASUM),
-
     /**
      * (optional keyword) This keyword records the name of the algorithm that was used to quantize floating-point image
      * pixels into integer values which are then passed to the compression algorithm.
      */
     ZQUANTIZ(VALUE.STRING, "compression quantization algorithm"),
-
     /**
      * (optional keyword) The value field of this keyword shall contain an integer that gives the seed value for the
      * random dithering pattern that was used when quantizing the floating-point pixel values. The value may range from
      * 1 to 100.00, inclusive.
      */
     ZDITHER0(VALUE.INTEGER, "dither algorithm seed value"),
-
     /**
      * When using the quantization method to compress floating-point images, this header is used to store the integer
      * value that represents undefined pixels (if any) in the scaled integer pixel values. These pixels have an IEEE NaN
@@ -198,14 +178,12 @@ public enum Compression implements IFitsHeader {
      * (the largest negative 32-bit integer).
      */
     ZBLANK(VALUE.INTEGER, "original BLANK value"),
-
     /**
      * Stores the original heap offset of the uncompressed heap.
-     * 
+     *
      * @since 1.19.1
      */
     ZTHEAP(VALUE.INTEGER, "original THEAP value", Standard.THEAP),
-
     /**
      * The value field of this keyword shall contain an integer representing the number of rows of data from the
      * original binary table that are contained in each tile of the compressed table. The number of rows in the last
@@ -214,13 +192,11 @@ public enum Compression implements IFitsHeader {
      * value.
      */
     ZTILELEN(VALUE.INTEGER, "number of rows compressed per tile"),
-
     /**
      * The value field of these keywords shall contain the character string values of the corresponding TFORMn keywords
      * that defines the data type of column n in the original uncompressed FITS table.
      */
     ZFORMn(VALUE.STRING, "compressed column data format", Standard.TFORMn),
-
     /**
      * The value field of these keywords shall contain a charac- ter string giving the mnemonic name of the algorithm
      * that was used to compress column n of the table. The current allowed values are GZIP_1, GZIP_2, and RICE_1, and
@@ -431,17 +407,16 @@ public enum Compression implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the equivalent of this comression keyword in the uncompressed HDU. For example, the compression keyword
      * <code>ZBITPIX</code> that stores the data type of the compressed image will return <code>BITPIX</code>.
-     * 
+     *
      * @return the equivalent keyword in the uncompressed HDU
      */
     public IFitsHeader getUncompressedKey() {
-        return uncompressedKey;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

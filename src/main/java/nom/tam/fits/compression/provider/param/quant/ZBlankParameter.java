@@ -1,7 +1,6 @@
 package nom.tam.fits.compression.provider.param.quant;
 
 import nom.tam.fits.Header;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import nom.tam.fits.Header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.compression.algorithm.quant.QuantizeOption;
@@ -50,26 +48,11 @@ final class ZBlankParameter extends CompressHeaderParameter<QuantizeOption> {
 
     @Override
     public void getValueFromHeader(Header header) throws HeaderCardException {
-        if (getOption() == null) {
-            return;
-        }
-
-        HeaderCard card = header.getCard(getName());
-        if (card != null) {
-            getOption().setBNull(card.getValue(Integer.class, getOption().getBNull()));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValueInHeader(Header header) throws HeaderCardException {
-        if (getOption() == null) {
-            return;
-        }
-
-        Integer blank = getOption().getBNull();
-        if (blank != null) {
-            header.addValue(Compression.ZBLANK, blank);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

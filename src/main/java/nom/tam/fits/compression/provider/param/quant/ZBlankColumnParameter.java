@@ -30,7 +30,6 @@ package nom.tam.fits.compression.provider.param.quant;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.quant.QuantizeOption;
 import nom.tam.fits.compression.provider.param.base.CompressColumnParameter;
 import nom.tam.fits.header.Compression;
@@ -52,27 +51,11 @@ public final class ZBlankColumnParameter extends CompressColumnParameter<int[], 
 
     @Override
     public void getValueFromColumn(int index) {
-        if (getOption().isCheckNull()) {
-            int[] col = getColumnData();
-            if (col != null) {
-                getOption().setBNull(col[index]);
-                return;
-            }
-        }
-        getOption().setBNull(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValueInColumn(int index) {
-        Integer blankValue = Integer.MIN_VALUE;
-
-        if (getOption().getBNull() != null) {
-            blankValue = getOption().getBNull();
-        }
-
-        int[] col = getColumnData();
-        if (col != null) {
-            col[index] = blankValue;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

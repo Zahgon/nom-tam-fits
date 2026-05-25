@@ -28,14 +28,12 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.util.type.ElementType;
 
@@ -84,16 +82,13 @@ public class FitsEncoder extends OutputEncoder {
      * library have used the value 1 for true, and 0 for false. Therefore, this implementation will recognise both 'T'
      * and 1 as <code>true</code>, but 0 will map to <code>null</code> and everything else will return
      * <code>false</code>.
-     * 
+     *
      * @param  b A java boolean value or <code>null</code>
-     * 
+     *
      * @return   the FITS byte representation of a boolean value.
      */
     public static byte byteForBoolean(Boolean b) {
-        if (b == null) {
-            return (byte) 0;
-        }
-        return b ? BYTE_TRUE : BYTE_FALSE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -148,7 +143,6 @@ public class FitsEncoder extends OutputEncoder {
             write(byteForBoolean(b[start]));
             return;
         }
-
         byte[] ascii = new byte[length];
         for (int i = 0; i < length; i++) {
             ascii[i] = byteForBoolean(b[start + i]);
@@ -178,7 +172,6 @@ public class FitsEncoder extends OutputEncoder {
             write(byteForBoolean(b[start]));
             return;
         }
-
         byte[] ascii = new byte[length];
         for (int i = 0; i < length; i++) {
             ascii[i] = byteForBoolean(b[start + i]);
@@ -211,7 +204,6 @@ public class FitsEncoder extends OutputEncoder {
             }
             return;
         }
-
         if (ElementType.CHAR.size() == 1) {
             byte[] ascii = new byte[length];
             for (int i = 0; i < length; i++) {
@@ -264,10 +256,7 @@ public class FitsEncoder extends OutputEncoder {
      * @see                #writeBytes(String)
      */
     void put(String str) throws IOException {
-        OutputBuffer out = getOutputBuffer();
-        for (int i = 0; i < str.length(); i++) {
-            out.putByte((byte) str.charAt(i));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -282,8 +271,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(boolean[] b, int start, int length) throws IOException {
-        put(b, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -298,8 +286,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(Boolean[] b, int start, int length) throws IOException {
-        put(b, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -396,8 +383,7 @@ public class FitsEncoder extends OutputEncoder {
      * @see                #writeChars(String)
      */
     protected synchronized void writeBytes(String s) throws IOException {
-        put(s);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -414,16 +400,7 @@ public class FitsEncoder extends OutputEncoder {
      * @see                FitsFactory#setUseUnicodeChars(boolean)
      */
     protected synchronized void writeChars(String s) throws IOException {
-        if (ElementType.CHAR.size() == 1) {
-            writeBytes(s);
-        } else {
-            OutputBuffer out = getOutputBuffer();
-            for (int i = 0; i < s.length(); i++) {
-                out.putShort((short) s.charAt(i));
-            }
-            flush();
-        }
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -442,8 +419,7 @@ public class FitsEncoder extends OutputEncoder {
      * @see                FitsFactory#setUseUnicodeChars(boolean)
      */
     protected synchronized void write(char[] c, int start, int length) throws IOException {
-        put(c, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -456,8 +432,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(short[] s, int start, int length) throws IOException {
-        getOutputBuffer().put(s, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -470,8 +445,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(int[] i, int start, int length) throws IOException {
-        getOutputBuffer().put(i, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -484,8 +458,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(long[] l, int start, int length) throws IOException {
-        getOutputBuffer().put(l, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -498,8 +471,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(float[] f, int start, int length) throws IOException {
-        getOutputBuffer().put(f, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -512,8 +484,7 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(double[] d, int start, int length) throws IOException {
-        getOutputBuffer().put(d, start, length);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -526,16 +497,12 @@ public class FitsEncoder extends OutputEncoder {
      * @throws IOException if there was an IO error writing to the output
      */
     protected synchronized void write(String[] str, int start, int length) throws IOException {
-        length += start;
-        while (start < length) {
-            writeBytes(str[start++]);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void writeArray(Object o) throws IOException, IllegalArgumentException {
-        putArray(o);
-        flush();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -562,51 +529,7 @@ public class FitsEncoder extends OutputEncoder {
      * @see                             #writeArray(Object)
      */
     protected void putArray(Object o) throws IOException, IllegalArgumentException {
-        if (o == null) {
-            return;
-        }
-
-        if (o instanceof ComplexValue) {
-            putArray(((ComplexValue) o).toArray());
-            return;
-        }
-
-        if (!o.getClass().isArray()) {
-            throw new IllegalArgumentException("Not an array: " + o.getClass().getName());
-        }
-
-        int length = Array.getLength(o);
-        if (length == 0) {
-            return;
-        }
-
-        if (o instanceof byte[]) {
-            getOutputBuffer().put((byte[]) o, 0, length);
-        } else if (o instanceof boolean[]) {
-            put((boolean[]) o, 0, length);
-        } else if (o instanceof char[]) {
-            put((char[]) o, 0, length);
-        } else if (o instanceof short[]) {
-            getOutputBuffer().put((short[]) o, 0, length);
-        } else if (o instanceof int[]) {
-            getOutputBuffer().put((int[]) o, 0, length);
-        } else if (o instanceof float[]) {
-            getOutputBuffer().put((float[]) o, 0, length);
-        } else if (o instanceof long[]) {
-            getOutputBuffer().put((long[]) o, 0, length);
-        } else if (o instanceof double[]) {
-            getOutputBuffer().put((double[]) o, 0, length);
-        } else if (o instanceof Boolean[]) {
-            put((Boolean[]) o, 0, length);
-        } else if (o instanceof String[]) {
-            put((String[]) o, 0, length);
-        } else {
-            Object[] array = (Object[]) o;
-            // Is this a multidimensional array? If so process recursively
-            for (int i = 0; i < length; i++) {
-                putArray(array[i]);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -618,38 +541,6 @@ public class FitsEncoder extends OutputEncoder {
      *               representation. (Also elements not known to FITS will count as 0 sized).
      */
     public static long computeSize(Object o) {
-        if (o == null) {
-            return 0;
-        }
-
-        if (o instanceof Object[]) {
-            long size = 0;
-            for (Object e : (Object[]) o) {
-                size += computeSize(e);
-            }
-            return size;
-        }
-
-        if (o instanceof ComplexValue) {
-            return 2L * (o instanceof ComplexValue.Float ? ElementType.FLOAT.size() : ElementType.DOUBLE.size());
-        }
-
-        Class<?> type = o.getClass();
-        ElementType<?> eType = type.isArray() ? ElementType.forClass(type.getComponentType()) : ElementType.forClass(type);
-
-        if (eType == ElementType.UNKNOWN) {
-            LOG.log(Level.WARNING, "computeSize() called with unknown type.",
-                    new IllegalArgumentException("Don't know FITS size of type " + type.getSimpleName()));
-        }
-
-        if (eType.isVariableSize()) {
-            return eType.size(o);
-        }
-
-        if (type.isArray()) {
-            return (long) Array.getLength(o) * eType.size();
-        }
-
-        return eType.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

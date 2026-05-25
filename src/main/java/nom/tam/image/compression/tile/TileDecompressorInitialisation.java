@@ -4,7 +4,6 @@ import nom.tam.fits.FitsException;
 import nom.tam.fits.Header;
 import nom.tam.image.tile.operation.ITileOperationInitialisation;
 import nom.tam.image.tile.operation.TileArea;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -35,7 +34,6 @@ import nom.tam.image.tile.operation.TileArea;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.image.compression.tile.TileCompressionType.COMPRESSED;
 import static nom.tam.image.compression.tile.TileCompressionType.GZIP_COMPRESSED;
 import static nom.tam.image.compression.tile.TileCompressionType.UNCOMPRESSED;
@@ -54,8 +52,7 @@ final class TileDecompressorInitialisation implements ITileOperationInitialisati
 
     private int compressedOffset = 0;
 
-    protected TileDecompressorInitialisation(TiledImageCompressionOperation imageTilesOperation, Object[] uncompressed,
-            Object[] compressed, Object[] gzipCompressed, Header header) {
+    protected TileDecompressorInitialisation(TiledImageCompressionOperation imageTilesOperation, Object[] uncompressed, Object[] compressed, Object[] gzipCompressed, Header header) {
         this.imageTilesOperation = imageTilesOperation;
         this.uncompressed = uncompressed;
         this.compressed = compressed;
@@ -65,23 +62,16 @@ final class TileDecompressorInitialisation implements ITileOperationInitialisati
 
     @Override
     public TileCompressionOperation createTileOperation(int tileIndex, TileArea area) {
-        return new TileDecompressor(imageTilesOperation, tileIndex, area);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void init(TileCompressionOperation tileOperation) {
-        tileOperation.setCompressedOffset(compressedOffset)//
-                .setCompressed(compressed != null ? compressed[tileOperation.getTileIndex()] : null, COMPRESSED)//
-                .setCompressed(uncompressed != null ? uncompressed[tileOperation.getTileIndex()] : null, UNCOMPRESSED)//
-                .setCompressed(gzipCompressed != null ? gzipCompressed[tileOperation.getTileIndex()] : null,
-                        GZIP_COMPRESSED);
-        tileOperation.createImageNullPixelMask(imageTilesOperation.getImageNullPixelMask());
-        compressedOffset += tileOperation.getPixelSize();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void tileCount(int tileCount) throws FitsException {
-        imageTilesOperation.compressOptions().getCompressionParameters().initializeColumns(header,
-                imageTilesOperation.getBinaryTable(), tileCount);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

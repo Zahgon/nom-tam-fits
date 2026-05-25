@@ -1,7 +1,6 @@
 package nom.tam.fits.compression.provider.param.quant;
 
 import nom.tam.fits.Header;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import nom.tam.fits.Header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.compression.algorithm.quant.QuantizeOption;
@@ -50,39 +48,11 @@ final class ZQuantizeParameter extends CompressHeaderParameter<QuantizeOption> {
 
     @Override
     public void getValueFromHeader(Header header) throws HeaderCardException {
-        if (getOption() == null) {
-            return;
-        }
-
-        HeaderCard card = header.getCard(getName());
-        String value = card != null ? card.getValue() : null;
-
-        getOption().setDither(false);
-        getOption().setDither2(false);
-
-        if (Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_1.equals(value)) {
-            getOption().setDither(true);
-        } else if (Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_2.equals(value)) {
-            getOption().setDither(true);
-            getOption().setDither2(true);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValueInHeader(Header header) throws HeaderCardException {
-        if (getOption() == null) {
-            return;
-        }
-
-        String value;
-
-        if (getOption().isDither2()) {
-            value = Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_2;
-        } else if (getOption().isDither()) {
-            value = Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_1;
-        } else {
-            value = Compression.ZQUANTIZ_NO_DITHER;
-        }
-        header.addValue(Compression.ZQUANTIZ, value);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

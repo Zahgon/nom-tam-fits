@@ -30,7 +30,6 @@ package nom.tam.fits.compression.provider.param.rice;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.algorithm.rice.RiceCompressOption;
 import nom.tam.fits.compression.provider.param.api.ICompressHeaderParameter;
@@ -39,7 +38,7 @@ import nom.tam.fits.compression.provider.param.base.CompressParameters;
 /**
  * (<i>for internal use</i>) Rice compression parameters that are recorded in a FITS compressed HDU.
  */
-@SuppressWarnings({"javadoc", "deprecation"})
+@SuppressWarnings({ "javadoc", "deprecation" })
 public class RiceCompressParameters extends CompressParameters {
 
     private RiceBlockSizeParameter blockSize;
@@ -53,20 +52,11 @@ public class RiceCompressParameters extends CompressParameters {
 
     @Override
     public RiceCompressParameters copy(ICompressOption option) {
-        if (option instanceof RiceCompressOption) {
-            RiceCompressOption ro = (RiceCompressOption) option;
-            RiceCompressParameters p = (RiceCompressParameters) super.clone();
-
-            p.blockSize = (RiceBlockSizeParameter) blockSize.copy(ro);
-            p.bytePix = (RiceBytePixParameter) bytePix.copy(ro);
-
-            return p;
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected ICompressHeaderParameter[] headerParameters() {
-        return new ICompressHeaderParameter[] {blockSize, bytePix};
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

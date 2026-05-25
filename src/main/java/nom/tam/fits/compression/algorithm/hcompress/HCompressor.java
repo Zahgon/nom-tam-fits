@@ -30,12 +30,10 @@ package nom.tam.fits.compression.algorithm.hcompress;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressor;
 import nom.tam.fits.compression.algorithm.quant.QuantizeProcessor.DoubleQuantCompressor;
 import nom.tam.fits.compression.algorithm.quant.QuantizeProcessor.FloatQuantCompressor;
@@ -43,7 +41,7 @@ import nom.tam.util.ArrayFuncs;
 
 /**
  * (<i>for internal use</i>) Data compressor using the HCompress algorithm.
- * 
+ *
  * @param <T> The generic type of buffer that accessed the type of elements needed for the compression
  */
 @SuppressWarnings("javadoc")
@@ -55,7 +53,7 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
 
         /**
          * HCompress of byte streams with the default scale parameter of 0 and no smoothing (lossless compression).
-         * 
+         *
          * @since 1.19.1
          */
         public ByteHCompressor() {
@@ -68,25 +66,13 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
 
         @Override
         public boolean compress(ByteBuffer buffer, ByteBuffer compressed) {
-            byte[] byteArray = new byte[buffer.limit()];
-            buffer.get(byteArray);
-            long[] longArray = new long[byteArray.length];
-            for (int index = 0; index < longArray.length; index++) {
-                longArray[index] = byteArray[index] & BYTE_MASK_FOR_LONG;
-            }
-            compress(longArray, compressed);
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, ByteBuffer buffer) {
-            long[] longArray = new long[buffer.limit()];
-            decompress(compressed, longArray);
-            for (long element : longArray) {
-                buffer.put((byte) element);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
     public static class DoubleHCompressor extends DoubleQuantCompressor {
@@ -110,7 +96,7 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
         /**
          * HCompress of 32-bit integer streams with the default scale parameter of 0 and no smoothing for lossless
          * compression.
-         * 
+         *
          * @since 1.19.1
          */
         public IntHCompressor() {
@@ -123,30 +109,20 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
 
         @Override
         public boolean compress(IntBuffer buffer, ByteBuffer compressed) {
-            int[] intArray = new int[buffer.limit()];
-            buffer.get(intArray);
-            long[] longArray = new long[intArray.length];
-            ArrayFuncs.copyInto(intArray, longArray);
-            compress(longArray, compressed);
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, IntBuffer buffer) {
-            long[] longArray = new long[buffer.limit()];
-            decompress(compressed, longArray);
-            for (long element : longArray) {
-                buffer.put((int) element);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
     public static class ShortHCompressor extends HCompressor<ShortBuffer> {
 
         /**
          * HCompress of 16-bit integer streams with the default scale parameter of 0 (lossless compression).
-         * 
+         *
          * @since 1.19.1
          */
         public ShortHCompressor() {
@@ -159,21 +135,12 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
 
         @Override
         public boolean compress(ShortBuffer buffer, ByteBuffer compressed) {
-            short[] shortArray = new short[buffer.limit()];
-            buffer.get(shortArray);
-            long[] longArray = new long[shortArray.length];
-            ArrayFuncs.copyInto(shortArray, longArray);
-            compress(longArray, compressed);
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, ShortBuffer buffer) {
-            long[] longArray = new long[buffer.limit()];
-            decompress(compressed, longArray);
-            for (long element : longArray) {
-                buffer.put((short) element);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -194,7 +161,7 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
     }
 
     protected void compress(long[] longArray, ByteBuffer compressed) {
-        compress().compress(longArray, options.getTileHeight(), options.getTileWidth(), options.getScale(), compressed);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private HDecompress decompress() {
@@ -202,6 +169,6 @@ public abstract class HCompressor<T extends Buffer> implements ICompressor<T> {
     }
 
     protected void decompress(ByteBuffer compressed, long[] aa) {
-        decompress().decompress(compressed, options.isSmooth(), aa);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

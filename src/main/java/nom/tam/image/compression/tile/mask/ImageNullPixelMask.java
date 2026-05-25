@@ -1,7 +1,6 @@
 package nom.tam.image.compression.tile.mask;
 
 import java.nio.ByteBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
 import nom.tam.fits.compression.provider.CompressorProvider;
 import nom.tam.image.tile.operation.buffer.TileBuffer;
@@ -36,7 +35,6 @@ import nom.tam.image.tile.operation.buffer.TileBuffer;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * Support for blank (<code>null</code>) values in compressed images.
  */
@@ -59,38 +57,28 @@ public class ImageNullPixelMask {
     }
 
     public NullPixelMaskPreserver createTilePreserver(TileBuffer tileBuffer, int tileIndex) {
-        return add(new NullPixelMaskPreserver(tileBuffer, tileIndex, nullValue, compressorControl));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public NullPixelMaskRestorer createTileRestorer(TileBuffer tileBuffer, int tileIndex) {
-        return add(new NullPixelMaskRestorer(tileBuffer, tileIndex, nullValue, compressorControl));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("deprecation")
     public byte[][] getColumn() {
-        byte[][] column = new byte[nullPixelMasks.length][];
-        for (AbstractNullPixelMask tileMask : nullPixelMasks) {
-            column[tileMask.getTileIndex()] = tileMask.getMaskBytes();
-        }
-        return column;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getCompressAlgorithm() {
-        return compressAlgorithm;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void setColumn(byte[][] nullPixels) {
-        for (AbstractNullPixelMask tileMask : nullPixelMasks) {
-            byte[] tileMaskBytes = nullPixels[tileMask.getTileIndex()];
-            if (tileMaskBytes != null && tileMaskBytes.length > 0) {
-                tileMask.setMask(ByteBuffer.wrap(tileMaskBytes));
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <T extends AbstractNullPixelMask> T add(T nullPixelMask) {
         nullPixelMasks[nullPixelMask.getTileIndex()] = nullPixelMask;
         return nullPixelMask;
     }
-
 }

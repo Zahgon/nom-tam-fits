@@ -30,7 +30,6 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * File checksum keywords. This data dictionary contains FITS keywords that have been widely used within the
@@ -44,6 +43,7 @@ package nom.tam.fits.header;
  * @author Richard van Nieuwenhoven
  */
 public enum Checksum implements IFitsHeader {
+
     /**
      * The value field of the CHECKSUM keyword shall contain a 16 character string, left justified starting in column
      * 12, containing the ASCII encoded complement of the checksum of the FITS HDU (Header and Data Unit). The algorithm
@@ -61,7 +61,6 @@ public enum Checksum implements IFitsHeader {
      * complement algorithm.
      */
     CHECKVER(HDU.ANY, VALUE.STRING, "version of checksum algorithm"),
-
     /**
      * The value field of the DATASUM keyword shall be a character string containing the unsigned integer value of the
      * checksum of the data records of the HDU. For dataless HDU's, this keyword may either be omitted, or the value
@@ -79,6 +78,6 @@ public enum Checksum implements IFitsHeader {
 
     @Override
     public FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -28,12 +28,10 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.util.StringTokenizer;
 import java.util.logging.Logger;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.fits.LongValueException;
 
@@ -55,29 +53,37 @@ public class ComplexValue {
 
     private static final Logger LOG = Logger.getLogger(ComplexValue.class.getName());
 
-    /** The complex zero **/
+    /**
+     * The complex zero *
+     */
     public static final ComplexValue ZERO = new ComplexValue(0.0, 0.0);
 
-    /** The complex unity along the real axis, or (1.0, 0.0) **/
+    /**
+     * The complex unity along the real axis, or (1.0, 0.0) *
+     */
     public static final ComplexValue ONE = new ComplexValue(1.0, 0.0);
 
-    /** The unity along the imaginary axis <i>i</i>, or (0.0, 1.0) **/
+    /**
+     * The unity along the imaginary axis <i>i</i>, or (0.0, 1.0) *
+     */
     public static final ComplexValue I = new ComplexValue(0.0, 1.0);
 
-    /** The real and imaginary parts */
+    /**
+     * The real and imaginary parts
+     */
     private double re, im;
 
     /**
      * The minimum size string needed to represent a complex value with even just single digits for the real and
      * imaginary parts.
      */
-    private static final int MIN_STRING_LENGTH = 5; // "(#,#)"
+    // "(#,#)"
+    private static final int MIN_STRING_LENGTH = 5;
 
     /**
      * Private constructor
      */
     private ComplexValue() {
-
     }
 
     /**
@@ -100,7 +106,7 @@ public class ComplexValue {
      * @see    #im()
      */
     public final double re() {
-        return re;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,26 +117,17 @@ public class ComplexValue {
      * @see    #re()
      */
     public final double im() {
-        return im;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(re()) ^ Double.hashCode(im());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-
-        if (!(o instanceof ComplexValue)) {
-            return false;
-        }
-
-        ComplexValue z = (ComplexValue) o;
-        return z.re() == re() && z.im() == im();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -139,7 +136,7 @@ public class ComplexValue {
      * @return <code>true</code>if both the real or imaginary parts are zero. Otherwise <code>false</code>.
      */
     public final boolean isZero() {
-        return re() == 0.0 && im() == 0.0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -149,12 +146,12 @@ public class ComplexValue {
      *             <code>false</code>.
      */
     public final boolean isFinite() {
-        return Double.isFinite(re()) && Double.isFinite(im());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return "(" + re() + "," + im() + ")";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,8 +165,7 @@ public class ComplexValue {
      * @see             FlexFormat
      */
     public String toString(int decimals) {
-        FlexFormat f = new FlexFormat().setPrecision(decimals);
-        return "(" + f.format(re()) + "," + f.format(im()) + ")";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -196,13 +192,10 @@ public class ComplexValue {
      */
     public ComplexValue(String text) throws IllegalArgumentException {
         this();
-
         // Allow the use of 'D' or 'd' to mark the exponent, instead of the standard 'E' or 'e'...
         text = text.trim().toUpperCase().replace('D', 'E');
-
         boolean hasOpeningBracket = text.charAt(0) == '(';
         boolean hasClosingBracket = text.charAt(text.length() - 1) == ')';
-
         if (!(hasOpeningBracket || hasClosingBracket)) {
             // Use just the real value.
             re = Double.parseDouble(text);
@@ -210,24 +203,19 @@ public class ComplexValue {
         }
         if (!hasOpeningBracket || !hasClosingBracket) {
             if (!FitsFactory.isAllowHeaderRepairs()) {
-                throw new IllegalArgumentException("Missing bracket around complex value: '" + text
-                        + "'\n\n --> Try FitsFactory.setAllowHeaderRepair(true).\n");
+                throw new IllegalArgumentException("Missing bracket around complex value: '" + text + "'\n\n --> Try FitsFactory.setAllowHeaderRepair(true).\n");
             }
             LOG.warning("Ignored missing bracket in '" + text + "'.");
         }
-
         int start = hasOpeningBracket ? 1 : 0;
         int end = hasClosingBracket ? text.length() - 1 : text.length();
-        StringTokenizer tokens = new StringTokenizer(text.substring(start, end),
-                FitsFactory.isAllowHeaderRepairs() ? ",; \t" : ", ");
+        StringTokenizer tokens = new StringTokenizer(text.substring(start, end), FitsFactory.isAllowHeaderRepairs() ? ",; \t" : ", ");
         if (tokens.countTokens() != 2) {
             if (!FitsFactory.isAllowHeaderRepairs()) {
-                throw new IllegalArgumentException(
-                        "Invalid complex value: '" + text + "'\n\n --> Try FitsFactory.setAllowHeaderRepair(true).\n");
+                throw new IllegalArgumentException("Invalid complex value: '" + text + "'\n\n --> Try FitsFactory.setAllowHeaderRepair(true).\n");
             }
             LOG.warning("Ignored wrong number of components (" + tokens.countTokens() + ") in '" + text + "'.");
         }
-
         if (tokens.hasMoreTokens()) {
             re = Double.parseDouble(tokens.nextToken());
         }
@@ -248,47 +236,25 @@ public class ComplexValue {
      * @throws LongValueException if the space was too short to fit the value even with the minimal (1-digit) precision.
      */
     public String toBoundedString(int maxLength) throws LongValueException {
-        if (maxLength < MIN_STRING_LENGTH) {
-            throw new LongValueException(maxLength, toString());
-        }
-
-        String s = toString();
-        if (s.length() <= maxLength) {
-            return s;
-        }
-
-        int decimals = FlexFormat.DOUBLE_DECIMALS;
-
-        s = toString(decimals);
-        while (s.length() > maxLength) {
-            // Assume both real and imaginary parts shorten the same amount...
-            decimals -= (s.length() - maxLength + 1) / 2;
-
-            if (decimals < 0) {
-                throw new LongValueException(maxLength, toString());
-            }
-            s = toString(decimals);
-        }
-
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Converts this complex number to an array of 2.
-     * 
+     *
      * @return An array of 2 floating point values.
-     * 
+     *
      * @since  1.20
      */
     Object toArray() {
-        return new double[] {re, im};
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Single-precision complex values.
-     * 
+     *
      * @author Attila Kovacs
-     * 
+     *
      * @since  1.18
      */
     public static final class Float extends ComplexValue {
@@ -298,7 +264,7 @@ public class ComplexValue {
          *
          * @param re the real part
          * @param im thei maginary part
-         * 
+         *
          * @since    1.20
          */
         public Float(float re, float im) {
@@ -313,12 +279,12 @@ public class ComplexValue {
          * <code>123</code> (as real-only values). There can be any number of spaces around the brackets, number
          * components or the comma.
          * </p>
-         * 
+         *
          * @param  str                      the FITS string representation of the complex value
-         * 
+         *
          * @throws IllegalArgumentException if the supplied string does not appear to be a FITS standard representation
          *                                      of a complex value.
-         * 
+         *
          * @since                           1.20
          */
         public Float(String str) throws IllegalArgumentException {
@@ -327,7 +293,7 @@ public class ComplexValue {
 
         @Override
         Object toArray() {
-            return new float[] {(float) re(), (float) im()};
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

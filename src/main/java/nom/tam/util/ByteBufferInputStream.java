@@ -30,14 +30,13 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 /**
  * Stream interface for reading from a {@link ByteBuffer} (<i>primarily for internal use</i>)
- * 
+ *
  * @see ByteBufferOutputStream
  * @see ByteArrayIO
  */
@@ -52,7 +51,7 @@ public class ByteBufferInputStream extends InputStream {
      * position. Its <code>read()</code> methods can be intermixed with the <code>get()</code> methods of the buffer,
      * and also with {@link ByteBuffer#position(int)}, maintaining overall sequentiality of the calls. In other words,
      * the stream's input is not decopuled from direct access to the buffer.
-     * 
+     *
      * @param buffer the buffer to read from
      */
     public ByteBufferInputStream(ByteBuffer buffer) {
@@ -62,19 +61,11 @@ public class ByteBufferInputStream extends InputStream {
 
     @Override
     public int read() throws IOException {
-        if (!buf.hasRemaining()) {
-            return -1;
-        }
-        return buf.get() & BYTE_MASK;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(byte[] bytes, int off, int len) throws IOException {
-        if (!buf.hasRemaining()) {
-            return -1;
-        }
-        int readLen = Math.min(len, buf.remaining());
-        buf.get(bytes, off, readLen);
-        return readLen;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -32,7 +32,6 @@ import nom.tam.util.ComplexValue;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * Interface for accessing binary and ASCII table data.
@@ -44,10 +43,9 @@ import nom.tam.util.ComplexValue;
  * prudent design to consolidate the two interfaces but this is what we have so we stick to it. However, mabe this is
  * something an upcoming major release may address...
  * </p>
- * 
+ *
  * @see nom.tam.util.DataTable
  */
-
 public interface TableData {
 
     /**
@@ -55,20 +53,20 @@ public interface TableData {
      * tables already in an HDU, since it will not update the HDUs headers. Instead you can either use
      * {@link TableHDU#addColumn(Object)} or else create a new HDU for the table once the editing is copmleted -- adding
      * or migrating any custom header entries as necessary after.
-     * 
+     *
      * @param  newCol        the new column information. it should be either a primitive array, in which each element
      *                           stores a scalar value for every row, or else an <code>Object[]</code> where type of all
      *                           of the constituents is identical. Multidimensional data should have the same layout in
      *                           each row, but varied length one-dimensional arrays are OK. The arrat's length must
      *                           match the number of rows already contained in the table, unless the table is still
      *                           empty.
-     * 
+     *
      * @return               the number of columns in the adapted table
-     * 
+     *
      * @see                  TableHDU#addColumn(Object)
      * @see                  #deleteColumns(int, int)
      * @see                  #addRow(Object[])
-     * 
+     *
      * @throws FitsException if the operation failed
      */
     int addColumn(Object newCol) throws FitsException;
@@ -78,14 +76,14 @@ public interface TableData {
      * method on tables already in an HDU, since it will not update the HDUs headers. Instead you can use
      * {@link TableHDU#addRow(Object[])} or else create a new HDU for the table once the editing is completed -- adding
      * or migrating any custom header entries as necessary after.
-     * 
+     *
      * @param  newRow        An array of elements to be added. Each element of o should be an array of primitives or a
      *                           String.
-     * 
+     *
      * @throws FitsException if the operation failed
-     * 
+     *
      * @return               the number of rows in the adapted table
-     * 
+     *
      * @see                  TableHDU#addColumn(Object)
      * @see                  #setRowEntries(int, Object...)
      * @see                  #deleteRows(int, int)
@@ -95,20 +93,20 @@ public interface TableData {
 
     /**
      * Like {@link #addRow(Object[])}, but with a vararg list of row entries.
-     * 
+     *
      * @param  entries       A vararg list of elements to be added. Each element of o should be an array of primitives
      *                           or a String.
-     * 
+     *
      * @throws FitsException if the operation failed
-     * 
+     *
      * @return               the number of rows in the adapted table
-     * 
+     *
      * @see                  #setRow(int, Object[])
      * @see                  #addRowEntries(Object...)
      * @see                  #deleteRows(int, int)
      */
     default int addRowEntries(Object... entries) throws FitsException {
-        return addRow(entries);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -116,12 +114,12 @@ public interface TableData {
      * the columns that were removed. You should not use this method on tables already in an HDU, since it will not
      * update the HDUs headers. Instead you should always create a new HDU for the table after editing, adding or
      * migrating any custom header entries as necessary after.
-     * 
+     *
      * @param  col           the 0-based index of the first column to remove
      * @param  len           the number of subsequent columns to remove
-     * 
+     *
      * @throws FitsException if the table could not be modified
-     * 
+     *
      * @see                  #addColumn(Object)
      * @see                  #deleteRows(int, int)
      * @see                  #updateAfterDelete(int, Header)
@@ -133,12 +131,12 @@ public interface TableData {
      * encompassing HDU. You should not use this method on tables already in an HDU, since it will not update the HDUs
      * headers. Instead you should always create a new HDU for the table after editing, adding or migrating any custom
      * header entries as necessary after.
-     * 
+     *
      * @param  row           the 0-based index of the first row to remove
      * @param  len           the number of subsequent rows to remove
-     * 
+     *
      * @throws FitsException if the table could not be modified
-     * 
+     *
      * @see                  #addRow(Object[])
      * @see                  #deleteColumns(int, int)
      */
@@ -149,14 +147,14 @@ public interface TableData {
      * Returns the data for a particular column in as an array of elements. See {@link #addColumn(Object)} for more
      * information about the format of data elements in general.
      * </p>
-     * 
+     *
      * @param  col           The 0-based column index.
-     * 
+     *
      * @return               an array of primitives (for scalar columns), or else an <code>Object[]</code> array, or
      *                           possibly <code>null</code>
-     * 
+     *
      * @throws FitsException if the table could not be accessed
-     * 
+     *
      * @see                  #setColumn(int, Object)
      * @see                  #getElement(int, int)
      * @see                  #getNCols()
@@ -181,14 +179,14 @@ public interface TableData {
      * will change it's FITS column type from <code>C</code> to <code>F</code>, or from <code>M</code> to
      * <code>D</code>,.</li>
      * </ul>
-     * 
+     *
      * @param  row           the 0-based row index of the element
      * @param  col           the 0-based column index of the element
-     * 
+     *
      * @return               A primitive array containing the data for the the specified (row, col) entry in the table.
-     * 
+     *
      * @throws FitsException if the table could not be accessed
-     * 
+     *
      * @see                  #setElement(int, int, Object)
      * @see                  #getNRows()
      * @see                  #getNCols()
@@ -197,9 +195,9 @@ public interface TableData {
 
     /**
      * Returns the number of columns contained in this table.
-     * 
+     *
      * @return the current number of columns in the table.
-     * 
+     *
      * @see    #getNRows()
      * @see    #getColumn(int)
      * @see    #setColumn(int, Object)
@@ -208,9 +206,9 @@ public interface TableData {
 
     /**
      * Returns the number of columns contained in this table.
-     * 
+     *
      * @return the current number of columns in the table.
-     * 
+     *
      * @see    #getNRows()
      * @see    #getColumn(int)
      * @see    #setColumn(int, Object)
@@ -220,15 +218,15 @@ public interface TableData {
     /**
      * Returns an array of elements in a particualr table row. See {@link #getElement(int, int)} for more information
      * about the format of each element in the row.
-     * 
+     *
      * @param  row           the 0-based row index
-     * 
+     *
      * @return               an object containing the row data (for all column) of the specified row, or possubly
      *                           <code>null</code>. See {@link #getElement(int, int)} for more information about the
      *                           format of each element in the row.
-     * 
+     *
      * @throws FitsException if the table could not be accessed
-     * 
+     *
      * @see                  #getNRows()
      * @see                  #setRow(int, Object[])
      * @see                  #getColumn(int)
@@ -238,13 +236,13 @@ public interface TableData {
 
     /**
      * Sets new data for a table column. See {@link #addColumn(Object)} for more information on the column data format.
-     * 
+     *
      * @param  col           the 0-based column index
      * @param  newCol        an object containing the new column data (for all rows) of the specified column. See
      *                           {@link #getColumn(int)} for more information on the column data format.
-     * 
+     *
      * @throws FitsException if the table could not be modified
-     * 
+     *
      * @see                  #getNCols()
      * @see                  #getColumn(int)
      * @see                  #setRow(int, Object[])
@@ -255,13 +253,13 @@ public interface TableData {
     /**
      * Sets new data element in this table. See {@link #getElement(int, int)} for more information about the format of
      * elements.
-     * 
+     *
      * @param  row           the 0-based row index of the element
      * @param  col           the 0-based column index of the element
      * @param  element       the new element at the specified table location as a primitive array.
-     * 
+     *
      * @throws FitsException if the table could not be modified
-     * 
+     *
      * @see                  #getElement(int, int)
      * @see                  #getNRows()
      * @see                  #getNCols()
@@ -271,14 +269,14 @@ public interface TableData {
     /**
      * Sets new data for a table row. See {@link #getElement(int, int)} for more information about the format of
      * elements.
-     * 
+     *
      * @param  row           the 0-based row index
      * @param  newRow        an object containing the row data (for all column) of the specified row. See
      *                           {@link #getElement(int, int)} for more information about the format of each element in
      *                           the row.
-     * 
+     *
      * @throws FitsException if the table could not be modified
-     * 
+     *
      * @see                  #setRowEntries(int, Object...)
      * @see                  #getNRows()
      * @see                  #getRow(int)
@@ -289,38 +287,37 @@ public interface TableData {
 
     /**
      * Like {@link #setRow(int, Object[])} but with vararg list of entries.
-     * 
+     *
      * @param  row           the 0-based row index
      * @param  entries       an object containing the row data (for all column) of the specified row. See
      *                           {@link #getElement(int, int)} for more information about the format of each element in
      *                           the row.
-     * 
+     *
      * @throws FitsException if the table could not be modified
-     * 
+     *
      * @see                  #setRow(int, Object[])
      * @see                  #addRowEntries(Object...)
      * @see                  #setElement(int, int, Object)
      */
     default void setRowEntries(int row, Object... entries) throws FitsException {
-        setRow(row, entries);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Updates the table dimensions in the header following deletion. Whoever calls {@link #deleteColumns(int, int)} on
      * this table should call this method after the deletion(s), at least once after all desired column deletions have
      * been processed).
-     * 
+     *
      * @param      oldNcol       The number of columns in the table before the first call to
      *                               {@link #deleteColumns(int, int)}.
      * @param      hdr           The table header
-     * 
+     *
      * @throws     FitsException if the header could not be updated
-     * 
+     *
      * @deprecated               It is not entirely foolproof for keeping the header in sync -- it is better to (re)wrap
      *                               tables in a new HDU after column deletions, and then edit the new header as
      *                               necessary to incorporate custom entries. May be removed from the API in the future.
      */
     @Deprecated
     void updateAfterDelete(int oldNcol, Header hdr) throws FitsException;
-
 }

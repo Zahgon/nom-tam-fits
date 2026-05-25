@@ -30,21 +30,19 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.LongValueException;
 
 /**
  * Formatting number values for use in FITS headers.
- * 
+ *
  * @author Attila Kovacs
  * @since 1.16
  */
@@ -130,7 +128,7 @@ public class FlexFormat {
      * decimal place. The special value {@link #AUTO_PRECISION} can be used to
      * display as many of the available decimal places as can fit into the space
      * that is available (see {@link #setWidth(int)}.
-     * 
+     *
      * @param nDecimals
      *            the requested new number of decimal places to show after the
      *            leading figure, or {@link #AUTO_PRECISION}. If an explicit
@@ -144,8 +142,7 @@ public class FlexFormat {
      * @see #format(Number)
      */
     public synchronized FlexFormat setPrecision(int nDecimals) {
-        decimals = nDecimals < 0 ? AUTO_PRECISION : nDecimals;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,7 +152,7 @@ public class FlexFormat {
      * {@link BigDecimal} and {@link BigInteger} types, the precision may be
      * reduced at most down to {@link #DOUBLE_DECIMALS} to make it fit in the
      * available space.
-     * 
+     *
      * @return itself
      * @see #setPrecision(int)
      * @see #getPrecision()
@@ -163,7 +160,7 @@ public class FlexFormat {
      * @see #format(Number)
      */
     public synchronized FlexFormat autoPrecision() {
-        return setPrecision(AUTO_PRECISION);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -172,7 +169,7 @@ public class FlexFormat {
      * {@link #AUTO_PRECISION} if either fixed or exponential form may be used
      * with up to the native precision of the value, or whatever precision can
      * be shown in the space available.
-     * 
+     *
      * @return the maximum number of decimal places that will be shown when
      *         formatting floating point values, or {@link #AUTO_PRECISION}.
      * @see #setPrecision(int)
@@ -180,7 +177,7 @@ public class FlexFormat {
      * @see #setWidth(int)
      */
     public final synchronized int getPrecision() {
-        return decimals;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -188,7 +185,7 @@ public class FlexFormat {
      * values. Subsequent calls to {@link #format(Number)} will guarantee to
      * return only values that are shorter or equals to the specified width, or
      * else throw an exception.
-     * 
+     *
      * @param nChars
      *            the new maximum length for formatted values.
      * @return itself
@@ -198,8 +195,7 @@ public class FlexFormat {
      * @see #format(Number)
      */
     public synchronized FlexFormat setWidth(int nChars) {
-        width = nChars > 0 ? nChars : 0;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -207,28 +203,28 @@ public class FlexFormat {
      * values to the space available for the value field in the specified header
      * card. It is essentially a shorthand for
      * <code>setWidth(card.spaceForValue())</code>.
-     * 
+     *
      * @param card
      *            the header card in which the formatted number values must fit.
      * @return itself
      */
     public final FlexFormat forCard(HeaderCard card) {
-        return setWidth(card.spaceForValue());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the number of characters that this formatter can use to print
      * number values
-     * 
+     *
      * @return the maximum length for formatted values.
      */
     public final synchronized int getWidth() {
-        return width;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if the specified number is a decimal (non-integer) type.
-     * 
+     *
      * @param value
      *            the number to check
      * @return <code>true</code> if the specified number is a decimal type
@@ -245,7 +241,7 @@ public class FlexFormat {
      * precision while filling the available space, or if both notations can fit
      * it will return the more compact one. If neither notation can be
      * accomodated in the space available, then an exception is thrown.
-     * 
+     *
      * @param value
      *            the decimal value to print
      * @return the string representing the value, or an empty string if the
@@ -258,58 +254,7 @@ public class FlexFormat {
      * @see #forCard(HeaderCard)
      */
     public synchronized String format(Number value) throws LongValueException {
-
-        if (value == null) {
-            return "";
-        }
-
-        // The value in fixed notation...
-        String fixed = null;
-
-        if (!isDecimal(value)) {
-            // For integer types, always consider the fixed format...
-            fixed = value.toString();
-            if (fixed.length() <= width) {
-                return fixed;
-            }
-            if (!(value instanceof BigInteger)) {
-                throw new LongValueException(width, fixed);
-            }
-            // We'll try exponential with reduced precision...
-            fixed = null;
-        } else if (decimals < 0) {
-            // Don"t do fixed format if precision is set explicitly
-            // (It's not really trivial to control the number of significant
-            // gigures in the fixed format...)
-            double a = Math.abs(value.doubleValue());
-            if (a >= MIN_FIXED && a < MAX_FIXED) {
-                // Fixed format only in a resonable data...
-                try {
-                    fixed = format(value, "0.#", AUTO_PRECISION, false);
-                } catch (LongValueException e) {
-                    // We'll try with exponential notation...
-                }
-            }
-        }
-
-        // The value in exponential notation...
-        String exp = null;
-
-        try {
-            exp = format(value, "0.#E0", decimals, FitsFactory.isUseExponentD());
-            if (fixed == null) {
-                return exp;
-            }
-            // Go with whichever is more compact.
-            return exp.length() < fixed.length() ? exp : fixed;
-
-        } catch (LongValueException e) {
-            if (fixed == null) {
-                throw e;
-            }
-        }
-
-        return fixed;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -318,7 +263,7 @@ public class FlexFormat {
      * most down to to doube precision, if necessary to fit the number in the
      * alotted space. If it's not at all possible to fit the fixed
      * representation in the space available, then an exception is.
-     * 
+     *
      * @param value
      *            the decimal value to set
      * @param fmt
@@ -339,12 +284,10 @@ public class FlexFormat {
         if (width < 1) {
             throw new LongValueException(width);
         }
-
         DecimalFormat f = new DecimalFormat(fmt);
         f.setDecimalFormatSymbols(SYMBOLS);
         f.setDecimalSeparatorAlwaysShown(true);
         f.setRoundingMode(RoundingMode.HALF_UP);
-
         if (nDecimals < 0) {
             // Determine precision based on the type.
             if (value instanceof BigDecimal || value instanceof BigInteger) {
@@ -355,32 +298,25 @@ public class FlexFormat {
                 nDecimals = FLOAT_DECIMALS;
             }
         }
-
         f.setMinimumFractionDigits(fmt.indexOf('E') < 0 ? 1 : 0);
         f.setMaximumFractionDigits(nDecimals);
-
         String text = f.format(value);
-
         // Iterate to make sure we get where we want...
         while (text.length() > width) {
             int delta = text.length() - width;
             nDecimals -= delta;
-
             if ((value instanceof BigInteger && nDecimals < MIN_BIGINT_EFORM_DECIMALS) || (!(value instanceof BigInteger) && nDecimals < DOUBLE_DECIMALS)) {
                 // We cannot show enough decimals for big types...
                 throw new LongValueException(width, text);
             }
-
             f.setMaximumFractionDigits(nDecimals);
             text = f.format(value);
         }
-
         if (allowUseD && nDecimals > FLOAT_DECIMALS) {
             // If we want 'D' instead of 'E', just replace the letter in the
             // result.
             text = text.replace('E', 'D');
         }
-
         return text;
     }
 }

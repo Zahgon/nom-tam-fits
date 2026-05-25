@@ -30,7 +30,6 @@ package nom.tam.fits.header.extra;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.header.FitsKey;
 import nom.tam.fits.header.IFitsHeader;
 
@@ -40,53 +39,67 @@ import nom.tam.fits.header.IFitsHeader;
  * </p>
  *
  * @author John Murphy and Attila Kovacs
- * 
+ *
  * @since  1.20.1
  */
 public enum CommonExt implements IFitsHeader {
 
-    /** Ambient air temperature in degrees Celsius */
+    /**
+     * Ambient air temperature in degrees Celsius
+     */
     AMBTEMP(VALUE.REAL, "[C] ambient air temperature"),
-
-    /** Synonym of {@link #OBJCTROT}. */
+    /**
+     * Synonym of {@link #OBJCTROT}.
+     */
     ANGLE(VALUE.REAL, HDU.IMAGE, "[deg] image rotation angle"),
-
-    /** X axis binning factor. Synonym for {@link SBFitsExt#XBINNING} */
+    /**
+     * X axis binning factor. Synonym for {@link SBFitsExt#XBINNING}
+     */
     CCDXBIN(VALUE.INTEGER, "X axis binning factor"),
-
-    /** Y axis binning factor. Synonym for {@link SBFitsExt#YBINNING} */
+    /**
+     * Y axis binning factor. Synonym for {@link SBFitsExt#YBINNING}
+     */
     CCDYBIN(VALUE.INTEGER, "Y axis binning factor"),
-
-    /** Cloud cover as percentage */
+    /**
+     * Cloud cover as percentage
+     */
     CLOUDCVR(VALUE.REAL, "[%] cloud cover"),
-
-    /** Local time of observation (ISO timestamp), e.g. "2017-01-03T02:41:24" or "2024-02-24T22:23:33.054" */
+    /**
+     * Local time of observation (ISO timestamp), e.g. "2017-01-03T02:41:24" or "2024-02-24T22:23:33.054"
+     */
     DATE_LOC("DATE-LOC", VALUE.STRING, "Local time of observation"),
-
-    /** Dew point in degrees Celsius. */
+    /**
+     * Dew point in degrees Celsius.
+     */
     DEWPOINT(VALUE.REAL, "[C] dew point"),
-
-    /** Whether or not the image is flipped */
+    /**
+     * Whether or not the image is flipped
+     */
     FLIPPED(VALUE.LOGICAL, HDU.IMAGE, "is image flipped"),
-
-    /** Name of focuser. Synonym of {@link #FOCUSER} */
+    /**
+     * Name of focuser. Synonym of {@link #FOCUSER}
+     */
     FOCNAME(VALUE.STRING, "focuser name"),
-
-    /** Focuser position in steps. Usually an integer, but not always. Synonymous to {@link MaxImDLExt#FOCUSPOS} */
+    /**
+     * Focuser position in steps. Usually an integer, but not always. Synonymous to {@link MaxImDLExt#FOCUSPOS}
+     */
     FOCPOS(VALUE.REAL, "[ct] focuser position in steps"),
-
-    /** Focal ratio */
+    /**
+     * Focal ratio
+     */
     FOCRATIO(VALUE.REAL, "focal ratio"),
-
-    /** Name of focuser */
+    /**
+     * Name of focuser
+     */
     FOCUSER(VALUE.STRING, "focuser name"),
-
-    /** Focus temperature in degrees Celsius. Synonymous to {@link MaxImDLExt#FOCUSTEM}. */
+    /**
+     * Focus temperature in degrees Celsius. Synonymous to {@link MaxImDLExt#FOCUSTEM}.
+     */
     FOCTEMP(VALUE.REAL, "[C] focuser temperature readout"),
-
-    /** Filter wheel name */
+    /**
+     * Filter wheel name
+     */
     FWHEEL(VALUE.STRING, "filter wheel name"),
-
     /**
      * Camera gain / amplification. Often used the same as {@link #GAINRAW}. There may be many different conventions on
      * using this keyword. For example it may represent a multiplicative gain factor or gain defined as decibels, or
@@ -95,46 +108,54 @@ public enum CommonExt implements IFitsHeader {
      * sense to their application, and for the tools they intend to use.
      */
     GAIN(VALUE.ANY, "camera gain"),
-
-    /** Synonym of {@link MaxImDLExt#EGAIN} */
+    /**
+     * Synonym of {@link MaxImDLExt#EGAIN}
+     */
     GAINADU(VALUE.REAL, "[ct/adu] amplifier gain electrons / ADU"),
-
-    /** Amplifier gain. Synonym of {@link MaxImDLExt#ISOSPEED} */
+    /**
+     * Amplifier gain. Synonym of {@link MaxImDLExt#ISOSPEED}
+     */
     GAINRAW(VALUE.REAL, "gain factor"),
-
-    /** Relative humidity as percentage */
+    /**
+     * Relative humidity as percentage
+     */
     HUMIDITY(VALUE.REAL, "[%] relative humidity"),
-
-    /** Image rotation angle in degrees. **/
+    /**
+     * Image rotation angle in degrees. *
+     */
     OBJCTROT(VALUE.REAL, HDU.IMAGE, "[deg] image rotation angle"),
-
-    /** Camera offset setting. Very common since CMOS cameras became popular */
+    /**
+     * Camera offset setting. Very common since CMOS cameras became popular
+     */
     OFFSET(VALUE.INTEGER, "camera offset setting"),
-
     /**
      * Image scale in arcsec/pixel. Redundant with {@link nom.tam.fits.header.Standard#CDELTn}.
      */
     PIXSCALE(VALUE.REAL, HDU.IMAGE, "[arcsec/pixel] image scale"),
-
-    /** Air pressure in hPa. */
+    /**
+     * Air pressure in hPa.
+     */
     PRESSURE(VALUE.REAL, "[hPa] air pressure"),
-
     /**
      * Image scale in arcsec / pixel. Synonym of {@link #PIXSCALE}, and redundant with
      * {@link nom.tam.fits.header.Standard#CDELTn}.
      */
     SCALE(VALUE.REAL, HDU.IMAGE, "[arcsec/pixel] image scale"),
-
-    /** Elevation of observing site above sea level in meters */
+    /**
+     * Elevation of observing site above sea level in meters
+     */
     SITEELEV(VALUE.REAL, "[m] elevation at observing site"),
-
-    /** Observatory site, e.g. "Maunakea" */
+    /**
+     * Observatory site, e.g. "Maunakea"
+     */
     SITENAME(VALUE.STRING, "observatory site"),
-
-    /** Wind direction clockwise from North [0:360] */
+    /**
+     * Wind direction clockwise from North [0:360]
+     */
     WINDDIR(VALUE.REAL, "[deg] wind direction: 0=N, 90=E, 180=S, 270=W"),
-
-    /** Average wind speed in km/h */
+    /**
+     * Average wind speed in km/h
+     */
     WINDSPD(VALUE.REAL, "[km/h] wind speed");
 
     private final FitsKey key;
@@ -157,7 +178,6 @@ public enum CommonExt implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

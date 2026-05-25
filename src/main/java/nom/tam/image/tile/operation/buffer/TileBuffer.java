@@ -30,15 +30,13 @@ package nom.tam.image.tile.operation.buffer;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
-
 import nom.tam.util.type.ElementType;
 
 /**
  * (<i>for internal use</i>) A linear buffer that contains data for a single 2D image tile, in row-major format. You can
  * use {@link TileBufferFactory} to create appropriate implementations depending on tile and image sizes.
- * 
+ *
  * @see TileBufferFactory
  * @see nom.tam.image.tile.operation.TileArea
  */
@@ -66,37 +64,35 @@ public abstract class TileBuffer {
      * nothing to do in the normal case, overwrite this method if post processing is necessary.
      */
     public void finish() {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public ElementType<Buffer> getBaseType() {
-        return baseType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public abstract Buffer getBuffer();
 
     public int getHeight() {
-        return height;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * @return the number of pixels in the tile this view represents.
      */
     public int getPixelSize() {
-        return width * height;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public int getWidth() {
-        return width;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public TileBuffer setData(Buffer value) {
-        value.position(offset);
-        imageBuffer = baseType.sliceBuffer(value);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected Buffer getImageBuffer() {
-        return imageBuffer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

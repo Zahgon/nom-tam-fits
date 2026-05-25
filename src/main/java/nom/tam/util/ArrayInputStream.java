@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.BufferedInputStream;
@@ -38,7 +37,7 @@ import java.io.InputStream;
 
 /**
  * Efficient reading of binary arrays from streams with custom binary encoding.
- * 
+ *
  * @author Attila Kovacs
  * @since 1.16
  * @see ArrayOutputStream
@@ -46,13 +45,15 @@ import java.io.InputStream;
  */
 public class ArrayInputStream extends BufferedInputStream implements InputReader {
 
-    /** conversion from FITS binary representation to Java arrays */
+    /**
+     * conversion from FITS binary representation to Java arrays
+     */
     private InputDecoder decoder;
 
     /**
      * Instantiates a new input stream for efficient array transactions. For use
      * by subclass constructors only.
-     * 
+     *
      * @param i
      *            the underlying input stream
      * @param bufLength
@@ -64,7 +65,7 @@ public class ArrayInputStream extends BufferedInputStream implements InputReader
 
     /**
      * Instantiates a new input stream for efficient array transactions.
-     * 
+     *
      * @param i
      *            the underlying input stream
      * @param bufLength
@@ -81,33 +82,33 @@ public class ArrayInputStream extends BufferedInputStream implements InputReader
     /**
      * Sets the conversion from the binary representation of arrays in stream to
      * Java arrays. For use by subclass constructors only.
-     * 
+     *
      * @param bin2java
      *            the conversion from the binary representation of arrays in the
      *            stream to Java arrays.
      * @see #getDecoder()
      */
     protected void setDecoder(InputDecoder bin2java) {
-        decoder = bin2java;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the conversion from the binary representation of arrays in stream
      * to Java arrays. Subclass implementeations can use this to access the
      * required conversion when writing data to file.
-     * 
+     *
      * @return the conversion from the binary representation of arrays in the
      *         stream to Java arrays
      * @see #setDecoder(InputDecoder)
      */
     protected InputDecoder getDecoder() {
-        return decoder;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link ArrayDataInput#readLArray(Object)} for a contract of this
      * method.
-     * 
+     *
      * @param o
      *            an array, to be populated
      * @return the actual number of bytes read from the input, or -1 if already
@@ -120,17 +121,13 @@ public class ArrayInputStream extends BufferedInputStream implements InputReader
      * @see #readArrayFully(Object)
      */
     public synchronized long readLArray(Object o) throws IOException, IllegalArgumentException {
-        try {
-            return decoder.readArray(o);
-        } catch (IllegalArgumentException e) {
-            throw new IOException(e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link ArrayDataInput#readArrayFully(Object)} for a contract of this
      * method.
-     * 
+     *
      * @param o
      *            an array, to be populated
      * @throws IllegalArgumentException
@@ -142,13 +139,13 @@ public class ArrayInputStream extends BufferedInputStream implements InputReader
      * @see #readImage(Object)
      */
     public synchronized void readArrayFully(Object o) throws IOException, IllegalArgumentException {
-        decoder.readArrayFully(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Like {@link #readArrayFully(Object)} but strictly for numerical types
      * only.
-     * 
+     *
      * @param o
      *            An any-dimensional array containing only numerical types
      * @throws IllegalArgumentException
@@ -162,7 +159,6 @@ public class ArrayInputStream extends BufferedInputStream implements InputReader
      * @since 1.18
      */
     public void readImage(Object o) throws EOFException, IOException, IllegalArgumentException {
-        decoder.readImage(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

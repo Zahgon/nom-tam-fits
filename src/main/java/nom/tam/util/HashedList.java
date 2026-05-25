@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * This class implements a structure which can
  * be accessed either through a hash or
@@ -47,7 +46,6 @@ package nom.tam.util;
  * This class does only the search structure
  * and knows nothing of the semantics of the
  * referenced objects.
- *
  */
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,7 +54,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
-
 import nom.tam.fits.header.FitsKey;
 
 /**
@@ -83,7 +80,7 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
 
         @Override
         public int compare(VALUE o1, VALUE o2) {
-            return comp.compare(o1.getKey(), o2.getKey());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -100,89 +97,63 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
 
         @Override
         public void add(String key, VALUE ref) {
-            add(ref);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void add(VALUE reference) {
-            HashedList.this.add(current, reference);
-            current++;
-
-            // AK: Do not allow the iterator to exceed the header size
-            // prev() requires this to work properly...
-            if (current > HashedList.this.size()) {
-                current = HashedList.this.size();
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public VALUE end() {
-            current = HashedList.this.ordered.size() - 1;
-            if (current < 0) {
-                current = 0;
-                return null;
-            }
-            return next();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean hasNext() {
-            return current >= 0 && current < HashedList.this.ordered.size();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean hasPrev() {
-            return current > 0;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public VALUE next() {
-            if (current < 0 || current >= HashedList.this.ordered.size()) {
-                throw new NoSuchElementException("Outside list: " + current);
-            }
-            VALUE entry = HashedList.this.ordered.get(current);
-            current++;
-            return entry;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public VALUE next(int count) {
-            for (int index = 1; index < count; index++) {
-                next();
-            }
-            return next();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public VALUE prev() {
-            if (current <= 0) {
-                throw new NoSuchElementException("Before beginning of list");
-            }
-            return HashedList.this.ordered.get(--current);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void remove() {
-            if (current > 0 && current <= HashedList.this.ordered.size()) {
-                HashedList.this.remove(--current);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void setKey(String key) {
-            VALUE entry = HashedList.this.keyed.get(key);
-            if (entry != null) {
-                current = indexOf(entry);
-            } else {
-                current = HashedList.this.ordered.size();
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
-    /** An ordered list of the keys */
+    /**
+     * An ordered list of the keys
+     */
     private final ArrayList<VALUE> ordered = new ArrayList<>();
 
-    /** The key value pairs */
+    /**
+     * The key value pairs
+     */
     private final HashMap<String, VALUE> keyed = new HashMap<>();
 
     /**
@@ -224,7 +195,6 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
         } else {
             ordered.add(pos, entry);
         }
-
         // AK: When inserting keys before the current position, increment the current
         // position so it keeps pointing to the same location in the header...
         if (pos < cursor.current) {
@@ -234,8 +204,7 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
 
     @Override
     public boolean add(VALUE e) {
-        add(ordered.size(), e);
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -246,129 +215,97 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
      * @param entry The element to add to the list.
      */
     public void update(String key, VALUE entry) {
-        if (keyed.containsKey(key) && !FitsKey.isCommentStyleKey(key)) {
-            int index = indexOf(get(key));
-            remove(index);
-            add(index, entry);
-        } else {
-            cursor.add(entry);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean addAll(Collection<? extends VALUE> c) {
-        for (VALUE element : c) {
-            add(element);
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void clear() {
-        keyed.clear();
-        ordered.clear();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean contains(Object o) {
-        for (VALUE entry : ordered) {
-            if (o.equals(entry)) {
-                return true;
-            }
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        List<?> values = new ArrayList<Object>(c);
-        for (VALUE entry : ordered) {
-            values.remove(entry);
-        }
-        return values.isEmpty();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if the list contains an entry for the given keyword.
-     * 
+     *
      * @return     <code>true</code> if the key is included in the list, otherwise <code>false</code>.
      *
      * @param  key the key to search
      */
     public boolean containsKey(Object key) {
-        return keyed.containsKey(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the element for a given index from the odered list.
-     * 
+     *
      * @return   the n'th entry from the beginning.
      *
      * @param  n the index to get
      */
     public VALUE get(int n) {
-        return ordered.get(n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the element for the given hash key.
-     * 
+     *
      * @return     the value of a keyed entry. Non-keyed entries may be returned by requesting an iterator.
      *
      * @param  key the key to search for
-     * 
+     *
      * @see        #iterator()
      */
     public VALUE get(Object key) {
-        return keyed.get(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int indexOf(VALUE entry) {
-        // Note that, if the entry is not found, a NoSuchElementException is
-        // thrown instead of returning -1 (as is usual in indexOf methods) because
-        // the method is used internally in situations where the entry must be
-        // there.
-        for (int index = 0; index < ordered.size(); index++) {
-            String searchKey = entry.getKey();
-            if (searchKey.equals(ordered.get(index).getKey())) {
-                return index;
-            }
-        }
-        throw new NoSuchElementException("Internal error: " + entry + " should have been found in " + ordered);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isEmpty() {
-        return ordered.isEmpty();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns an iterator that will go over all elements of the list in the defined order.
-     * 
+     *
      * @return an interator over the entire list.
-     * 
+     *
      * @see    #cursor()
      */
     @Override
     public HashedListIterator iterator() {
-        return new HashedListIterator(0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns an iterator, which starts from the specified entry index, and goes over the remaining elements in the
      * list.
-     * 
+     *
      * @return   an iterator starting with the n'th entry.
      *
      * @param  n the index to start the iterator
-     * 
+     *
      * @see      #iterator(String)
      */
     public Cursor<String, VALUE> iterator(int n) {
-        if (n >= 0 && n <= ordered.size()) {
-            return new HashedListIterator(n);
-        }
-        throw new NoSuchElementException("Invalid index for iterator:" + n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -378,29 +315,25 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
      * in the header), we can just use findCard().
      *
      * @return the iterator representing the current position in the header.
-     * 
+     *
      * @see    #iterator()
      */
     public Cursor<String, VALUE> cursor() {
-        return cursor;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns an iterator, which starts from the specified keyed entry, and goes over the remaining elements in the
      * list.
-     * 
+     *
      * @return     an iterator over the list starting with the entry with a given key.
      *
      * @param  key the key to use as a start point
-     * 
+     *
      * @see        #iterator(int)
      */
     public HashedListIterator iterator(String key) {
-        VALUE entry = keyed.get(key);
-        if (entry != null) {
-            return new HashedListIterator(indexOf(entry));
-        }
-        throw new NoSuchElementException("Unknown key for iterator:" + key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -411,43 +344,28 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
      * @return       true if the index was in range
      */
     public boolean remove(int index) {
-        if (index >= 0 && index < ordered.size()) {
-            return internalRemove(index, ordered.get(index));
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private boolean internalRemove(int index, VALUE entry) {
         keyed.remove(entry.getKey());
         ordered.remove(index);
-
         // AK: if removing a key before the current position, update the current position to
         // keep pointing to the same location.
         if (index < cursor.current) {
             cursor.current--;
         }
-
         return true;
     }
 
     @Override
     public boolean remove(Object o) {
-        for (int i = 0; i < ordered.size(); i++) {
-            VALUE entry = ordered.get(i);
-            if (o.equals(entry)) {
-                return internalRemove(i, entry);
-            }
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        boolean result = false;
-        for (Object element : c.toArray()) {
-            result = remove(element) || result;
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -459,12 +377,7 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
      * @return     <code>true</code> if the key was removed
      */
     public boolean removeKey(Object key) {
-        VALUE entry = get(key);
-        if (entry != null) {
-            internalRemove(indexOf(entry), entry);
-            return true;
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -476,35 +389,17 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
      * @return        if the replacement was successful.
      */
     public boolean replaceKey(String oldKey, String newKey) {
-
-        if (!keyed.containsKey(oldKey) || keyed.containsKey(newKey)) {
-            return false;
-        }
-        VALUE oldVal = keyed.get(oldKey);
-        // same entry in hashmap and ordered so only one change.
-        keyed.remove(oldKey);
-        keyed.put(newKey, oldVal);
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-
-        Iterator<VALUE> iter = iterator();
-        boolean result = false;
-        while (iter.hasNext()) {
-            Object o = iter.next();
-            if (!c.contains(o)) {
-                iter.remove();
-                result = true;
-            }
-        }
-        return result;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int size() {
-        return ordered.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -513,21 +408,21 @@ public class HashedList<VALUE extends CursorValue<String>> implements Collection
      * @param comp the comparator to use for the sorting
      */
     public void sort(final Comparator<String> comp) {
-        java.util.Collections.sort(ordered, new EntryComparator<VALUE>(comp));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object[] toArray() {
-        return ordered.toArray();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public <T> T[] toArray(T[] o) {
-        return ordered.toArray(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return ordered.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

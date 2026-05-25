@@ -30,9 +30,7 @@ package nom.tam.image.compression.tile;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
-
 import nom.tam.image.compression.tile.mask.ImageNullPixelMask;
 import nom.tam.image.compression.tile.mask.NullPixelMaskPreserver;
 import nom.tam.image.tile.operation.TileArea;
@@ -41,7 +39,7 @@ import nom.tam.util.type.ElementType;
 /**
  * (<i>for internal use</i>) A parallel operation for compressing a specific image or binary table tile. Each instance
  * will be processed in a single thread, but operations on separate tiles can be (and will be) processed in parallel.
- * 
+ *
  * @see TileDecompressor
  */
 public class TileCompressor extends TileCompressionOperation {
@@ -52,7 +50,7 @@ public class TileCompressor extends TileCompressionOperation {
 
     /**
      * Creates a new tile compressor for a specific tile in the image.
-     * 
+     *
      * @param array     the class that handles the compression of the entire image via parallel processing tiles.
      * @param tileIndex the sequential index of the specific tile
      * @param area      the location and size of the time in the complete image
@@ -63,7 +61,7 @@ public class TileCompressor extends TileCompressionOperation {
 
     @Override
     public void run() {
-        compress();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -86,14 +84,11 @@ public class TileCompressor extends TileCompressionOperation {
 
     private synchronized void compress() {
         initTileOptions();
-
         compressedData.limit(getTileBuffer().getPixelSize() * getBaseType().size());
         compressionType = TileCompressionType.COMPRESSED;
         boolean compressSuccess = false;
         boolean tryNormalCompression = !(tileOptions.isLossyCompression() && forceNoLoss);
-
         tileOptions.getCompressionParameters().setTileIndex(getTileIndex());
-
         if (tryNormalCompression) {
             compressSuccess = getCompressorControl().compress(getTileBuffer().getBuffer(), compressedData, tileOptions);
             if (compressSuccess) {
@@ -103,7 +98,6 @@ public class TileCompressor extends TileCompressionOperation {
                 tileOptions.getCompressionParameters().setValuesInColumn(getTileIndex());
             }
         }
-
         if (!compressSuccess) {
             compressionType = TileCompressionType.GZIP_COMPRESSED;
             compressedData.rewind();
@@ -113,17 +107,14 @@ public class TileCompressor extends TileCompressionOperation {
                 tileOptions.getCompressionParameters().setValuesInColumn(getTileIndex());
             }
         }
-
         if (!compressSuccess) {
             compressionType = TileCompressionType.UNCOMPRESSED;
             compressedData.rewind();
             getTileBuffer().getBuffer().rewind();
             getBaseType().appendToByteBuffer(compressedData, getTileBuffer().getBuffer());
         }
-
         compressedData.limit(compressedData.position());
         compressedData.rewind();
-
         compactCompressedData();
     }
 
@@ -138,14 +129,11 @@ public class TileCompressor extends TileCompressionOperation {
 
     @Override
     protected synchronized NullPixelMaskPreserver createImageNullPixelMask(ImageNullPixelMask imageNullPixelMask) {
-        if (imageNullPixelMask != null) {
-            nullPixelMaskPerserver = imageNullPixelMask.createTilePreserver(getTileBuffer(), getTileIndex());
-        }
-        return nullPixelMaskPerserver;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected synchronized void forceNoLoss(boolean value) {
-        forceNoLoss = value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

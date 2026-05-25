@@ -9,7 +9,6 @@ import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.compression.provider.param.api.ICompressColumnParameter;
 import nom.tam.fits.compression.provider.param.api.ICompressHeaderParameter;
 import nom.tam.fits.compression.provider.param.api.ICompressParameters;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -40,85 +39,62 @@ import nom.tam.fits.compression.provider.param.api.ICompressParameters;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Standard.TTYPEn;
 
 /**
  * (<i>for internal use</i>) A set of {@link CompressParameter}s that are bundled together, typically because they are
  * parameters that all link to the same {@link nom.tam.fits.compression.algorithm.api.ICompressOption}
- * 
+ *
  * @see CompressParameter
  */
 public abstract class CompressParameters implements ICompressParameters, Cloneable {
 
     @Override
     public void addColumnsToTable(BinaryTableHDU hdu) throws FitsException {
-        for (ICompressColumnParameter parameter : columnParameters()) {
-            Object column = parameter.getColumnData();
-            if (column != null) {
-                hdu.setColumnName(hdu.addColumn(column) - 1, parameter.getName(), null);
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected CompressParameters clone() {
-        try {
-            return (CompressParameters) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setTileIndex(int index) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getValuesFromColumn(int index) {
-        for (ICompressColumnParameter parameter : columnParameters()) {
-            parameter.getValueFromColumn(index);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getValuesFromHeader(Header header) throws HeaderCardException {
-        for (ICompressHeaderParameter compressionParameter : headerParameters()) {
-            compressionParameter.getValueFromHeader(header);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public void initializeColumns(Header header, BinaryTable binaryTable, int size)
-            throws HeaderCardException, FitsException {
-        for (ICompressColumnParameter parameter : columnParameters()) {
-            parameter.setColumnData(getNullableColumn(header, binaryTable, parameter.getName()), size);
-        }
+    public void initializeColumns(Header header, BinaryTable binaryTable, int size) throws HeaderCardException, FitsException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void initializeColumns(int size) {
-        for (ICompressColumnParameter parameter : columnParameters()) {
-            parameter.setColumnData(null, size);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValuesInColumn(int index) {
-        for (ICompressColumnParameter parameter : columnParameters()) {
-            parameter.setValueInColumn(index);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValuesInHeader(Header header) throws HeaderCardException {
-        for (ICompressHeaderParameter parameter : headerParameters()) {
-            parameter.setValueInHeader(header);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    private Object getNullableColumn(Header header, BinaryTable binaryTable, String columnName)
-            throws HeaderCardException, FitsException {
+    private Object getNullableColumn(Header header, BinaryTable binaryTable, String columnName) throws HeaderCardException, FitsException {
         for (int i = 1; i <= binaryTable.getNCols(); i++) {
             HeaderCard card = header.getCard(TTYPEn.n(i));
             if (card != null) {
@@ -133,20 +109,20 @@ public abstract class CompressParameters implements ICompressParameters, Cloneab
     /**
      * Retuens the subset of parameters from within, which are recorded in compressed table columns along with the
      * compressed data.
-     * 
+     *
      * @return the subset of parameters that are recorded in compressed table columns.
-     * 
+     *
      * @see    #headerParameters()
      */
     protected ICompressColumnParameter[] columnParameters() {
-        return new ICompressColumnParameter[0];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the subset of parameters from within, which are recorded in the header of the compressed HDU.
-     * 
+     *
      * @return the subset of parameters that are recorded in the compressed HDU's header.
-     * 
+     *
      * @see    #columnParameters()
      */
     protected abstract ICompressHeaderParameter[] headerParameters();

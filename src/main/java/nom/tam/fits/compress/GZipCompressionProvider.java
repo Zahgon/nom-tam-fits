@@ -30,7 +30,6 @@ package nom.tam.fits.compress;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
@@ -39,7 +38,7 @@ import java.util.zip.GZIPInputStream;
  * (<i>for internal use</i>) GZIP (<code>.gz</code>) input stream decompression. You can use this class to decompress
  * files that have been compressed with <b>gzip</b>, or use {@link CompressionManager} to automatically detect the type
  * of compression used. This class uses Java's builtin {@link GZIPInputStream} class to handle the lifting.
- * 
+ *
  * @see CompressionManager
  */
 public class GZipCompressionProvider implements ICompressProvider {
@@ -52,17 +51,16 @@ public class GZipCompressionProvider implements ICompressProvider {
 
     @Override
     public InputStream decompress(InputStream in) throws IOException {
-        return new GZIPInputStream(in);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int priority() {
-        return PRIORITY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean provides(int mag1, int mag2) {
-        return mag1 == GZIP_MAGIC_BYTE1 && mag2 == GZIP_MAGIC_BYTE2;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

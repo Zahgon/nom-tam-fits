@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import nom.tam.fits.BinaryTableHDU;
 import nom.tam.fits.FitsException;
 import nom.tam.fits.FitsUtil;
@@ -27,7 +26,6 @@ import nom.tam.util.ByteBufferOutputStream;
 import nom.tam.util.Cursor;
 import nom.tam.util.FitsInputStream;
 import nom.tam.util.FitsOutputStream;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -58,10 +56,8 @@ import nom.tam.util.FitsOutputStream;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Compression.ZIMAGE;
 import static nom.tam.fits.header.Standard.BLANK;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -88,22 +84,22 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * <p>
  * For example to compress an image HDU:
  * </p>
- * 
+ *
  * <pre>
  *   ImageHDU image = ...
- *   
+ *
  *   // 1. Create compressed HDU
  *   CompressedImageHDU compressed = CompressedImageHDU.fromImageHDU(image, 60, 40);
- *   
+ *
  *   // 2. Set compression (and optional qunatizaiton) algorithm(s)
  *   compressed.setCompressAlgorithm(Compression.ZCMPTYPE_RICE_1)
  *             .setQuantAlgorithm(Compression.ZQUANTIZ_SUBTRACTIVE_DITHER_1)
  *             .preserveNulls(Compression.ZCMPTYPE_HCOMPRESS_1);
- *             
+ *
  *   // 3. Set compression (and quantizaiton) options
  *   compressed.getCompressOption(RiceCompressOption.class).setBlockSize(32);
  *   compressed.getCompressOption(QuantizeOption.class).setBZero(3.0).setBScale(0.1).setBNull(-999);
- *                    
+ *
  *   // 4. Perform the compression.
  *   compressed.compress();
  * </pre>
@@ -114,18 +110,21 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * <p>
  * The reverse process is simply via the {@link #asImageHDU()} method. E.g.:
  * </p>
- * 
+ *
  * <pre>
  *    CompressedImageHDU compressed = ...
  *    ImageHDU image = compressed.asImageHDU();
  * </pre>
- * 
+ *
  * @see CompressedImageData
  * @see nom.tam.image.compression.CompressedImageTiler
  */
 @SuppressWarnings("deprecation")
 public class CompressedImageHDU extends BinaryTableHDU {
-    /** The maximum number of table columns FITS supports */
+
+    /**
+     * The maximum number of table columns FITS supports
+     */
     public static final int MAX_NAXIS_ALLOWED = 999;
 
     /**
@@ -152,7 +151,7 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * @return               the prepared compressed image hdu.
      *
      * @throws FitsException if the image could not be used to create a compressed image.
-     * 
+     *
      * @see                  #asImageHDU()
      * @see                  #setCompressAlgorithm(String)
      * @see                  #setQuantAlgorithm(String)
@@ -160,43 +159,12 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * @see                  #compress()
      */
     public static CompressedImageHDU fromImageHDU(ImageHDU imageHDU, int... tileAxis) throws FitsException {
-        Header header = new Header();
-        CompressedImageData compressedData = new CompressedImageData();
-        int[] size = imageHDU.getAxes();
-        int[] tileSize = new int[size.length];
-
-        compressedData.setAxis(size);
-
-        // Start with the default tile size.
-        int nm1 = size.length - 1;
-        Arrays.fill(tileSize, 1);
-        tileSize[nm1] = size[nm1];
-
-        // Check and apply the requested tile sizes.
-        int n = Math.min(size.length, tileAxis.length);
-        for (int i = 0; i < n; i++) {
-            if (tileAxis[i] > 0) {
-                tileSize[nm1 - i] = Math.min(tileAxis[i], size[nm1 - i]);
-            }
-        }
-
-        compressedData.setTileSize(tileSize);
-
-        compressedData.fillHeader(header);
-        Cursor<String, HeaderCard> iterator = header.iterator();
-        Cursor<String, HeaderCard> imageIterator = imageHDU.getHeader().iterator();
-        while (imageIterator.hasNext()) {
-            HeaderCard card = imageIterator.next();
-            CompressedCard.restore(card, iterator);
-        }
-        CompressedImageHDU compressedImageHDU = new CompressedImageHDU(header, compressedData);
-        compressedData.prepareUncompressedData(imageHDU.getData().getData(), header);
-        return compressedImageHDU;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Check that this HDU has a valid header for this type.
-     * 
+     *
      * @deprecated     (<i>for internal use</i>) Will reduce visibility in the future
      *
      * @param      hdr header to check
@@ -211,13 +179,13 @@ public class CompressedImageHDU extends BinaryTableHDU {
 
     /**
      * Returns an empty compressed image data object based on its description in a FITS header.
-     * 
+     *
      * @param      hdr           the FITS header containing a description of the compressed image
-     * 
+     *
      * @return                   an empty compressed image data corresponding to the header description.
-     * 
+     *
      * @throws     FitsException if the header does not sufficiently describe a compressed image
-     * 
+     *
      * @deprecated               (<i>for internal use</i>) Will reduce visibility in the future
      */
     @Deprecated
@@ -227,11 +195,11 @@ public class CompressedImageHDU extends BinaryTableHDU {
 
     /**
      * Creates an new compressed image HDU with the specified header and compressed data.
-     * 
+     *
      * @param hdr   the header
      * @param datum the compressed image data. The data may not be actually compressed at this point, int which case you
      *                  may need to call {@link #compress()} before writing the new compressed HDU to a stream.
-     * 
+     *
      * @see         #compress()
      */
     public CompressedImageHDU(Header hdr, CompressedImageData datum) {
@@ -240,101 +208,42 @@ public class CompressedImageHDU extends BinaryTableHDU {
 
     /**
      * Restores the original image HDU by decompressing the data contained in this compresed image HDU.
-     * 
+     *
      * @return               The uncompressed Image HDU.
-     * 
+     *
      * @throws FitsException If there was an issue with the decompression.
-     * 
+     *
      * @see                  #getTileHDU(int[], int[])
      * @see                  #fromImageHDU(ImageHDU, int...)
      */
     public ImageHDU asImageHDU() throws FitsException {
-        final Header header = getImageHeader();
-        ImageData data = ImageHDU.manufactureData(header);
-        ImageHDU imageHDU = new ImageHDU(header, data);
-        data.setBuffer(getUncompressedData());
-        return imageHDU;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns an <code>ImageHDU</code>, with the specified decompressed image area. The HDU's header will be adjusted
      * as necessary to reflect the correct size and coordinate system of the image cutout.
-     * 
+     *
      * @param  corners                  the location in pixels where the tile begins in the full (uncompressed) image.
      *                                      The number of elements in the array must match the image dimnesion.
      * @param  lengths                  the size of the tile in pixels. The number of elements in the array must match
      *                                      the image dimnesion.
-     * 
+     *
      * @return                          a new image HDU containing the selected area of the uncompresed image, including
      *                                      the adjusted header for the selected area,
-     * 
+     *
      * @throws IOException              If the tiling operation itself could not be performed
      * @throws FitsException            If the compressed image itself if invalid or imcomplete
      * @throws IllegalArgumentException if the tile area is not fully contained inside the uncompressed image or if the
      *                                      lengths are not positive definite.
-     * 
+     *
      * @see                             #asImageHDU()
      * @see                             CompressedImageTiler#getTile(int[], int[])
-     * 
+     *
      * @since                           1.18
      */
     public ImageHDU getTileHDU(int[] corners, int[] lengths) throws IOException, FitsException, IllegalArgumentException {
-        Header h = getImageHeader();
-
-        int dim = h.getIntValue(Standard.NAXIS);
-
-        if (corners.length != lengths.length || corners.length != dim) {
-            throw new IllegalArgumentException("arguments for mismatched dimensions");
-        }
-
-        // Edit the image bound for the tile
-        for (int i = 0; i < corners.length; i++) {
-            int naxis = h.getIntValue(Standard.NAXISn.n(dim - i));
-
-            if (lengths[0] <= 0) {
-                throw new IllegalArgumentException("Illegal tile size in dim " + i + ": " + lengths[i]);
-            }
-
-            if (corners[i] < 0 || corners[i] + lengths[i] > naxis) {
-                throw new IllegalArgumentException("tile out of bounds in dim " + i + ": [" + corners[i] + ":"
-                        + (corners[i] + lengths[i]) + "] in " + naxis);
-            }
-
-            h.addValue(Standard.NAXISn.n(dim - i), lengths[i]);
-
-            // Adjust the CRPIXn values
-            HeaderCard crpix = h.getCard(Standard.CRPIXn.n(dim - i));
-            if (crpix != null) {
-                crpix.setValue(crpix.getValue(Double.class, Double.NaN) - corners[i]);
-            }
-
-            // Adjust CRPIXna values
-            for (char c = 'A'; c <= 'Z'; c++) {
-                crpix = h.getCard("CRPIX" + (dim - i) + Character.toString(c));
-                if (crpix != null) {
-                    crpix.setValue(crpix.getValue(Double.class, Double.NaN) - corners[i]);
-                }
-            }
-        }
-
-        ImageData im = ImageHDU.manufactureData(h);
-        ByteBuffer buf = ByteBuffer.wrap(new byte[(int) FitsUtil.addPadding(im.getSize())]);
-
-        try (FitsOutputStream out = new FitsOutputStream(new ByteBufferOutputStream(buf))) {
-            new CompressedImageTiler(this).getTile(out, corners, lengths);
-            out.close();
-        }
-
-        // Rewind buffer for reading, including padding.
-        buf.limit(buf.capacity());
-        buf.position(0);
-
-        try (FitsInputStream in = new FitsInputStream(new ByteBufferInputStream(buf))) {
-            im.read(in);
-            in.close();
-        }
-
-        return new ImageHDU(h, im);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -347,24 +256,7 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * @since                1.18
      */
     public int[] getImageAxes() throws FitsException {
-        int nAxis = myHeader.getIntValue(Compression.ZNAXIS);
-        if (nAxis < 0) {
-            throw new FitsException("Negative ZNAXIS (or NAXIS) value " + nAxis);
-        }
-        if (nAxis > CompressedImageHDU.MAX_NAXIS_ALLOWED) {
-            throw new FitsException("ZNAXIS/NAXIS value " + nAxis + " too large");
-        }
-
-        if (nAxis == 0) {
-            return null;
-        }
-
-        final int[] axes = new int[nAxis];
-        for (int i = 1; i <= nAxis; i++) {
-            axes[nAxis - i] = myHeader.getIntValue(Compression.ZNAXISn.n(i));
-        }
-
-        return axes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -377,19 +269,7 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * @since                      1.18
      */
     public Header getImageHeader() throws HeaderCardException {
-        Header header = new Header();
-
-        Cursor<String, HeaderCard> imageIterator = header.iterator();
-        Cursor<String, HeaderCard> iterator = getHeader().iterator();
-
-        while (iterator.hasNext()) {
-            HeaderCard card = iterator.next();
-
-            if (!TABLE_COLUMN_KEYS.contains(GenericKey.lookup(card.getKey()))) {
-                CompressedCard.backup(card, imageIterator);
-            }
-        }
-        return header;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -397,16 +277,16 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * e.g using the {@link #fromImageHDU(ImageHDU, int...)} method, the HDU is merely prepared but without actually
      * performing the compression to allow the user to configure the algorithm(S) to be used as well as any specific
      * compression (or quantization) options. See details in the class description.
-     * 
+     *
      * @throws FitsException if the compression could not be performed
-     * 
+     *
      * @see                  #fromImageHDU(ImageHDU, int...)
      * @see                  #setCompressAlgorithm(String)
      * @see                  #setQuantAlgorithm(String)
      * @see                  #getCompressOption(Class)
      */
     public void compress() throws FitsException {
-        getData().compress(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -422,8 +302,7 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * @return        this
      */
     public CompressedImageHDU forceNoLoss(int x, int y, int width, int heigth) {
-        getData().forceNoLoss(x, y, width, heigth);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -432,37 +311,37 @@ public class CompressedImageHDU extends BinaryTableHDU {
      * if you called <code>setCompressionAlgorithm({@link Compression#ZCMPTYPE_RICE_1})</code>, then you can retrieve
      * options for it with this method as
      * <code>getCompressOption({@link nom.tam.fits.compression.algorithm.rice.RiceCompressOption}.class)</code>.
-     * 
+     *
      * @param  <T>   The generic type of the compression class
      * @param  clazz the compression class
-     * 
+     *
      * @return       The current set of options for the requested type, or <code>null</code> if there are no options or
      *                   if the requested type does not match the algorithm(s) selected.
-     * 
+     *
      * @see          nom.tam.fits.compression.algorithm.hcompress.HCompressorOption
      * @see          nom.tam.fits.compression.algorithm.rice.RiceCompressOption
      * @see          nom.tam.fits.compression.algorithm.quant.QuantizeOption
      */
     public <T extends ICompressOption> T getCompressOption(Class<T> clazz) {
-        return getData().getCompressOption(clazz);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public CompressedImageData getData() {
-        return (CompressedImageData) super.getData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the uncompressed image in serialized form, as it would appear in a stream.
-     * 
+     *
      * @deprecated               (<i>for internal use</i>) There is no reason why this should be exposed to users. Use
      *                               {@link #asImageHDU()} instead. Future release may restrict the visibility to
      *                               private.
-     * 
+     *
      * @return                   the buffer containing the serialized form of the uncompressed image.
-     * 
+     *
      * @throws     FitsException if the decompression could not be performed.
-     * 
+     *
      * @see                      #asImageHDU()
      */
     @Deprecated
@@ -485,58 +364,48 @@ public class CompressedImageHDU extends BinaryTableHDU {
      *                                  recognized names.
      *
      * @return                      itself
-     * 
+     *
      * @see                         Compression
      * @see                         #setCompressAlgorithm(String)
      * @see                         #setQuantAlgorithm(String)
      */
     public CompressedImageHDU preserveNulls(String compressionAlgorithm) {
-        long nullValue = getHeader().getLongValue(BLANK, Long.MIN_VALUE);
-        getData().preserveNulls(nullValue, compressionAlgorithm);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the compression algorithm to use, by its standard FITS name. You should typically use one of the enum values
      * defined in {@link Compression}.
-     * 
+     *
      * @param  compressAlgorithm compression algorithm to use, see {@link Compression} for recognized names.
-     * 
+     *
      * @return                   itself
-     * 
+     *
      * @throws FitsException     if no algorithm is available by the specified name
-     * 
+     *
      * @see                      Compression
      * @see                      #setQuantAlgorithm(String)
      * @see                      #preserveNulls(String)
      */
     public CompressedImageHDU setCompressAlgorithm(String compressAlgorithm) throws FitsException {
-        HeaderCard compressAlgorithmCard = HeaderCard.create(Compression.ZCMPTYPE, compressAlgorithm);
-        getData().setCompressAlgorithm(compressAlgorithmCard);
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the quantization algorithm to use, by its standard FITS name. You should typically use one of the enum
      * values defined in {@link Compression}.
-     * 
+     *
      * @param  quantAlgorithm quantization algorithm to use, see {@link Compression} for recognized names.
-     * 
+     *
      * @return                itself
-     * 
+     *
      * @throws FitsException  if no algorithm is available by the specified name
-     * 
+     *
      * @see                   Compression
      * @see                   #setCompressAlgorithm(String)
      * @see                   #preserveNulls(String)
      */
     public CompressedImageHDU setQuantAlgorithm(String quantAlgorithm) throws FitsException {
-        if (quantAlgorithm != null && !quantAlgorithm.isEmpty()) {
-            HeaderCard quantAlgorithmCard = HeaderCard.create(Compression.ZQUANTIZ, quantAlgorithm);
-            getData().setQuantAlgorithm(quantAlgorithmCard);
-        } else {
-            getData().setQuantAlgorithm(null);
-        }
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

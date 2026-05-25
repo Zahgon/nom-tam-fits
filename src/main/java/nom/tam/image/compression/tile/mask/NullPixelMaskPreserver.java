@@ -30,14 +30,12 @@ package nom.tam.image.compression.tile.mask;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
 import nom.tam.image.tile.operation.buffer.TileBuffer;
 import nom.tam.util.type.ElementType;
@@ -46,7 +44,7 @@ import nom.tam.util.type.ElementType;
  * (<i>for internal use</i>) Preserves blank (<code>null</code>) values in
  * compressed images. This class overwrites the pixels specified in the mask
  * with null values. Where the null value can be defined separately.
- * 
+ *
  * @see nom.tam.image.compression.hdu.CompressedImageHDU
  */
 public class NullPixelMaskPreserver extends AbstractNullPixelMask {
@@ -54,7 +52,7 @@ public class NullPixelMaskPreserver extends AbstractNullPixelMask {
     /**
      * Creates a new instance for preserving the null values in a specific image
      * tile when compressing the tile.
-     * 
+     *
      * @param tileBuffer
      *            the buffer containing the serialized tile data (still
      *            uncompressed)
@@ -76,26 +74,7 @@ public class NullPixelMaskPreserver extends AbstractNullPixelMask {
      * to indicate where the blanking values appear in in the original image.
      */
     public void preserveNull() {
-        if (getTileBuffer().getBaseType().is(ElementType.DOUBLE)) {
-            preserveNullDoubles();
-        } else if (getTileBuffer().getBaseType().is(ElementType.FLOAT)) {
-            preserveNullFloats();
-        } else if (getTileBuffer().getBaseType().is(ElementType.LONG)) {
-            preserveNullLongs();
-        } else if (getTileBuffer().getBaseType().is(ElementType.INT)) {
-            preserveNullInts();
-        } else if (getTileBuffer().getBaseType().is(ElementType.SHORT)) {
-            preserveNullShorts();
-        } else if (getTileBuffer().getBaseType().is(ElementType.BYTE)) {
-            preserveNullBytes();
-        }
-        if (getMask() != null) {
-            ByteBuffer compressed = ByteBuffer.allocate(getTileBuffer().getPixelSize());
-            if (!getCompressorControl().compress(getMask(), compressed, getCompressorControl().option())) {
-                throw new IllegalStateException("could not compress the null pixel mask");
-            }
-            setMask(compressed);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void preserveNullBytes() {
@@ -161,5 +140,4 @@ public class NullPixelMaskPreserver extends AbstractNullPixelMask {
             }
         }
     }
-
 }

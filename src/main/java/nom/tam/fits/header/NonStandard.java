@@ -30,7 +30,6 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * This data dictionary contains FITS keywords that have been widely used within the astronomical community. It is
@@ -45,12 +44,12 @@ package nom.tam.fits.header;
  * @author Richard van Nieuwenhoven
  */
 public enum NonStandard implements IFitsHeader {
+
     /**
      * @deprecated The CONTINUE key is now part of the FITS 4.0 standard, so use {@link Standard#CONTINUE} instead.
      */
     @Deprecated
     CONTINUE(SOURCE.HEASARC, HDU.ANY, VALUE.NONE, "denotes the CONTINUE long string keyword convention"),
-
     /**
      * The HIERARCH keyword, when followed by spaces in columns 9 and 10 of the FITS card image, indicates that the ESO
      * HIERARCH keyword convention should be used to interpret the name and value of the keyword. The HIERARCH keyword
@@ -70,12 +69,11 @@ public enum NonStandard implements IFitsHeader {
      * filter position". In this example the logical name of the keyword is 'Filter Wheel' and the value is 12.
      */
     HIERARCH(SOURCE.ESO, HDU.ANY, VALUE.NONE, null),
-
     /**
      * The presence of this keyword with a value = T in an extension key indicates that the keywords contained in the
      * primary key (except the FITS Mandatory keywords, and any COMMENT, HISTORY or 'blank' keywords) are to be
      * inherited, or logically included in that extension key.
-     * 
+     *
      * @deprecated Part of the FITS standard, use {@link Standard#INHERIT} instead.
      */
     @Deprecated
@@ -99,6 +97,6 @@ public enum NonStandard implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

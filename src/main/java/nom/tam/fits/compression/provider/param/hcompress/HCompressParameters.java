@@ -30,7 +30,6 @@ package nom.tam.fits.compression.provider.param.hcompress;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.algorithm.hcompress.HCompressorOption;
 import nom.tam.fits.compression.provider.param.api.ICompressHeaderParameter;
@@ -53,14 +52,11 @@ public class HCompressParameters extends CompressParameters {
 
     @Override
     public HCompressParameters copy(ICompressOption option) {
-        if (option instanceof HCompressorOption) {
-            return new HCompressParameters((HCompressorOption) option);
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected ICompressHeaderParameter[] headerParameters() {
-        return new ICompressHeaderParameter[] {scale, smooth};
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

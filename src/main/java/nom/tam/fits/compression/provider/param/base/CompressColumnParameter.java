@@ -30,9 +30,7 @@ package nom.tam.fits.compression.provider.param.base;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.lang.reflect.Array;
-
 import nom.tam.fits.compression.provider.param.api.ICompressColumnParameter;
 
 /**
@@ -52,8 +50,7 @@ import nom.tam.fits.compression.provider.param.api.ICompressColumnParameter;
  * @param  <T>      The generic array type that contains the individual parameters for each tile as a table column.
  * @param  <OPTION> The generic type of compression option that is associated with these parameters
  */
-public abstract class CompressColumnParameter<T, OPTION> extends CompressParameter<OPTION>
-        implements ICompressColumnParameter {
+public abstract class CompressColumnParameter<T, OPTION> extends CompressParameter<OPTION> implements ICompressColumnParameter {
 
     private Data column;
 
@@ -61,7 +58,7 @@ public abstract class CompressColumnParameter<T, OPTION> extends CompressParamet
 
     /**
      * Creates a new compression parameter, which stores a per-tile value for a compression option in a table column.
-     * 
+     *
      * @param name   the FITS parameter name, that is the column name which stores the values
      * @param option the compression option that uses the parameter value
      * @param type   the Java class of the parameter, such as {@link java.lang.Integer} or {@link java.lang.String}.
@@ -74,12 +71,12 @@ public abstract class CompressColumnParameter<T, OPTION> extends CompressParamet
 
     @Override
     public synchronized T getColumnData() {
-        return column.getValues();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized void setColumnData(Object columnValue, int sizeValue) {
-        column.create(columnValue, sizeValue);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -90,6 +87,7 @@ public abstract class CompressColumnParameter<T, OPTION> extends CompressParamet
      * @since  1.18
      */
     private final class Data {
+
         private T values;
 
         private synchronized T getValues() {

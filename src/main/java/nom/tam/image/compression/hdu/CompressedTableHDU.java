@@ -10,7 +10,6 @@ import nom.tam.fits.header.Compression;
 import nom.tam.fits.header.Standard;
 import nom.tam.util.Cursor;
 import nom.tam.util.type.ElementType;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -41,9 +40,7 @@ import nom.tam.util.type.ElementType;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Compression.ZTABLE;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -65,20 +62,20 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * <p>
  * For example to compress a binary table:
  * </p>
- * 
+ *
  * <pre>
  *   BinaryTableHDU table = ...
- *   
+ *
  *   // 1. Create compressed HDU with the
  *   CompressedTableHDU compressed = CompressedTableHDU.fromBinaryTableHDU(table, 4, Compression.ZCMPTYPE_RICE_1);
- *   
+ *
  *   // 2. Perform the compression.
  *   compressed.compress();
  * </pre>
  * <p>
  * which of course you can compact into a single line as:
  * </p>
- * 
+ *
  * <pre>
  * CompressedTableHDU compressed = CompressedTableHDU.fromBinaryTableHDU(table, 4, Compression.ZCMPTYPE_RICE_1).compress();
  * </pre>
@@ -90,7 +87,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * <p>
  * The reverse process is simply via the {@link #asBinaryTableHDU()} method. E.g.:
  * </p>
- * 
+ *
  * <pre>
  *    CompressedTableHDU compressed = ...
  *    BinaryTableHDU table = compressed.asBinaryTableHDU();
@@ -123,38 +120,38 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * this presciption. They store the uncopressed pointer <i>before</i> the compressed pointers. Because these tools
      * are widely used we want to support files created or consumed by these tools. As such we allow to deviate from the
      * FITS standard, and swap the order of the stored VLA indices inside compressed tables.
-     * 
+     *
      * @param value <code>true</code> if we should use VLA indices in compressed tables that follow the format described
      *                  in the original Pence et al. 2013 convention, and also the FITS 4.0 standard as of 2024 Mar 1;
      *                  otherwise <code>false</code>. These original prescriptions define the reverse of what is
      *                  actually implemented by CFITSIO and its tools <code>fpack</code> and <code>funpack</code>. (Our
      *                  default is to conform to CFITSIO, and the expected revision of the standard to match).
-     * 
+     *
      * @see         #hasOldStandardVLAIndexing()
      * @see         #asBinaryTableHDU()
-     * 
+     *
      * @since       1.19.1
      */
     public static void useOldStandardVLAIndexing(boolean value) {
-        reversedVLAIndices = value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if we should use reversed compressed/uncompressed heap indices for when decompressing variable-length
      * arrays (VLAs).
-     * 
+     *
      * @return value <code>true</code> if we will assime VLA indices in compressed tables that follow the format
      *             described in the original Pence et al. 2013 convention, and also the FITS 4.0 standard as of 2024 Mar
      *             1; otherwise <code>false</code>. These original prescriptions define the reverse of what is actually
      *             implemented by CFITSIO and its tools <code>fpack</code> and <code>funpack</code>. (Our default is to
      *             conform to CFITSIO, and the expcted revision of the standard to match).
-     * 
+     *
      * @see    #useOldStandardVLAIndexing(boolean)
-     * 
+     *
      * @since  1.19.1
      */
     public static boolean hasOldStandardVLAIndexing() {
-        return reversedVLAIndices;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -177,7 +174,7 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * @throws IllegalArgumentException    if any of the listed compression algorithms are not approved for use with
      *                                         tables.
      * @throws FitsException               if the binary table could not be used to create a compressed binary table.
-     * 
+     *
      * @see                                Compression
      * @see                                Compression#ZCMPTYPE_GZIP_1
      * @see                                Compression#ZCMPTYPE_GZIP_2
@@ -186,34 +183,13 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * @see                                #asBinaryTableHDU()
      * @see                                #useOldStandardVLAIndexing(boolean)
      */
-    public static CompressedTableHDU fromBinaryTableHDU(BinaryTableHDU binaryTableHDU, int tileRows,
-            String... columnCompressionAlgorithms) throws FitsException {
-
-        Header header = new Header();
-
-        CompressedTableData compressedData = new CompressedTableData();
-        compressedData.setColumnCompressionAlgorithms(columnCompressionAlgorithms);
-
-        int rowsPerTile = tileRows > 0 ? tileRows : binaryTableHDU.getData().getNRows();
-        compressedData.setRowsPerTile(rowsPerTile);
-
-        Cursor<String, HeaderCard> headerIterator = header.iterator();
-        Cursor<String, HeaderCard> imageIterator = binaryTableHDU.getHeader().iterator();
-        while (imageIterator.hasNext()) {
-            HeaderCard card = imageIterator.next();
-            CompressedCard.restore(card, headerIterator);
-        }
-
-        CompressedTableHDU compressedHDU = new CompressedTableHDU(header, compressedData);
-        compressedData.prepareUncompressedData(binaryTableHDU.getData());
-        compressedData.fillHeader(header);
-
-        return compressedHDU;
+    public static CompressedTableHDU fromBinaryTableHDU(BinaryTableHDU binaryTableHDU, int tileRows, String... columnCompressionAlgorithms) throws FitsException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Check that this HDU has a valid header for this type.
-     * 
+     *
      * @deprecated     (<i>for internal use</i>) Will reduce visibility in the future
      *
      * @param      hdr header to check
@@ -228,9 +204,9 @@ public class CompressedTableHDU extends BinaryTableHDU {
 
     /**
      * @deprecated     (<i>for internal use</i>) Will reduce visibility in the future
-     * 
+     *
      * @param      hdr the header that describes the compressed HDU
-     * 
+     *
      * @return         a new blank data object created from the header description
      */
     @Deprecated
@@ -240,11 +216,11 @@ public class CompressedTableHDU extends BinaryTableHDU {
 
     /**
      * Creates an new compressed table HDU with the specified header and compressed data.
-     * 
+     *
      * @param hdr   the header
      * @param datum the compressed table data. The data may not be actually compressed at this point, int which case you
      *                  may need to call {@link #compress()} before writing the new compressed HDU to a stream.
-     * 
+     *
      * @see         #compress()
      */
     public CompressedTableHDU(Header hdr, CompressedTableData datum) {
@@ -253,22 +229,17 @@ public class CompressedTableHDU extends BinaryTableHDU {
 
     /**
      * Restores the original binary table HDU by decompressing the data contained in this compresed table HDU.
-     * 
+     *
      * @return               The uncompressed binary table HDU.
-     * 
+     *
      * @throws FitsException If there was an issue with the decompression.
-     * 
+     *
      * @see                  #asBinaryTableHDU(int, int)
      * @see                  #fromBinaryTableHDU(BinaryTableHDU, int, String...)
      * @see                  #useOldStandardVLAIndexing(boolean)
      */
     public BinaryTableHDU asBinaryTableHDU() throws FitsException {
-        return asBinaryTableHDU(0, getTileCount());
-        // Header header = getTableHeader();
-        // BinaryTable data = BinaryTableHDU.manufactureData(header);
-        // BinaryTableHDU tableHDU = new BinaryTableHDU(header, data);
-        // getData().asBinaryTable(data, getHeader(), header);
-        // return tableHDU;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -276,49 +247,45 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * tiles to decompress, e.g. via {@link #asBinaryTableHDU(int, int)}, when wanting to access select table rows only.
      * This value is stored under the FITS keyword ZTILELEN in the compressed header. Thus, this method simply provides
      * a user-friendly way to access it. Note that the last tile may contain fewer rows than the value indicated by this
-     * 
+     *
      * @return               the number of table rows that are compressed into a tile.
-     * 
+     *
      * @throws FitsException if the compressed header does not contain the required ZTILELEN keyword, or it is &lt;= 0.
-     * 
+     *
      * @see                  #asBinaryTableHDU(int, int)
-     * 
+     *
      * @since                1.19
      */
     public int getTileRows() throws FitsException {
-        int n = getHeader().getIntValue(Compression.ZTILELEN, -1);
-        if (n <= 0) {
-            throw new FitsException("imnvalid or missing ZTILELEN header keyword");
-        }
-        return n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the number of compressed tiles contained in this HDU.
-     * 
+     *
      * @return the number of compressed tiles in this table. It is the same as the NAXIS2 value of the header, which is
      *             also returned by {@link #getNRows()} for this compressed table.
-     * 
+     *
      * @see    #getTileRows()
-     * 
+     *
      * @since  1.19
      */
     public int getTileCount() {
-        return getNRows();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Restores a section of the original binary table HDU by decompressing a selected range of compressed table tiles.
      * The returned section will start at row index <code>fromTile * getTileRows()</code> of the full table.
-     * 
+     *
      * @param  fromTile                 Java index of first tile to decompress
      * @param  toTile                   Java index of last tile to decompress
-     * 
+     *
      * @return                          The uncompressed binary table HDU from the selected compressed tiles.
-     * 
+     *
      * @throws IllegalArgumentException If the tile range is out of bounds
      * @throws FitsException            If there was an issue with the decompression.
-     * 
+     *
      * @see                             #getTileRows()
      * @see                             #getTileCount()
      * @see                             #asBinaryTableHDU()
@@ -326,83 +293,65 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * @see                             #useOldStandardVLAIndexing(boolean)
      */
     public BinaryTableHDU asBinaryTableHDU(int fromTile, int toTile) throws FitsException, IllegalArgumentException {
-        Header header = getTableHeader();
-        int tileSize = getTileRows();
-        getData().setRowsPerTile(tileSize);
-
-        if (fromTile < 0 || toTile > getTileCount() || toTile <= fromTile) {
-            throw new IllegalArgumentException(
-                    "illegal tile range [" + fromTile + ", " + toTile + "] for " + getTileCount() + " tiles");
-        }
-
-        // Set the correct number of rows
-        int rows = getHeader().getIntValue(Compression.ZNAXISn.n(2));
-        header.addValue(Standard.NAXIS2, Integer.min(rows, toTile * tileSize) - fromTile * tileSize);
-
-        BinaryTable data = BinaryTableHDU.manufactureData(header);
-        BinaryTableHDU tableHDU = new BinaryTableHDU(header, data);
-        getData().asBinaryTable(data, getHeader(), header, fromTile);
-
-        return tableHDU;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Restores a section of the original binary table HDU by decompressing a single compressed table tile. The returned
      * section will start at row index <code>tile * getTileRows()</code> of the full table.
-     * 
+     *
      * @param  tile                     Java index of the table tile to decompress
-     * 
+     *
      * @return                          The uncompressed binary table HDU from the selected compressed tile.
-     * 
+     *
      * @throws IllegalArgumentException If the tile index is out of bounds
      * @throws FitsException            If there was an issue with the decompression.
-     * 
+     *
      * @see                             #asBinaryTableHDU(int, int)
      * @see                             #getTileRows()
      * @see                             #getTileCount()
      * @see                             #useOldStandardVLAIndexing(boolean)
      */
     public final BinaryTableHDU asBinaryTableHDU(int tile) throws FitsException, IllegalArgumentException {
-        return asBinaryTableHDU(tile, tile + 1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns a particular section of a decompressed data column.
-     * 
+     *
      * @param  col                      the Java column index
-     * 
+     *
      * @return                          The uncompressed column data as an array.
-     * 
+     *
      * @throws IllegalArgumentException If the tile range is out of bounds
      * @throws FitsException            If there was an issue with the decompression.
-     * 
+     *
      * @see                             #getColumnData(int, int, int)
      * @see                             #asBinaryTableHDU()
      * @see                             #fromBinaryTableHDU(BinaryTableHDU, int, String...)
      */
     public Object getColumnData(int col) throws FitsException, IllegalArgumentException {
-        return getColumnData(col, 0, getTileCount());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns a particular section of a decompressed data column.
-     * 
+     *
      * @param  col                      the Java column index
      * @param  fromTile                 the Java index of first tile to decompress
      * @param  toTile                   the Java index of last tile to decompress
-     * 
+     *
      * @return                          The uncompressed column data segment as an array.
-     * 
+     *
      * @throws IllegalArgumentException If the tile range is out of bounds
      * @throws FitsException            If there was an issue with the decompression.
-     * 
+     *
      * @see                             #getColumnData(int)
      * @see                             #asBinaryTableHDU()
      * @see                             #fromBinaryTableHDU(BinaryTableHDU, int, String...)
      */
     public Object getColumnData(int col, int fromTile, int toTile) throws FitsException, IllegalArgumentException {
-        getData().setRowsPerTile(getTileRows());
-        return getData().getColumnData(col, fromTile, toTile, getHeader(), getTableHeader());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -411,17 +360,16 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * without actually performing the compression, and this method will have to be called to actually perform the
      * compression. The design would allow for setting options between creation and compressing, but in this case there
      * is really nothing of the sort.
-     * 
+     *
      * @return               itself
-     * 
+     *
      * @throws FitsException if the compression could not be performed
-     * 
+     *
      * @see                  #fromBinaryTableHDU(BinaryTableHDU, int, String...)
      * @see                  #useOldStandardVLAIndexing(boolean)
      */
     public CompressedTableHDU compress() throws FitsException {
-        getData().compress(getHeader());
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -434,25 +382,11 @@ public class CompressedTableHDU extends BinaryTableHDU {
      * @since                      1.18
      */
     public Header getTableHeader() throws HeaderCardException {
-        Header header = new Header();
-
-        header.addValue(Standard.XTENSION, Standard.XTENSION_BINTABLE);
-        header.addValue(Standard.BITPIX, ElementType.BYTE.bitPix());
-        header.addValue(Standard.NAXIS, 2);
-
-        Cursor<String, HeaderCard> tableIterator = header.iterator();
-        Cursor<String, HeaderCard> iterator = getHeader().iterator();
-
-        while (iterator.hasNext()) {
-            CompressedCard.backup(iterator.next(), tableIterator);
-        }
-
-        return header;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public CompressedTableData getData() {
-        return (CompressedTableData) super.getData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

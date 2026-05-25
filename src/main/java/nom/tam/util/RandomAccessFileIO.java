@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.Closeable;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -48,28 +47,28 @@ public interface RandomAccessFileIO extends ReadWriteAccess, Closeable {
 
     /**
      * Reads data, fully populating the supplied array.
-     * 
+     *
      * @param  bytes       An array which to fill with data from the input
-     * 
+     *
      * @return             The number of bytes read, which may be fewer than the destination array size.
-     * 
+     *
      * @throws IOException if there was an error reading the requisite data from the input
-     * 
+     *
      * @see                #read(byte[], int, int)
      * @see                #write(byte[])
      */
     default int read(byte[] bytes) throws IOException {
-        return read(bytes, 0, bytes.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link RandomAccessFile#readUTF()} for a contract of this method.
-     * 
+     *
      * @return             Reads a UTF string from the input, up to an EOL termination (with <code>\n</code>) or until
      *                         the end of file, whichever comes first.
-     * 
+     *
      * @throws IOException if there was an error reading the requisite data from the input
-     * 
+     *
      * @see                #writeUTF(String)
      * @see                RandomAccessFile#readUTF()
      */
@@ -97,36 +96,36 @@ public interface RandomAccessFileIO extends ReadWriteAccess, Closeable {
 
     /**
      * Write all data from the the supplied array.
-     * 
+     *
      * @param  bytes       the data array
-     * 
+     *
      * @throws IOException if there was an error writing the data to the output
-     * 
+     *
      * @see                #write(byte[], int, int)
      * @see                #read(byte[])
      */
     default void write(byte[] bytes) throws IOException {
-        write(bytes, 0, bytes.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link RandomAccessFile#setLength(long)} for a contract of this method.
-     * 
+     *
      * @param  length      The new file length.
-     * 
+     *
      * @throws IOException if there was an error executing the request.
-     * 
+     *
      * @see                RandomAccessFile#setLength(long)
      */
     void setLength(long length) throws IOException;
 
     /**
      * See {@link RandomAccessFile#writeUTF(String)} for a contract of this method.
-     * 
+     *
      * @param  s           A java string.
-     * 
+     *
      * @throws IOException if there was an error writing the requisite data to the output
-     * 
+     *
      * @see                #readUTF()
      * @see                RandomAccessFile#writeUTF(String)
      */

@@ -3,7 +3,6 @@ package nom.tam.fits;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-
 import nom.tam.fits.header.Standard;
 import nom.tam.fits.header.hierarch.IHierarchKeyFormatter;
 import nom.tam.fits.header.hierarch.StandardIHierarchKeyFormatter;
@@ -42,7 +41,6 @@ import nom.tam.image.compression.hdu.CompressedTableHDU;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * Controls the creation of HDUs to encapsulate a variery of data, based on a few configuration switches. The switches
  * allow for toggling support for different conventions to set the desired compatibility level. The default settings
@@ -79,7 +77,7 @@ public final class FitsFactory {
 
     /**
      * An class for aggregating all the settings internal to {@link FitsFactory}.
-     * 
+     *
      * @author Attila Kovacs
      */
     protected static final class FitsSettings implements Cloneable {
@@ -121,11 +119,7 @@ public final class FitsFactory {
 
         @Override
         protected FitsSettings clone() {
-            try {
-                return (FitsSettings) super.clone();
-            } catch (CloneNotSupportedException e) {
-                return null;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private FitsSettings copy() {
@@ -138,11 +132,11 @@ public final class FitsFactory {
          * an unusually long FITS keywords that cannot be represented by a standard 8-byte keyword. The HIERARCH
          * formatted will take such string keywords and will format them according to its rules when writing them to
          * FITS headers.
-         * 
+         *
          * @return The formatter instance used for HIERARCH-style keywords.
          */
         protected IHierarchKeyFormatter getHierarchKeyFormatter() {
-            return hierarchKeyFormatter;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -151,36 +145,36 @@ public final class FitsFactory {
          * represent either a <code>float</code> or <code>double</code> value -- which are not exactly the same. For
          * that reason FITS offers the possibility to replace 'E' in the string formatted number with 'D' when the value
          * specifies a double-precision number, thus disambiguating the two.
-         * 
+         *
          * @return <code>true</code> if we will use 'D' to denote the exponent of double-precision values in FITS
          *             headers and ASCII tables.
          */
         protected boolean isUseExponentD() {
-            return useExponentD;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Checks if we treat junk after the last properly formed HDU silently withotu generating an exception. When
          * this setting is <code>true</code> we can read corrupted FITS files (at least partially) without raising an
          * alarm.
-         * 
+         *
          * @return <code>true</code> if we allow additional bytes after the last readable HDU to be present in FITS
          *             files without throwing an exception. Otherwise <code>false</code>.
          */
         protected boolean isAllowTerminalJunk() {
-            return allowTerminalJunk;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Whether we check if ASCII strings in FITS files conform to the restricted set of characters (0x20 trough
          * 0x7E) allowed by the FITS standard. If the checking is enabled, we will log any such violations so they can
          * be inspected and perhaps fixed.
-         * 
+         *
          * @return <code>true</code> if we should check and report if string appearing in FITS files do not conform to
          *             specification. Otherwise <code>false</code>
          */
         protected boolean isCheckAsciiStrings() {
-            return checkAsciiStrings;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -188,12 +182,12 @@ public final class FitsFactory {
          * string may span multiple 80-character header records. They are now standard as of FITS 4.0, but they were not
          * in earlier specifications. When long strings are not enabled, we will throw a {@link LongValueException}
          * whenever one tries to add a string value that cannot be contained in a single 80-character header record.
-         * 
+         *
          * @return <code>true</code> (default) if we allow adding long string values to out FITS headers. Otherwise
          *             <code>false</code>.
          */
         protected boolean isLongStringsEnabled() {
-            return longStringsEnabled;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -213,12 +207,12 @@ public final class FitsFactory {
          * better option, as they are both more compact and flexible but sometimes we might want to make our table data
          * to be human readable in a terminal without needing any FITS-specific tool -- even though the 1970s is long
          * past...
-         * 
+         *
          * @return <code>true</code> if we have a preference for writing table data in ASCII format (rather than
          *             binary), whenever that is possible. Otherwise <code>false</code>
          */
         protected boolean isUseAsciiTables() {
-            return useAsciiTables;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -227,36 +221,35 @@ public final class FitsFactory {
          * formatting rules we use. Our own standard is to define such keywords internally as starting with the string
          * <code>HIERARCH.</code> followed by a dot-separated hierarchy, or just an unusually long FITS keywords that
          * cannot be represented by a standard 8-byte keyword.
-         * 
+         *
          * @return <code>true</code> if we allow HIERARCH keywords. Otherwise <code>false</code>
          */
         protected boolean isUseHierarch() {
-            return useHierarch;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Checks if we allow storing Java <code>char[]</code> arrays in binary tables as 16-bit <code>short[]</code>.
          * Otherwise we will store them as simple 8-bit ASCII.
-         * 
+         *
          * @return <code>true</code> if <code>char[]</code> is stored as <code>short[]</code> in binary tables, or
          *             <code>false</code> if we store than as 8-bit ASCII.
          */
         protected boolean isUseUnicodeChars() {
-            return useUnicodeChars;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
          * Checks if we are tolerant to FITS standard violations when reading 3rd party FITS files.
-         * 
+         *
          * @return <code>true</code> if we tolerate minor violations of the FITS standard when interpreting headers,
          *             which are unlikely to affect the integrity of the FITS otherwise. The violations will still be
          *             logged, but no exception will be generated. Or, <code>false</code> if we want to generate
          *             exceptions for such error.s
          */
         protected boolean isAllowHeaderRepairs() {
-            return allowHeaderRepairs;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
     private static final FitsSettings GLOBAL_SETTINGS = new FitsSettings();
@@ -281,12 +274,10 @@ public final class FitsFactory {
      */
     @Deprecated
     public static Data dataFactory(Header hdr) throws FitsException {
-
         if (ImageHDU.isHeader(hdr)) {
             if (hdr.getIntValue(Standard.NAXIS, 0) == 0) {
                 return new NullData();
             }
-
             Data d = ImageHDU.manufactureData(hdr);
             // Fix for positioning error noted by V. Forchi
             if (hdr.findCard(Standard.EXTEND) != null) {
@@ -319,15 +310,15 @@ public final class FitsFactory {
      * Whether the letter 'D' may replace 'E' in the exponential notation of doubl-precision values. FITS allows (even
      * encourages) the use of 'D' to indicate double-recision values. For example to disambiguate between 1.37E-3
      * (single-precision) and 1.37D-3 (double-precision), which are not exatly the same value in binary representation.
-     * 
+     *
      * @return Do we allow automatic header repairs, like missing end quotes?
      *
      * @since  1.16
-     * 
+     *
      * @see    #setUseExponentD(boolean)
      */
     public static boolean isUseExponentD() {
-        return current().isUseExponentD();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -340,11 +331,11 @@ public final class FitsFactory {
      *             with column type 'A'.
      *
      * @since  1.16
-     * 
+     *
      * @see    #setUseUnicodeChars(boolean)
      */
     public static boolean isUseUnicodeChars() {
-        return current().isUseUnicodeChars();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -352,25 +343,25 @@ public final class FitsFactory {
      * HDU, it would be the beginning of another HDU -- which must start with a very specific sequence of bytes. So,
      * when there is data beyond the end of an HDU that does not appear to be another HDU, it's junk. We can either
      * ignore it, or throw an exception.
-     * 
+     *
      * @return Is terminal junk (i.e., non-FITS data following a valid HDU) allowed.
-     * 
+     *
      * @see    #setAllowTerminalJunk(boolean)
      */
     public static boolean getAllowTerminalJunk() {
-        return current().isAllowTerminalJunk();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Whether we allow 3rd party FITS headers to be in violation of the standard, attempting to make sense of corrupted
      * header data as much as possible.
-     * 
+     *
      * @return Do we allow automatic header repairs, like missing end quotes?
-     * 
+     *
      * @see    #setAllowHeaderRepairs(boolean)
      */
     public static boolean isAllowHeaderRepairs() {
-        return current().isAllowHeaderRepairs();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -378,13 +369,13 @@ public final class FitsFactory {
      * internally as starting with the string <code>HIERARCH.</code> followed by a dot-separated hierarchy, or just an
      * unusually long FITS keywords that cannot be represented by a standard 8-byte keyword. The HIERARCH formatted will
      * take such string keywords and will format them according to its rules when writing them to FITS headers.
-     * 
+     *
      * @return the formatter to use for hierarch keys.
-     * 
+     *
      * @see    #setHierarchFormater(IHierarchKeyFormatter)
      */
     public static IHierarchKeyFormatter getHierarchFormater() {
-        return current().getHierarchKeyFormatter();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -392,13 +383,13 @@ public final class FitsFactory {
      * they constitute a recognised convention. Even if other programs may not process HIRARCH keywords themselves,
      * there is generally no harm to putting them into FITS headers, since the convention is such that these keywords
      * will be simply treated as comments by programs that do not recognise them.
-     * 
+     *
      * @return <code>true</code> if we are processing HIERARCH style keywords
-     * 
+     *
      * @see    #setUseHierarch(boolean)
      */
     public static boolean getUseHierarch() {
-        return current().isUseHierarch();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -409,32 +400,32 @@ public final class FitsFactory {
      * @see    #setUseAsciiTables(boolean)
      */
     public static boolean getUseAsciiTables() {
-        return current().isUseAsciiTables();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks whether we should check and validated ASCII strings that goe into FITS. FITS only allows ASCII characters
      * between 0x20 and 0x7E in ASCII tables.
-     * 
+     *
      * @return Get the current status for string checking.
-     * 
+     *
      * @see    #setCheckAsciiStrings(boolean)
      */
     public static boolean getCheckAsciiStrings() {
-        return current().isCheckAsciiStrings();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Whether we allow storing long string in the header, which do not fit into a single 80-byte header record. Such
      * strings are then wrapped into multiple consecutive header records, OGIP 1.0 standard -- which is nart of FITS
      * 4.0, and was a recognised convention before.
-     * 
+     *
      * @return <code>true</code> If long string support is enabled.
-     * 
+     *
      * @see    #setLongStringsEnabled(boolean)
      */
     public static boolean isLongStringsEnabled() {
-        return current().isLongStringsEnabled();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -443,7 +434,7 @@ public final class FitsFactory {
      * @deprecated The FITS standard is very explicit that assignment must be "= " (equals followed by a blank space).
      *                 If we allow skipping the space, it will result in a non-standard FITS, that is likely to break
      *                 compatibility with other tools.
-     * 
+     *
      * @see        #setSkipBlankAfterAssign(boolean)
      */
     @Deprecated
@@ -453,7 +444,7 @@ public final class FitsFactory {
 
     /**
      * .
-     * 
+     *
      * @deprecated               (<i>for internal use</i>)/ Will reduce visibility in the future
      *
      * @return                   Given Header and data objects return the appropriate type of HDU.
@@ -508,14 +499,14 @@ public final class FitsFactory {
      * <li>{@link AsciiTableHDU} -- Like above, but only when the data can be represented by an ASCII table <b>AND</b>
      * {@link FitsFactory#getUseAsciiTables()} is <code>true</code></li>
      * </ul>
-     * 
+     *
      * @return                   An appropriate HDU to encapsulate the given Java data object
      *
      * @param      o             The object to be described.
      *
      * @throws     FitsException if the parameter could not be converted to a HDU because the binary representation of
      *                               the object is not known..
-     * 
+     *
      * @deprecated               Use {@link Fits#makeHDU(Object)} instead (this method may either be migrated to
      *                               {@link Fits} entirely or else have visibility reduced to the package level).
      */
@@ -523,7 +514,6 @@ public final class FitsFactory {
     public static BasicHDU<?> hduFactory(Object o) throws FitsException {
         Data d;
         Header h;
-
         if (o == null) {
             return new NullDataHDU();
         } else if (o instanceof Header) {
@@ -541,7 +531,6 @@ public final class FitsFactory {
         } else {
             throw new FitsException("This type of data is not supported for FITS representation");
         }
-
         return hduFactory(h, d);
     }
 
@@ -564,7 +553,6 @@ public final class FitsFactory {
     }
 
     // CHECKSTYLE:ON
-
     // CHECKSTYLE:OFF
     /**
      * @return                   Given an object, create the appropriate FITS header to describe it.
@@ -582,25 +570,13 @@ public final class FitsFactory {
     }
 
     // CHECKSTYLE:ON
-
     /**
      * Restores all settings to their default values.
      *
      * @since 1.16
      */
     public static void setDefaults() {
-        FitsSettings s = current();
-        s.useExponentD = DEFAULT_USE_EXPONENT_D;
-        s.allowHeaderRepairs = DEFAULT_ALLOW_HEADER_REPAIRS;
-        s.allowTerminalJunk = DEFAULT_ALLOW_TERMINAL_JUNK;
-        s.checkAsciiStrings = DEFAULT_CHECK_ASCII_STRINGS;
-        s.longStringsEnabled = DEFAULT_LONG_STRINGS_ENABLED;
-        s.skipBlankAfterAssign = DEFAULT_SKIP_BLANK_AFTER_ASSIGN;
-        s.useAsciiTables = DEFAULT_USE_ASCII_TABLES;
-        s.useHierarch = DEFAULT_USE_HIERARCH;
-        s.useUnicodeChars = DEFAULT_USE_UNICODE_CHARS;
-        s.hierarchKeyFormatter = DEFAULT_HIERARCH_FORMATTER;
-        s.hierarchKeyFormatter.setCaseSensitive(DEFAULT_CASE_SENSITIVE_HIERARCH);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -611,33 +587,33 @@ public final class FitsFactory {
      *                           more precision than a 32-bit float.
      *
      * @since                1.16
-     * 
+     *
      * @see                  #isUseExponentD()
      */
     public static void setUseExponentD(boolean allowExponentD) {
-        current().useExponentD = allowExponentD;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Do we allow junk after a valid FITS file?
      *
      * @param allowTerminalJunk value to set
-     * 
+     *
      * @see                     #getAllowTerminalJunk()
      */
     public static void setAllowTerminalJunk(boolean allowTerminalJunk) {
-        current().allowTerminalJunk = allowTerminalJunk;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Do we allow automatic header repairs, like missing end quotes?
      *
      * @param allowHeaderRepairs value to set
-     * 
+     *
      * @see                      #isAllowHeaderRepairs()
      */
     public static void setAllowHeaderRepairs(boolean allowHeaderRepairs) {
-        current().allowHeaderRepairs = allowHeaderRepairs;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -646,11 +622,11 @@ public final class FitsFactory {
      * context. Disabled by default.
      *
      * @param checkAsciiStrings value to set
-     * 
+     *
      * @see                     #getCheckAsciiStrings()
      */
     public static void setCheckAsciiStrings(boolean checkAsciiStrings) {
-        current().checkAsciiStrings = checkAsciiStrings;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -660,18 +636,18 @@ public final class FitsFactory {
      * @param formatter the hierarch key formatter.
      */
     public static void setHierarchFormater(IHierarchKeyFormatter formatter) {
-        current().hierarchKeyFormatter = formatter;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Enable/Disable longstring support.
      *
      * @param longStringsEnabled value to set
-     * 
+     *
      * @see                      #isLongStringsEnabled()
      */
     public static void setLongStringsEnabled(boolean longStringsEnabled) {
-        current().longStringsEnabled = longStringsEnabled;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -685,7 +661,7 @@ public final class FitsFactory {
      *                                      their opening quote in byte 11 (counted from 1). If we allow skipping the
      *                                      space, we will violate both standards in a way that is likely to break
      *                                      compatibility with other tools.
-     * 
+     *
      * @see                             #isSkipBlankAfterAssign()
      */
     @Deprecated
@@ -699,7 +675,7 @@ public final class FitsFactory {
      * @param useAsciiTables value to set
      */
     public static void setUseAsciiTables(boolean useAsciiTables) {
-        current().useAsciiTables = useAsciiTables;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -708,7 +684,7 @@ public final class FitsFactory {
      * @param useHierarch value to set
      */
     public static void setUseHierarch(boolean useHierarch) {
-        current().useHierarch = useHierarch;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -731,19 +707,16 @@ public final class FitsFactory {
      * @see         #isUseUnicodeChars()
      */
     public static void setUseUnicodeChars(boolean value) {
-        current().useUnicodeChars = value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the common thread pool that we use for processing FITS files.
-     * 
+     *
      * @return the thread pool for processing FITS files.
      */
     public static ExecutorService threadPool() {
-        if (threadPool == null) {
-            initializeThreadPool();
-        }
-        return threadPool;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -753,42 +726,35 @@ public final class FitsFactory {
      * @param useThreadSettings true if the thread should not share the global settings.
      */
     public static void useThreadLocalSettings(boolean useThreadSettings) {
-        if (useThreadSettings) {
-            LOCAL_SETTINGS.set(GLOBAL_SETTINGS.copy());
-        } else {
-            LOCAL_SETTINGS.remove();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private static void initializeThreadPool() {
         synchronized (GLOBAL_SETTINGS) {
             if (threadPool == null) {
-                threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, //
-                        new ThreadFactory() {
-                            private int counter = 1;
+                threadPool = //
+                Executors.//
+                newFixedThreadPool(//
+                Runtime.getRuntime().availableProcessors() * 2, new ThreadFactory() {
 
-                            @Override
-                            public Thread newThread(Runnable r) {
-                                Thread thread = new Thread(r, "nom-tam-fits worker " + counter++);
-                                thread.setDaemon(true);
-                                return thread;
-                            }
-                        });
+                    private int counter = 1;
+
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        throw new UnsupportedOperationException("STUB: not implemented");
+                    }
+                });
             }
         }
     }
 
     /**
      * Returns the current settings that guide how we read or produce FITS files.
-     * 
+     *
      * @return the current active settings for generating or interpreting FITS files.
      */
     protected static FitsSettings current() {
-        FitsSettings settings = LOCAL_SETTINGS.get();
-        if (settings == null) {
-            return GLOBAL_SETTINGS;
-        }
-        return settings;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private FitsFactory() {

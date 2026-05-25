@@ -2,7 +2,6 @@ package nom.tam.fits.header.hierarch;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
-
 import nom.tam.fits.utilities.FitsLineAppender;
 
 /*
@@ -35,16 +34,16 @@ import nom.tam.fits.utilities.FitsLineAppender;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * HIERARCH keyword formatter based on the ESO convention. This formatter writes HIERARCH keywords that conform to the
  * ESO convention, but takes a more liberal approach by supporting the full range of ASCII characters allowed in FITS
  * headers, including the option to preserve case. (The ESO convention is upper-case only).
- * 
+ *
  * @see nom.tam.fits.FitsFactory#setUseHierarch(boolean)
  */
 @SuppressWarnings("deprecation")
 public class StandardIHierarchKeyFormatter implements IHierarchKeyFormatter {
+
     private boolean allowMixedCase;
 
     /**
@@ -55,45 +54,26 @@ public class StandardIHierarchKeyFormatter implements IHierarchKeyFormatter {
 
     @Override
     public String toHeaderString(String key) {
-        StringBuilder formatted = new StringBuilder(key.length());
-
-        if (!allowMixedCase) {
-            key = key.toUpperCase(Locale.US);
-        }
-
-        StringTokenizer tokens = new StringTokenizer(key, ". ");
-        if (!tokens.hasMoreTokens()) {
-            return "";
-        }
-        formatted.append(tokens.nextToken());
-
-        while (tokens.hasMoreTokens()) {
-            formatted.append(' ');
-            formatted.append(tokens.nextToken());
-        }
-
-        return formatted.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void append(String key, FitsLineAppender buffer) {
-        buffer.append(toHeaderString(key));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getExtraSpaceRequired(String key) {
-        // The one extra space before '='...
-        return 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setCaseSensitive(boolean value) {
-        allowMixedCase = value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final boolean isCaseSensitive() {
-        return allowMixedCase;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

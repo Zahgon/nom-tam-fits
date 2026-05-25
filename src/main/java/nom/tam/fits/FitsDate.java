@@ -30,7 +30,6 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +46,6 @@ public class FitsDate implements Comparable<FitsDate> {
     /**
      * logger to log to.
      */
-
     private static final int FIRST_THREE_CHARACTER_VALUE = 100;
 
     private static final int FIRST_TWO_CHARACTER_VALUE = 10;
@@ -70,8 +68,7 @@ public class FitsDate implements Comparable<FitsDate> {
 
     private static final int NEW_FORMAT_YEAR_GROUP = 2;
 
-    private static final Pattern NORMAL_REGEX = Pattern.compile(
-            "\\s*(([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9]))(T([0-9][0-9]):([0-9][0-9]):([0-9][0-9])(\\.([0-9]+))?)?\\s*");
+    private static final Pattern NORMAL_REGEX = Pattern.compile("\\s*(([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9]))(T([0-9][0-9]):([0-9][0-9]):([0-9][0-9])(\\.([0-9]+))?)?\\s*");
 
     private static final int OLD_FORMAT_DAY_OF_MONTH_GROUP = 1;
 
@@ -89,65 +86,42 @@ public class FitsDate implements Comparable<FitsDate> {
 
     /**
      * Returns the FITS date string for the current date and time.
-     * 
+     *
      * @return the current date in FITS date format
-     * 
+     *
      * @see    #getFitsDateString(Date)
      */
     public static String getFitsDateString() {
-        return getFitsDateString(new Date(), true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the FITS date string for a specific date and time
-     * 
+     *
      * @return       a created FITS format date string Java Date object.
      *
      * @param  epoch The epoch to be converted to FITS format.
-     * 
+     *
      * @see          #getFitsDateString(Date, boolean)
      * @see          #getFitsDateString()
      */
     public static String getFitsDateString(Date epoch) {
-        return getFitsDateString(epoch, true);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the FITS date string, with or without the time component, for a specific date and time.
-     * 
+     *
      * @return           a created FITS format date string. Note that the date is not rounded.
      *
      * @param  epoch     The epoch to be converted to FITS format.
      * @param  timeOfDay Whether the time of day information shouldd be included
-     * 
+     *
      * @see              #getFitsDateString(Date)
      * @see              #getFitsDateString()
      */
     public static String getFitsDateString(Date epoch, boolean timeOfDay) {
-        Calendar cal = Calendar.getInstance(UTC);
-        cal.setTime(epoch);
-        StringBuilder fitsDate = new StringBuilder();
-        DecimalFormat df = new DecimalFormat("0000");
-        fitsDate.append(df.format(cal.get(Calendar.YEAR)));
-        fitsDate.append("-");
-        df = new DecimalFormat("00");
-
-        fitsDate.append(df.format(cal.get(Calendar.MONTH) + 1));
-        fitsDate.append("-");
-        fitsDate.append(df.format(cal.get(Calendar.DAY_OF_MONTH)));
-
-        if (timeOfDay) {
-            fitsDate.append("T");
-            fitsDate.append(df.format(cal.get(Calendar.HOUR_OF_DAY)));
-            fitsDate.append(":");
-            fitsDate.append(df.format(cal.get(Calendar.MINUTE)));
-            fitsDate.append(":");
-            fitsDate.append(df.format(cal.get(Calendar.SECOND)));
-            fitsDate.append(".");
-            df = new DecimalFormat("000");
-            fitsDate.append(df.format(cal.get(Calendar.MILLISECOND)));
-        }
-        return fitsDate.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private int hour = -1;
@@ -226,111 +200,27 @@ public class FitsDate implements Comparable<FitsDate> {
      * @return The Java Date object.
      */
     public Date toDate() {
-        if (year == -1) {
-            return null;
-        }
-
-        Calendar cal = Calendar.getInstance(UTC);
-
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, mday);
-
-        if (hour == -1) {
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-        } else {
-            cal.set(Calendar.HOUR_OF_DAY, hour);
-            cal.set(Calendar.MINUTE, minute);
-            cal.set(Calendar.SECOND, second);
-            if (millisecond == -1) {
-                cal.set(Calendar.MILLISECOND, 0);
-            } else {
-                cal.set(Calendar.MILLISECOND, millisecond);
-            }
-        }
-        return cal.getTime();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        if (year == -1) {
-            return "";
-        }
-        StringBuilder buf = new StringBuilder(FitsDate.FITS_DATE_STRING_SIZE);
-        buf.append(year);
-        buf.append('-');
-        appendTwoDigitValue(buf, month);
-        buf.append('-');
-        appendTwoDigitValue(buf, mday);
-        if (hour != -1) {
-            buf.append('T');
-            appendTwoDigitValue(buf, hour);
-            buf.append(':');
-            appendTwoDigitValue(buf, minute);
-            buf.append(':');
-            appendTwoDigitValue(buf, second);
-            if (millisecond != -1) {
-                buf.append('.');
-                appendThreeDigitValue(buf, millisecond);
-            }
-        }
-        return buf.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof FitsDate)) {
-            return false;
-        }
-
-        return compareTo((FitsDate) o) == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(year) ^ Integer.hashCode(month) ^ Integer.hashCode(mday) ^ Integer.hashCode(hour)
-                ^ Integer.hashCode(minute) ^ Integer.hashCode(second) ^ Integer.hashCode(millisecond);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int compareTo(FitsDate fitsDate) {
-        int result = Integer.compare(year, fitsDate.year);
-        if (result != 0) {
-            return result;
-        }
-
-        result = Integer.compare(month, fitsDate.month);
-        if (result != 0) {
-            return result;
-        }
-
-        result = Integer.compare(mday, fitsDate.mday);
-        if (result != 0) {
-            return result;
-        }
-
-        result = Integer.compare(hour, fitsDate.hour);
-        if (result != 0) {
-            return result;
-        }
-
-        result = Integer.compare(minute, fitsDate.minute);
-        if (result != 0) {
-            return result;
-        }
-
-        result = Integer.compare(second, fitsDate.second);
-        if (result != 0) {
-            return result;
-        }
-
-        return Integer.compare(millisecond, fitsDate.millisecond);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void appendThreeDigitValue(StringBuilder buf, int value) {

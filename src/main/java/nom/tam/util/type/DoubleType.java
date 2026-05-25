@@ -30,10 +30,8 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
-
 import nom.tam.fits.header.Bitpix;
 
 /**
@@ -50,42 +48,36 @@ class DoubleType extends ElementType<DoubleBuffer> {
 
     @Override
     public void appendBuffer(DoubleBuffer buffer, DoubleBuffer dataToAppend) {
-        @SuppressWarnings("deprecation")
-        double[] temp = new double[Math.min(COPY_BLOCK_SIZE, dataToAppend.remaining())];
-        while (dataToAppend.hasRemaining()) {
-            int nrObBytes = Math.min(temp.length, dataToAppend.remaining());
-            dataToAppend.get(temp, 0, nrObBytes);
-            buffer.put(temp, 0, nrObBytes);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public DoubleBuffer asTypedBuffer(ByteBuffer buffer) {
-        return buffer.asDoubleBuffer();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getArray(DoubleBuffer buffer, Object array, int offset, int length) {
-        buffer.get((double[]) array, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object newArray(int length) {
-        return new double[length];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void putArray(DoubleBuffer buffer, Object array, int offset, int length) {
-        buffer.put((double[]) array, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public DoubleBuffer sliceBuffer(DoubleBuffer buffer) {
-        return buffer.slice();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public DoubleBuffer wrap(Object array) {
-        return DoubleBuffer.wrap((double[]) array);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

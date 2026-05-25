@@ -30,7 +30,6 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
 
 /**
@@ -44,13 +43,6 @@ class StringType extends ElementType<Buffer> {
 
     @Override
     public int size(Object instance) {
-        if (instance == null) {
-            return 0;
-        }
-        if (instance instanceof CharSequence) {
-            return ((CharSequence) instance).length();
-        }
-        throw new IllegalArgumentException(
-                "Class " + instance.getClass().getName() + " is not an instance of CharSequence");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

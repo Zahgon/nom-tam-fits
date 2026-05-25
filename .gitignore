@@ -19,3 +19,8 @@ nom-tam-fits.iml
 coverage
 javadoc
 infer-out
+
+.aider*
+logs/
+.commit0_scripts/
+.github/workflows/

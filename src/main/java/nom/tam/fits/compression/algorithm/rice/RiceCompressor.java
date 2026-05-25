@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.logging.Logger;
-
 import nom.tam.fits.compression.algorithm.api.ICompressor;
 import nom.tam.fits.compression.algorithm.quant.QuantizeProcessor.DoubleQuantCompressor;
 import nom.tam.fits.compression.algorithm.quant.QuantizeProcessor.FloatQuantCompressor;
@@ -42,7 +41,6 @@ import nom.tam.util.type.ElementType;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * (<i>for internal use</i>) The Rice compression algorithm. The original compression was designed by Rice, Yeh, and
  * Miller the code was written by Richard White at STScI at the STScI and included (ported to c and adapted) in cfitsio
@@ -56,7 +54,7 @@ import nom.tam.util.type.ElementType;
  *
  * @param  <T> the genetic type of NIO buffer on which this compressor operates.
  */
-@SuppressWarnings({"deprecation", "javadoc"})
+@SuppressWarnings({ "deprecation", "javadoc" })
 public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T> {
 
     public static class ByteRiceCompressor extends RiceCompressor<ByteBuffer> {
@@ -65,7 +63,7 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
 
         /**
          * Rice compression of byte streams with the default block size of 32.
-         * 
+         *
          * @since 1.19.1
          */
         public ByteRiceCompressor() {
@@ -78,25 +76,22 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         public boolean compress(ByteBuffer buffer, ByteBuffer writeBuffer) {
-            pixelBuffer = buffer;
-            super.compress(buffer.limit(), pixelBuffer.get(pixelBuffer.position()), new BitBuffer(writeBuffer));
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer readBuffer, ByteBuffer buffer) {
-            pixelBuffer = buffer;
-            super.decompressBuffer(readBuffer, buffer.limit());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int nextPixel() {
-            return pixelBuffer.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void nextPixel(int pixel) {
-            pixelBuffer.put((byte) pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -120,7 +115,7 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
 
         /**
          * Rice compression of 32-bit integer streams with the default block size of 32.
-         * 
+         *
          * @since 1.19.1
          */
         public IntRiceCompressor() {
@@ -133,25 +128,22 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         public boolean compress(IntBuffer buffer, ByteBuffer writeBuffer) {
-            pixelBuffer = buffer;
-            super.compress(buffer.limit(), pixelBuffer.get(pixelBuffer.position()), new BitBuffer(writeBuffer));
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer readBuffer, IntBuffer buffer) {
-            pixelBuffer = buffer;
-            super.decompressBuffer(readBuffer, buffer.limit());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int nextPixel() {
-            return pixelBuffer.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void nextPixel(int pixel) {
-            pixelBuffer.put(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -161,7 +153,7 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
 
         /**
          * Rice compression of 16-bit integer streams with the default block size of 32.
-         * 
+         *
          * @since 1.19.1
          */
         public ShortRiceCompressor() {
@@ -174,25 +166,22 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         public boolean compress(ShortBuffer buffer, ByteBuffer writeBuffer) {
-            pixelBuffer = buffer;
-            super.compress(buffer.limit(), pixelBuffer.get(pixelBuffer.position()), new BitBuffer(writeBuffer));
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer readBuffer, ShortBuffer buffer) {
-            pixelBuffer = buffer;
-            super.decompressBuffer(readBuffer, buffer.limit());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int nextPixel() {
-            return pixelBuffer.get();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void nextPixel(int pixel) {
-            pixelBuffer.put((short) pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -240,16 +229,9 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
      *
      * @formatter:off
      */
-    private static final int[] NONZERO_COUNT = {0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-            5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
-            6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
-            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8,
-            8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-            8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-            8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
-            8, 8, 8, 8, 8, 8, 8, 8, 8};
-    // @formatter:on
+    private static final int[] NONZERO_COUNT = { 0, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 };
 
+    // @formatter:on
     private final int bBits;
 
     private final int bitsPerPixel;
@@ -318,116 +300,7 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
      * @param buffer     the buffer to write to
      */
     protected void compress(final int dataLength, int firstPixel, BitBuffer buffer) {
-        /* the first difference will always be zero */
-        int lastpix = firstPixel;
-        /* write out first int value to the first 4 bytes of the buffer */
-        buffer.putInt(firstPixel, bitsPerPixel);
-        int thisblock = blockSize;
-        for (int i = 0; i < dataLength; i += blockSize) {
-            /* last block may be shorter */
-            if (dataLength - i < blockSize) {
-                thisblock = dataLength - i;
-            }
-            /*
-             * Compute differences of adjacent pixels and map them to unsigned values. Note that this may overflow the
-             * integer variables -- that's OK, because we can recover when decompressing. If we were compressing shorts
-             * or bytes, would want to do this arithmetic with short/byte working variables (though diff will still be
-             * passed as an int.) compute sum of mapped pixel values at same time use double precision for sum to allow
-             * 32-bit integer inputs
-             */
-            long[] diff = new long[blockSize];
-            double pixelsum = 0.0;
-            int nextpix;
-            /*
-             * tiledImageOperation for differences mapped to non-negative values
-             */
-            for (int j = 0; j < thisblock; j++) {
-                nextpix = nextPixel();
-                long pdiff = (nextpix - lastpix);
-                diff[j] = (pdiff < 0 ? (pdiff << 1) ^ UNSIGNED_INTEGER_MASK : pdiff << 1) & UNSIGNED_INTEGER_MASK;
-                pixelsum += diff[j];
-                lastpix = nextpix;
-            }
-
-            /*
-             * compute number of bits to split from sum
-             */
-            double dpsum = (pixelsum - thisblock / 2d - 1d) / thisblock;
-            if (dpsum < 0) {
-                dpsum = 0.0;
-            }
-            long psum = (long) dpsum >> 1;
-            int fs;
-            for (fs = 0; psum > 0; fs++) { // NOSONAR
-                psum >>= 1;
-            }
-
-            /*
-             * write the codes fsbits ID bits used to indicate split level
-             */
-            if (fs >= fsMax) {
-                /*
-                 * Special high entropy case when FS >= fsmax Just write pixel difference values directly, no Rice
-                 * coding at all.
-                 */
-                buffer.putInt(fsMax + 1, fsBits);
-                for (int j = 0; j < thisblock; j++) {
-                    buffer.putLong(diff[j], bBits);
-                }
-            } else if (fs == 0 && pixelsum == 0) { // NOSONAR
-                /*
-                 * special low entropy case when FS = 0 and pixelsum=0 (all pixels in block are zero.) Output a 0 and
-                 * return
-                 */
-                buffer.putInt(0, fsBits);
-            } else {
-                /* normal case: not either very high or very low entropy */
-                buffer.putInt(fs + 1, fsBits);
-                int fsmask = (1 << fs) - 1;
-                /*
-                 * local copies of bit buffer to improve optimization
-                 */
-                int bitsToGo = buffer.missingBitsInCurrentByte();
-                int bitBuffer = buffer.bitbuffer() >> bitsToGo;
-                buffer.movePosition(bitsToGo - BITS_OF_1_BYTE);
-                for (int j = 0; j < thisblock; j++) {
-                    int v = (int) diff[j];
-                    int top = v >> fs;
-                    /*
-                     * top is coded by top zeros + 1
-                     */
-                    if (bitsToGo >= top + 1) {
-                        bitBuffer <<= top + 1;
-                        bitBuffer |= 1;
-                        bitsToGo -= top + 1;
-                    } else {
-                        bitBuffer <<= bitsToGo;
-                        buffer.putByte((byte) (bitBuffer & BYTE_MASK));
-                        for (top -= bitsToGo; top >= BITS_OF_1_BYTE; top -= BITS_OF_1_BYTE) {
-                            buffer.putByte((byte) 0);
-                        }
-                        bitBuffer = 1;
-                        bitsToGo = BITS_OF_1_BYTE - 1 - top;
-                    }
-                    /*
-                     * bottom FS bits are written without coding code is output_nbits, moved into this routine to reduce
-                     * overheads This code potentially breaks if FS>24, so I am limiting FS to 24 by choice of FSMAX
-                     * above.
-                     */
-                    if (fs > 0) {
-                        bitBuffer <<= fs;
-                        bitBuffer |= v & fsmask;
-                        bitsToGo -= fs;
-                        while (bitsToGo <= 0) {
-                            buffer.putByte((byte) (bitBuffer >> -bitsToGo & BYTE_MASK));
-                            bitsToGo += BITS_OF_1_BYTE;
-                        }
-                    }
-                }
-                buffer.putByte((byte) (bitBuffer & BYTE_MASK), BITS_OF_1_BYTE - bitsToGo);
-            }
-        }
-        buffer.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -437,91 +310,10 @@ public abstract class RiceCompressor<T extends Buffer> implements ICompressor<T>
      * @param nx         the number of pixel to uncompress
      */
     protected void decompressBuffer(final ByteBuffer readBuffer, final int nx) {
-        /* first x bytes of input buffer contain the value of the first */
-        /* x byte integer value, without any encoding */
-        long lastpix = 0L;
-        if (bitsPerPixel == ElementType.BYTE.bitPix()) {
-            lastpix = readBuffer.get() & UNSIGNED_BYTE_MASK;
-        } else if (bitsPerPixel == ElementType.SHORT.bitPix()) {
-            lastpix = readBuffer.getShort() & UNSIGNED_SHORT_MASK;
-        } else {
-            // Must be (this.bitsPerPixel == ElementType.INT.bitPix())
-            lastpix = readBuffer.getInt() & UNSIGNED_INTEGER_MASK;
-        }
-        long b = readBuffer.get() & BYTE_MASK; /* bit buffer */
-        int nbits = BITS_PER_BYTE; /* number of bits remaining in b */
-        for (int i = 0; i < nx;) {
-            /* get the FS value from first fsbits */
-            nbits -= fsBits;
-            while (nbits < 0) {
-                b = b << BITS_PER_BYTE | readBuffer.get() & BYTE_MASK;
-                nbits += BITS_PER_BYTE;
-            }
-            long fs = (b >>> nbits) - 1L;
-
-            b &= (1 << nbits) - 1;
-            /* loop over the next block */
-            int imax = i + blockSize;
-            if (imax > nx) {
-                imax = nx;
-            }
-            if (fs < 0) {
-                /* low-entropy case, all zero differences */
-                for (; i < imax; i++) {
-                    nextPixel((int) lastpix);
-                }
-            } else if (fs == fsMax) {
-                /* high-entropy case, directly coded pixel values */
-                for (; i < imax; i++) {
-                    int k = bBits - nbits;
-                    long diff = b << k;
-                    for (k -= BITS_PER_BYTE; k >= 0; k -= BITS_PER_BYTE) {
-                        b = readBuffer.get() & BYTE_MASK;
-                        diff |= b << k;
-                    }
-                    if (nbits > 0) {
-                        b = readBuffer.get() & BYTE_MASK;
-                        diff |= b >>> -k;
-                        b &= (1 << nbits) - 1L;
-                    } else {
-                        b = 0;
-                    }
-                    lastpix = undoMappingAndDifferencing(lastpix, diff);
-                }
-            } else {
-                /* normal case, Rice coding */
-                for (; i < imax; i++) {
-                    /* count number of leading zeros */
-                    while (b == 0) {
-                        nbits += BITS_PER_BYTE;
-                        b = readBuffer.get() & BYTE_MASK;
-                    }
-                    long nzero = nbits - NONZERO_COUNT[(int) (b & BYTE_MASK)];
-                    nbits -= nzero + 1;
-                    /* flip the leading one-bit */
-                    b ^= 1 << nbits;
-                    /* get the FS trailing bits */
-                    nbits -= fs;
-                    while (nbits < 0) {
-                        b = b << BITS_PER_BYTE | readBuffer.get() & BYTE_MASK;
-                        nbits += BITS_PER_BYTE;
-                    }
-                    long diff = nzero << fs | b >> nbits;
-                    b &= (1 << nbits) - 1L;
-
-                    lastpix = undoMappingAndDifferencing(lastpix, diff);
-                }
-            }
-        }
-        if (readBuffer.limit() > readBuffer.position()) {
-            LOG.warning("decompressing left over some extra bytes got: " + readBuffer.limit() + " but needed only "
-                    + readBuffer.position());
-        }
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected abstract int nextPixel();
 
     protected abstract void nextPixel(int pixel);
-
 }

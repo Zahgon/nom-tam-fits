@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.fits;
 
 import java.math.BigDecimal;
@@ -38,11 +37,9 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
 import nom.tam.fits.header.Standard;
 import nom.tam.util.ComplexValue;
 import nom.tam.util.FlexFormat;
-
 import static nom.tam.fits.header.NonStandard.HIERARCH;
 import static nom.tam.fits.header.Standard.CONTINUE;
 
@@ -72,17 +69,24 @@ class HeaderCardParser {
         LOG.setLevel(Level.SEVERE);
     }
 
-    /** regexp for IEEE floats */
+    /**
+     * regexp for IEEE floats
+     */
     private static final Pattern DECIMAL_REGEX = Pattern.compile("[+-]?\\d+(\\.\\d*)?([dDeE][+-]?\\d+)?");
 
-    /** regexp for complex numbers */
-    private static final Pattern COMPLEX_REGEX = Pattern
-            .compile("\\(\\s*" + DECIMAL_REGEX + "\\s*,\\s*" + DECIMAL_REGEX + "\\s*\\)");
+    /**
+     * regexp for complex numbers
+     */
+    private static final Pattern COMPLEX_REGEX = Pattern.compile("\\(\\s*" + DECIMAL_REGEX + "\\s*,\\s*" + DECIMAL_REGEX + "\\s*\\)");
 
-    /** regexp for decimal integers. */
+    /**
+     * regexp for decimal integers.
+     */
     private static final Pattern INT_REGEX = Pattern.compile("[+-]?\\d+");
 
-    /** The header line (usually 80-character width), which to parse. */
+    /**
+     * The header line (usually 80-character width), which to parse.
+     */
     private String line;
 
     /**
@@ -148,7 +152,7 @@ class HeaderCardParser {
      * @see    FitsFactory#setUseHierarch(boolean)
      */
     String getKey() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -159,7 +163,7 @@ class HeaderCardParser {
      * @see    FitsFactory#setUseHierarch(boolean)
      */
     String getValue() {
-        return value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -170,7 +174,7 @@ class HeaderCardParser {
      * @see    #getTrimmedComment()
      */
     String getUntrimmedComment() {
-        return comment;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -181,7 +185,7 @@ class HeaderCardParser {
      * @see    #getUntrimmedComment()
      */
     String getTrimmedComment() {
-        return comment == null ? null : comment.trim();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -195,10 +199,7 @@ class HeaderCardParser {
      * @see    FitsFactory#setAllowHeaderRepairs(boolean)
      */
     boolean isString() {
-        if (type == null) {
-            return false;
-        }
-        return String.class.isAssignableFrom(type);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,7 +224,7 @@ class HeaderCardParser {
      * @see    HeaderCard#valueType()
      */
     Class<?> getInferredType() {
-        return type;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,67 +241,50 @@ class HeaderCardParser {
          * contain any ASCII characters other than those used for separating. It is more in line with what we do with
          * standard keys too.
          */
-
         // Find the '=' in the line, if any...
         int iEq = line.indexOf('=');
-
         // The stem is in the first 8 characters or what precedes an '=' character
         // before that.
         int endStem = (iEq >= 0 && iEq <= HeaderCard.MAX_KEYWORD_LENGTH) ? iEq : HeaderCard.MAX_KEYWORD_LENGTH;
         endStem = Math.min(line.length(), endStem);
-
         String rawStem = line.substring(0, endStem).trim();
-
         // Check for space at the start of the keyword...
         if (endStem > 0 && !rawStem.isEmpty()) {
             if (Character.isSpaceChar(line.charAt(0))) {
                 LOG.warning("[" + sanitize(rawStem) + "] Non-standard starting with a space (trimming).");
             }
         }
-
         String stem = rawStem.toUpperCase();
-
         if (!stem.equals(rawStem)) {
             LOG.warning("[" + sanitize(rawStem) + "] Non-standard lower-case letter(s) in base keyword.");
         }
-
         key = stem;
         parsePos = endStem;
-
         // If not using HIERARCH, then be very resilient, and return whatever key the first 8 chars make...
-
         // If the line does not have an '=', can only be a simple key
         // If it's not a HIERARCH keyword, then return the simple key.
         if (!FitsFactory.getUseHierarch() || (iEq < 0) || !stem.equals(HIERARCH.key())) {
             return;
         }
-
         // Compose the hierarchical key...
         StringTokenizer tokens = new StringTokenizer(line.substring(stem.length(), iEq), " \t\r\n.");
         StringBuilder builder = new StringBuilder(stem);
-
         while (tokens.hasMoreTokens()) {
             String token = tokens.nextToken();
-
             parsePos = line.indexOf(token, parsePos) + token.length();
-
             // Add a . to separate hierarchies
             builder.append('.');
             builder.append(token);
         }
-
         key = builder.toString();
-
         if (HIERARCH.key().equals(key)) {
             // The key is only HIERARCH, without a hierarchical keyword after it...
             LOG.warning("HIERARCH base keyword without HIERARCH-style long key after it.");
             return;
         }
-
         if (!FitsFactory.getHierarchFormater().isCaseSensitive()) {
             key = key.toUpperCase(Locale.US);
         }
-
         try {
             HeaderCard.validateKey(key);
         } catch (IllegalArgumentException e) {
@@ -334,7 +318,6 @@ class HeaderCardParser {
             // nothing left to parse.
             return;
         }
-
         // if no value, then everything is comment from here on...
         if (value != null) {
             if (line.charAt(parsePos) == '/') {
@@ -345,10 +328,8 @@ class HeaderCardParser {
                 LOG.warning("[" + sanitize(getKey()) + "] Junk after value (included in the comment).");
             }
         }
-
         comment = line.substring(parsePos);
         parsePos = line.length();
-
         try {
             HeaderCard.validateChars(comment);
         } catch (IllegalArgumentException e) {
@@ -369,25 +350,21 @@ class HeaderCardParser {
         if (key.isEmpty() || key.equals(Standard.COMMENT.key()) || key.equals(Standard.HISTORY.key())) {
             return;
         }
-
         if (!skipSpaces()) {
-            return; // nothing left to parse.
+            // nothing left to parse.
+            return;
         }
-
         if (CONTINUE.key().equals(key)) {
             parseValueBody();
         } else if (line.charAt(parsePos) == '=') {
-
             if (parsePos < HeaderCard.MAX_KEYWORD_LENGTH) {
-                LOG.warning("[" + sanitize(key) + "] assigmment before byte " + (HeaderCard.MAX_KEYWORD_LENGTH + 1)
-                        + " for key '" + sanitize(key) + "'.");
+                LOG.warning("[" + sanitize(key) + "] assigmment before byte " + (HeaderCard.MAX_KEYWORD_LENGTH + 1) + " for key '" + sanitize(key) + "'.");
             }
             if (parsePos + 1 >= line.length()) {
                 LOG.warning("[" + sanitize(key) + "] Record ends with '='.");
             } else if (line.charAt(parsePos + 1) != ' ') {
                 LOG.warning("[" + sanitize(key) + "] Missing required standard space after '='.");
             }
-
             if (parsePos > HeaderCard.MAX_KEYWORD_LENGTH) {
                 // equal sign = after the 9th char -- only supported with hierarch keys...
                 if (!key.startsWith(HIERARCH.key() + ".")) {
@@ -396,11 +373,9 @@ class HeaderCardParser {
                     return;
                 }
             }
-
             parsePos++;
             parseValueBody();
         }
-
         try {
             HeaderCard.validateChars(value);
         } catch (IllegalArgumentException e) {
@@ -422,7 +397,6 @@ class HeaderCardParser {
             // nothing left to parse.
             return;
         }
-
         if (isNextQuote()) {
             // Parse as a string value, or else throw an exception.
             parseStringValue();
@@ -435,7 +409,6 @@ class HeaderCardParser {
             parsePos = end;
             type = getInferredValueType(key, value);
         }
-
     }
 
     /**
@@ -462,14 +435,12 @@ class HeaderCardParser {
      */
     private static String getNoTrailingSpaceString(StringBuilder buf) {
         int to = buf.length();
-
         // Remove trailing spaces only!
         while (--to >= 0) {
             if (!Character.isSpaceChar(buf.charAt(to))) {
                 break;
             }
         }
-
         return to < 0 ? "" : buf.substring(0, to + 1);
     }
 
@@ -485,14 +456,12 @@ class HeaderCardParser {
     private void parseStringValue() throws UnclosedQuoteException {
         type = String.class;
         StringBuilder buf = new StringBuilder(HeaderCard.MAX_VALUE_LENGTH);
-
         // Build the string value, up to the end quote and paying attention to double
         // quotes inside the string, which are translated to single quotes within
         // the string value itself.
         for (++parsePos; parsePos < line.length(); parsePos++) {
             if (isNextQuote()) {
                 parsePos++;
-
                 if (!isNextQuote()) {
                     // Closing single quote;
                     value = getNoTrailingSpaceString(buf);
@@ -501,7 +470,6 @@ class HeaderCardParser {
             }
             buf.append(line.charAt(parsePos));
         }
-
         // String with missing end quote
         if (!FitsFactory.isAllowHeaderRepairs()) {
             throw new UnclosedQuoteException(line);
@@ -529,9 +497,7 @@ class HeaderCardParser {
             LOG.warning("[" + sanitize(key) + "] Null non-string value (defaulted to Boolean.class).");
             return Boolean.class;
         }
-
         String trimmedValue = value.trim().toUpperCase();
-
         if ("T".equals(trimmedValue) || "F".equals(trimmedValue)) {
             return Boolean.class;
         }
@@ -544,9 +510,7 @@ class HeaderCardParser {
         if (COMPLEX_REGEX.matcher(trimmedValue).matches()) {
             return ComplexValue.class;
         }
-
         LOG.warning("[" + sanitize(key) + "] Unrecognised non-string value type '" + sanitize(trimmedValue) + "'.");
-
         return null;
     }
 
@@ -564,14 +528,11 @@ class HeaderCardParser {
     private static Class<? extends Number> getDecimalType(String value) {
         value = value.toUpperCase(Locale.US);
         boolean hasD = (value.indexOf('D') >= 0);
-
         if (hasD) {
             // Convert the Double Scientific Notation specified by FITS to pure IEEE.
             value = value.replace('D', 'E');
         }
-
         BigDecimal big = new BigDecimal(value);
-
         // Check for zero, and deal with it separately...
         if (big.stripTrailingZeros().equals(BigDecimal.ZERO)) {
             int decimals = big.scale();
@@ -583,14 +544,12 @@ class HeaderCardParser {
             }
             return BigDecimal.class;
         }
-
         // Now non-zero values...
         int decimals = big.precision() - 1;
         float f = big.floatValue();
         if (decimals <= FlexFormat.FLOAT_DECIMALS && (f != 0.0F) && Float.isFinite(f)) {
             return hasD ? Double.class : Float.class;
         }
-
         double d = big.doubleValue();
         if (decimals <= FlexFormat.DOUBLE_DECIMALS && (d != 0.0) && Double.isFinite(d)) {
             return Double.class;
@@ -625,7 +584,6 @@ class HeaderCardParser {
     }
 
     static Logger getLogger() {
-        return LOG;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

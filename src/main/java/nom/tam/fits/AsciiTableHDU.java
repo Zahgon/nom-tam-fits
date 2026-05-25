@@ -1,12 +1,10 @@
 package nom.tam.fits;
 
 import java.io.PrintStream;
-
 import nom.tam.fits.header.IFitsHeader;
 import nom.tam.fits.header.Standard;
 import nom.tam.util.ArrayFuncs;
 import nom.tam.util.Cursor;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -37,7 +35,6 @@ import nom.tam.util.Cursor;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Standard.NAXIS1;
 import static nom.tam.fits.header.Standard.NAXIS2;
 import static nom.tam.fits.header.Standard.TBCOLn;
@@ -49,7 +46,6 @@ import static nom.tam.fits.header.Standard.TUNITn;
 import static nom.tam.fits.header.Standard.TZEROn;
 import static nom.tam.fits.header.Standard.XTENSION;
 import static nom.tam.fits.header.Standard.XTENSION_ASCIITABLE;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
@@ -59,7 +55,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * {@link FitsFactory#setUseAsciiTables(boolean)} can be toggled to adjust whether {@link Fits#makeHDU(Object)} or
  * similar methods should construct ASCII tables when possible. (The default setting is to produce binary tables
  * always.)
- * 
+ *
  * @see AsciiTable
  * @see BinaryTableHDU
  */
@@ -69,11 +65,11 @@ public class AsciiTableHDU extends TableHDU<AsciiTable> {
      * The standard column stems for an ASCII table. Note that TBCOL is not included here -- it needs to be handled
      * specially since it does not simply shift.
      */
-    private static final IFitsHeader[] KEY_STEMS = {TFORMn, TZEROn, TNULLn, TTYPEn, TUNITn};
+    private static final IFitsHeader[] KEY_STEMS = { TFORMn, TZEROn, TNULLn, TTYPEn, TUNITn };
 
     /**
      * Create an ASCII table header/data unit.
-     * 
+     *
      * @deprecated   (<i>for internal use</i>) Its visibility should be reduced to package level in the future.
      *
      * @param      h the template specifying the ASCII table.
@@ -86,7 +82,7 @@ public class AsciiTableHDU extends TableHDU<AsciiTable> {
 
     @Override
     protected final String getCanonicalXtension() {
-        return XTENSION_ASCIITABLE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -114,20 +110,18 @@ public class AsciiTableHDU extends TableHDU<AsciiTable> {
     @SuppressFBWarnings(value = "HSM_HIDING_METHOD", justification = "deprecated existing method, kept for compatibility")
     @Deprecated
     public static boolean isData(Object o) {
-
         if (o instanceof Object[]) {
             for (Object element : (Object[]) o) {
-                if (!(element instanceof String[]) && //
-                        !(element instanceof int[]) && //
-                        !(element instanceof long[]) && //
-                        !(element instanceof float[]) && //
-                        !(element instanceof double[])) {
+                if (//
+                !(element instanceof String[]) && //
+                !(element instanceof int[]) && //
+                !(element instanceof long[]) && //
+                !(element instanceof float[]) && !(element instanceof double[])) {
                     return false;
                 }
             }
             return true;
         }
-
         return false;
     }
 
@@ -182,63 +176,39 @@ public class AsciiTableHDU extends TableHDU<AsciiTable> {
     }
 
     @Override
-    public void setColumnName(int index, String name, String comment)
-            throws IndexOutOfBoundsException, HeaderCardException {
-        super.setColumnName(index, name, comment);
-        myData.setColumnName(index, name);
+    public void setColumnName(int index, String name, String comment) throws IndexOutOfBoundsException, HeaderCardException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public int addColumn(Object newCol) throws FitsException {
-        Standard.context(AsciiTable.class);
-        myData.addColumn(newCol);
-        // Move the iterator to point after all the data describing
-        // the previous column.
-
-        Cursor<String, HeaderCard> iter = myHeader.positionAfterIndex(TBCOLn, myData.getNCols());
-
-        int rowlen = myData.addColInfo(getNCols() - 1, iter);
-        int oldRowlen = myHeader.getIntValue(NAXIS1);
-        myHeader.setNaxis(1, rowlen + oldRowlen);
-
-        super.addColumn(newCol);
-        Standard.context(null);
-        return getNCols();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected IFitsHeader[] columnKeyStems() {
-        return KEY_STEMS;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void info(PrintStream stream) {
-        stream.println("ASCII Table:");
-        stream.println("  Header:");
-        stream.println("    Number of fields:" + myHeader.getIntValue(TFIELDS));
-        stream.println("    Number of rows:  " + myHeader.getIntValue(NAXIS2));
-        stream.println("    Length of row:   " + myHeader.getIntValue(NAXIS1));
-        stream.println("  Data:");
-        Object[] data = (Object[]) getKernel();
-        for (int i = 0; i < getNCols(); i++) {
-            stream.println("      " + i + ":" + ArrayFuncs.arrayDescription(data[i]));
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if a table entry is <code>null</code>
-     * 
+     *
      * @param  row row index of the element
      * @param  col column index of the element
      *
      * @return     <code>true</code> if the specified element is <code>null</code>
-     * 
+     *
      * @see        #setNull(int, int, boolean)
      * @see        AsciiTable#isNull(int, int)
      */
     public boolean isNull(int row, int col) {
-        return myData.isNull(row, col);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -247,19 +217,12 @@ public class AsciiTableHDU extends TableHDU<AsciiTable> {
      * @param row  row index of the element
      * @param col  column index of the element
      * @param flag set to null or not
-     * 
+     *
      * @see        #isNull(int, int)
      * @see        AsciiTable#setNull(int, int, boolean)
      */
     public void setNull(int row, int col, boolean flag) {
-
-        if (flag) {
-            String nullStr = myHeader.getStringValue(TNULLn.n(col + 1));
-            if (nullStr == null) {
-                setNullString(col, "NULL");
-            }
-        }
-        myData.setNull(row, col, flag);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -272,11 +235,6 @@ public class AsciiTableHDU extends TableHDU<AsciiTable> {
      *                                      That is if it contains characters outside the range of 0x20 thru 0x7E.
      */
     public void setNullString(int col, String newNull) throws IllegalArgumentException {
-        myHeader.positionAfterIndex(TBCOLn, col + 1);
-        HeaderCard card = HeaderCard.create(TNULLn.n(col + 1), newNull);
-        myHeader.deleteKey(card.getKey());
-        myHeader.addLine(card);
-        myData.setNullString(col, newNull);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

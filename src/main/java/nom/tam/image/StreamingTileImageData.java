@@ -30,10 +30,8 @@ package nom.tam.image;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.util.Arrays;
-
 import nom.tam.fits.FitsException;
 import nom.tam.fits.FitsUtil;
 import nom.tam.fits.Header;
@@ -47,7 +45,7 @@ import nom.tam.util.ArrayFuncs;
  * that the ImageData object will be extracted from an overlapping HDU (without first reading so as not to fill up the
  * memory), and one of these objects are created for the output.
  * </p>
- * 
+ *
  * <pre>
  *     Fits source = new Fits(myFile);
  *     ImageHDU imageHDU = source.getHDU(1);
@@ -75,9 +73,13 @@ import nom.tam.util.ArrayFuncs;
  * @since 1.18
  */
 public class StreamingTileImageData extends ImageData {
+
     private final int[] corners;
+
     private final int[] lengths;
+
     private final int[] steps;
+
     private final ImageTiler imageTiler;
 
     /**
@@ -92,13 +94,10 @@ public class StreamingTileImageData extends ImageData {
      *
      * @throws FitsException If the provided Header is unreadable
      */
-    public StreamingTileImageData(final Header header, final ImageTiler tiler, final int[] corners, final int[] lengths,
-            int[] steps) throws FitsException {
+    public StreamingTileImageData(final Header header, final ImageTiler tiler, final int[] corners, final int[] lengths, int[] steps) throws FitsException {
         super(header);
-
         if (ArrayFuncs.isEmpty(corners) || ArrayFuncs.isEmpty(lengths)) {
-            throw new IllegalArgumentException(
-                    "Cannot tile out with empty corners or lengths.  Use ImageData if no " + "tiling is desired.");
+            throw new IllegalArgumentException("Cannot tile out with empty corners or lengths.  Use ImageData if no " + "tiling is desired.");
         }
         if (ArrayFuncs.isEmpty(steps)) {
             this.steps = new int[corners.length];
@@ -108,7 +107,6 @@ public class StreamingTileImageData extends ImageData {
         } else {
             this.steps = steps;
         }
-
         imageTiler = tiler;
         this.corners = corners;
         this.lengths = lengths;
@@ -116,28 +114,16 @@ public class StreamingTileImageData extends ImageData {
 
     /**
      * Returns the striding step sizes along the various image dimensions.
-     * 
+     *
      * @return an array containing the steps sizes along the dimensions
      */
     public int[] getSteps() {
-        // Steps is always initialized so no need to check for null here...
-        return Arrays.copyOf(steps, steps.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public void write(ArrayDataOutput o) throws FitsException {
-        try {
-            final ImageTiler tiler = imageTiler;
-            if (tiler == null || getTrueSize() == 0) {
-                // Defer writing of unknowns to the parent.
-                super.write(o);
-            } else {
-                tiler.getTile(o, corners, lengths, steps);
-                FitsUtil.pad(o, getTrueSize());
-            }
-        } catch (IOException ioException) {
-            throw new FitsException(ioException.getMessage(), ioException);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,10 +30,8 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-
 import nom.tam.fits.header.Bitpix;
 
 /**
@@ -49,42 +47,36 @@ class IntType extends ElementType<IntBuffer> {
 
     @Override
     public void appendBuffer(IntBuffer buffer, IntBuffer dataToAppend) {
-        @SuppressWarnings("deprecation")
-        int[] temp = new int[Math.min(COPY_BLOCK_SIZE, dataToAppend.remaining())];
-        while (dataToAppend.hasRemaining()) {
-            int nrObBytes = Math.min(temp.length, dataToAppend.remaining());
-            dataToAppend.get(temp, 0, nrObBytes);
-            buffer.put(temp, 0, nrObBytes);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntBuffer asTypedBuffer(ByteBuffer buffer) {
-        return buffer.asIntBuffer();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getArray(IntBuffer buffer, Object array, int offset, int length) {
-        buffer.get((int[]) array, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object newArray(int length) {
-        return new int[length];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void putArray(IntBuffer buffer, Object array, int offset, int length) {
-        buffer.put((int[]) array, offset, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntBuffer sliceBuffer(IntBuffer buffer) {
-        return buffer.slice();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public IntBuffer wrap(Object array) {
-        return IntBuffer.wrap((int[]) array);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

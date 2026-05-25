@@ -30,7 +30,6 @@ package nom.tam.fits.compression.provider;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.Buffer;
@@ -38,7 +37,6 @@ import java.nio.ByteBuffer;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.FitsException;
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
 import nom.tam.fits.compression.algorithm.api.ICompressor;
@@ -89,7 +87,7 @@ import nom.tam.fits.compression.provider.param.rice.RiceCompressParameters;
 /**
  * (<i>for internal use</i>) Standard implementation of the {@code ICompressorProvider} interface.
  */
-@SuppressWarnings({"javadoc", "deprecation"})
+@SuppressWarnings({ "javadoc", "deprecation" })
 public class CompressorProvider implements ICompressorProvider {
 
     /**
@@ -126,83 +124,49 @@ public class CompressorProvider implements ICompressorProvider {
          * @since                    1.18
          */
         protected TileCompressorControl setQuantType(Class<?> floatingPointType) {
-            quantType = floatingPointType;
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean compress(Buffer in, ByteBuffer out, ICompressOption option) {
-            try {
-                return newCompressor(option).compress(in, out);
-            } catch (Exception e) {
-                LOG.log(Level.FINE, "could not compress using " + constructors[0].getName()
-                        + " must fallback to other compression method", e);
-                return false;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer in, Buffer out, ICompressOption option) {
-            try {
-                newCompressor(option).decompress(in, out);
-            } catch (Exception e) {
-                throw new IllegalStateException("could not decompress " + constructors[0].getName(), e);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public ICompressOption option() {
-            ICompressOption option = null;
-            if (optionClass != null) {
-                try {
-                    option = optionClass.getDeclaredConstructor().newInstance();
-                } catch (Exception e) {
-                    throw new IllegalStateException("could not instantiate option class for " + constructors[0].getName(),
-                            e);
-                }
-            }
-
-            if (option == null) {
-                option = NULL_OPTION;
-            }
-
-            if (quantType != null) {
-                return new QuantizeOption(option);
-            }
-
-            return option;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private ICompressor<Buffer> newCompressor(ICompressOption option)
-                throws FitsException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        private ICompressor<Buffer> newCompressor(ICompressOption option) throws FitsException, InstantiationException, IllegalAccessException, InvocationTargetException {
             ICompressor<Buffer> compressor = null;
             QuantizeOption quantOption = null;
-
             if (option instanceof QuantizeOption) {
                 quantOption = (QuantizeOption) option;
                 option = quantOption.getCompressOption();
             }
-
             if (option == NULL_OPTION) {
                 option = null;
             }
-
             for (Constructor<ICompressor<Buffer>> c : constructors) {
                 Class<?>[] parms = c.getParameterTypes();
-
                 if (parms.length == 0 && option == null) {
                     // Use constructor without special options...
                     compressor = c.newInstance();
                     break;
                 }
-
                 if (parms.length == 1 && option != null) {
                     // Use constructor with the option
                     Class<? extends ICompressOption> p = (Class<? extends ICompressOption>) parms[0];
                     if (quantOption != null && p.isAssignableFrom(quantOption.getClass())) {
                         compressor = c.newInstance(quantOption);
-                        quantOption = null; // Don't wrap in a quantizer below...
+                        // Don't wrap in a quantizer below...
+                        quantOption = null;
                         break;
                     }
                     if (p.isAssignableFrom(option.getClass())) {
@@ -211,11 +175,9 @@ public class CompressorProvider implements ICompressorProvider {
                     }
                 }
             }
-
             if (compressor == null) {
                 throw new FitsException("Could not instantiate (de)compressor for the specified options");
             }
-
             if (quantOption != null && quantType != null) {
                 if (quantType.equals(double.class)) {
                     return (ICompressor) new DoubleQuantCompressor(quantOption, (ICompressor) compressor);
@@ -224,7 +186,6 @@ public class CompressorProvider implements ICompressorProvider {
                     return (ICompressor) new FloatQuantCompressor(quantOption, (ICompressor) compressor);
                 }
             }
-
             return compressor;
         }
     }
@@ -233,36 +194,37 @@ public class CompressorProvider implements ICompressorProvider {
 
         @Override
         public ICompressOption copy() {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public ICompressParameters getCompressionParameters() {
-            return NULL_PARAMETERS;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public boolean isLossyCompression() {
-            return false;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void setParameters(ICompressParameters parameters) {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public ICompressOption setTileHeight(int value) {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public ICompressOption setTileWidth(int value) {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public <T> T unwrap(Class<T> clazz) {
-            return clazz.isAssignableFrom(this.getClass()) ? clazz.cast(this) : null;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     };
 
@@ -270,50 +232,50 @@ public class CompressorProvider implements ICompressorProvider {
 
         @Override
         protected ICompressHeaderParameter[] headerParameters() {
-            return new ICompressHeaderParameter[0];
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public ICompressParameters copy(ICompressOption option) {
-            return this;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     };
 
     // @formatter:off
-    private static final Class<?>[][] AVAILABLE_COMPRESSORS = {//
-            {ByteRiceCompressor.class, RiceCompressParameters.class}, //
-            {ShortRiceCompressor.class, RiceCompressParameters.class}, //
-            {IntRiceCompressor.class, RiceCompressParameters.class}, //
-            {FloatRiceCompressor.class, RiceQuantizeCompressOption.class}, //
-            {DoubleRiceCompressor.class, RiceQuantizeCompressOption.class}, //
-            {BytePLIOCompressor.class}, //
-            {ShortPLIOCompressor.class}, //
-            {IntPLIOCompressor.class}, //
-            {ByteHCompressor.class, HCompressParameters.class}, //
-            {ShortHCompressor.class, HCompressParameters.class}, //
-            {IntHCompressor.class, HCompressParameters.class}, //
-            {FloatHCompressor.class, HCompressorQuantizeOption.class}, //
-            {DoubleHCompressor.class, HCompressorQuantizeOption.class}, //
-            {ByteGZip2Compressor.class}, //
-            {ShortGZip2Compressor.class}, //
-            {IntGZip2Compressor.class}, //
-            {FloatGZip2Compressor.class}, //
-            {DoubleGZip2Compressor.class}, //
-            {LongGZip2Compressor.class}, //
-            {ByteGZipCompressor.class}, //
-            {ShortGZipCompressor.class}, //
-            {IntGZipCompressor.class}, //
-            {LongGZipCompressor.class}, //
-            {FloatGZipCompressor.class}, //
-            {DoubleGZipCompressor.class}, //
-            {ByteNoCompressCompressor.class}, //
-            {ShortNoCompressCompressor.class}, //
-            {IntNoCompressCompressor.class}, //
-            {LongNoCompressCompressor.class}, //
-            {FloatNoCompressCompressor.class}, //
-            {DoubleNoCompressCompressor.class}};
-    // @formatter:on
+    private static final Class<?>[][] AVAILABLE_COMPRESSORS = { //
+    //
+    { ByteRiceCompressor.class, RiceCompressParameters.class }, //
+    { ShortRiceCompressor.class, RiceCompressParameters.class }, //
+    { IntRiceCompressor.class, RiceCompressParameters.class }, //
+    { FloatRiceCompressor.class, RiceQuantizeCompressOption.class }, //
+    { DoubleRiceCompressor.class, RiceQuantizeCompressOption.class }, //
+    { BytePLIOCompressor.class }, //
+    { ShortPLIOCompressor.class }, //
+    { IntPLIOCompressor.class }, //
+    { ByteHCompressor.class, HCompressParameters.class }, //
+    { ShortHCompressor.class, HCompressParameters.class }, //
+    { IntHCompressor.class, HCompressParameters.class }, //
+    { FloatHCompressor.class, HCompressorQuantizeOption.class }, //
+    { DoubleHCompressor.class, HCompressorQuantizeOption.class }, //
+    { ByteGZip2Compressor.class }, //
+    { ShortGZip2Compressor.class }, //
+    { IntGZip2Compressor.class }, //
+    { FloatGZip2Compressor.class }, //
+    { DoubleGZip2Compressor.class }, //
+    { LongGZip2Compressor.class }, //
+    { ByteGZipCompressor.class }, //
+    { ShortGZipCompressor.class }, //
+    { IntGZipCompressor.class }, //
+    { LongGZipCompressor.class }, //
+    { FloatGZipCompressor.class }, //
+    { DoubleGZipCompressor.class }, //
+    { ByteNoCompressCompressor.class }, //
+    { ShortNoCompressCompressor.class }, //
+    { IntNoCompressCompressor.class }, //
+    { LongNoCompressCompressor.class }, //
+    { FloatNoCompressCompressor.class }, { DoubleNoCompressCompressor.class } };
 
+    // @formatter:on
     private static final CompressorControlNameComputer NAME_COMPUTER = new CompressorControlNameComputer();
 
     /**
@@ -321,44 +283,12 @@ public class CompressorProvider implements ICompressorProvider {
      */
     private static final Logger LOG = Logger.getLogger(CompressorProvider.class.getName());
 
-    public static ICompressorControl findCompressorControl(String quantAlgorithm, String compressionAlgorithm,
-            Class<?> baseType) {
-        for (ICompressorProvider iTileCompressorProvider : ServiceLoader.load(ICompressorProvider.class,
-                Thread.currentThread().getContextClassLoader())) {
-            ICompressorControl result = iTileCompressorProvider.createCompressorControl(quantAlgorithm,
-                    compressionAlgorithm, baseType);
-            if (result != null) {
-                return result;
-            }
-        }
-        return new CompressorProvider().createCompressorControl(quantAlgorithm, compressionAlgorithm, baseType);
+    public static ICompressorControl findCompressorControl(String quantAlgorithm, String compressionAlgorithm, Class<?> baseType) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
-    public ICompressorControl createCompressorControl(String quantAlgorithm, String compressionAlgorithm,
-            Class<?> baseType) {
-        Class<?> quantType = null;
-
-        if (quantAlgorithm != null) {
-            // Standard compression via 32-bit integers...
-            if (baseType.equals(double.class) || baseType.equals(float.class)) {
-                quantType = baseType;
-                baseType = int.class;
-                quantAlgorithm = null;
-            }
-        }
-
-        String className = NAME_COMPUTER.createCompressorClassName(quantAlgorithm, compressionAlgorithm, baseType);
-
-        for (Class<?>[] types : AVAILABLE_COMPRESSORS) {
-            Class<?> compressorClass = types[0];
-            if (compressorClass.getSimpleName().equals(className)) {
-                TileCompressorControl tc = new TileCompressorControl(compressorClass);
-                tc.setQuantType(quantType);
-                return tc;
-            }
-        }
-
-        return null;
+    public ICompressorControl createCompressorControl(String quantAlgorithm, String compressionAlgorithm, Class<?> baseType) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

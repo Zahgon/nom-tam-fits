@@ -1,7 +1,6 @@
 package nom.tam.fits.compression.provider.param.quant;
 
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import nom.tam.fits.compression.algorithm.api.ICompressOption;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.compression.algorithm.quant.QuantizeOption;
 import nom.tam.fits.compression.provider.param.api.ICompressColumnParameter;
 import nom.tam.fits.compression.provider.param.api.ICompressHeaderParameter;
@@ -76,34 +74,21 @@ public class QuantizeParameters extends CompressParameters {
 
     @Override
     protected ICompressColumnParameter[] columnParameters() {
-        return new ICompressColumnParameter[] {blankColumn, zero, scale};
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected ICompressHeaderParameter[] headerParameters() {
-        return new ICompressHeaderParameter[] {quantz, blank, seed};
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setTileIndex(int index) {
-        seed.setTileIndex(index);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public QuantizeParameters copy(ICompressOption option) {
-        if (option instanceof QuantizeOption) {
-            QuantizeOption qo = (QuantizeOption) option;
-
-            QuantizeParameters p = (QuantizeParameters) super.clone();
-            p.quantz = (ZQuantizeParameter) quantz.copy(qo);
-            p.blank = (ZBlankParameter) blank.copy(qo);
-            p.seed = (ZDither0Parameter) seed.copy(qo);
-            p.blankColumn = (ZBlankColumnParameter) blankColumn.copy(qo);
-            p.zero = (ZZeroColumnParameter) zero.copy(qo);
-            p.scale = (ZScaleColumnParameter) scale.copy(qo);
-
-            return p;
-        }
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -1,7 +1,6 @@
 package nom.tam.fits.compression.algorithm.hcompress;
 
 import java.nio.ByteBuffer;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import java.nio.ByteBuffer;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.compression.algorithm.hcompress.HCompress.BITS_OF_1_BYTE;
 import static nom.tam.fits.compression.algorithm.hcompress.HCompress.BITS_OF_1_NYBBLE;
 import static nom.tam.fits.compression.algorithm.hcompress.HCompress.BYTE_MASK;
@@ -70,38 +68,33 @@ public class HDecompress {
         }
 
         public void bitOr(int i, long planeVal) {
-            a[offset + i] |= planeVal;
-
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public LongArrayPointer copy(int extraOffset) {
-            LongArrayPointer intAP = new LongArrayPointer(a);
-            intAP.offset = offset + extraOffset;
-            return intAP;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public long get() {
-            return a[offset];
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public long get(int i) {
-            return a[offset + i];
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public void set(int i, long value) {
-            a[offset + i] = value;
-
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         public void set(long value) {
-            a[offset] = value;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
     }
 
-    private static final byte[] CODE_MAGIC = {(byte) 0xDD, (byte) 0x99};
+    private static final byte[] CODE_MAGIC = { (byte) 0xDD, (byte) 0x99 };
 
-    private static final int[] MASKS = {0, 1, 3, 7, 15, 31, 63, 127, 255};
+    private static final int[] MASKS = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
     private static final byte ZERO = 0;
 
@@ -164,7 +157,9 @@ public class HDecompress {
      */
     private int bitsToGo;
 
-    /** Bits waiting to be input */
+    /**
+     * Bits waiting to be input
+     */
     private int buffer2;
 
     private int nx;
@@ -195,7 +190,6 @@ public class HDecompress {
     private void decode64(ByteBuffer infile, LongArrayPointer a) {
         byte[] nbitplanes = new byte[N03];
         byte[] tmagic = new byte[2];
-
         /*
          * File starts either with special 2-byte magic code or with FITS keyword "SIMPLE  ="
          */
@@ -206,16 +200,16 @@ public class HDecompress {
         if (tmagic[0] != CODE_MAGIC[0] || tmagic[1] != CODE_MAGIC[1]) {
             throw new RuntimeException("Compression error");
         }
-        nx = infile.getInt(); /* x size of image */
-        ny = infile.getInt(); /* y size of image */
-        scale = infile.getInt(); /* scale factor for digitization */
-
+        nx = infile.getInt();
+        /* x size of image */
+        ny = infile.getInt();
+        /* y size of image */
+        scale = infile.getInt();
+        /* scale factor for digitization */
         /* sum of all pixels */
         long sumall = infile.getLong();
         /* # bits in quadrants */
-
         infile.get(nbitplanes);
-
         dodecode64(infile, a, nbitplanes);
         /*
          * put sum of all pixels back into pixel 0
@@ -234,23 +228,7 @@ public class HDecompress {
      * @param aa     the resulting long tiledImageOperation
      */
     public void decompress(ByteBuffer input, boolean smooth, long[] aa) {
-
-        LongArrayPointer a = new LongArrayPointer(aa);
-
-        /* decode the input tiledImageOperation */
-
-        decode64(input, a);
-
-        /*
-         * Un-Digitize
-         */
-        undigitize64(a);
-
-        /*
-         * Inverse H-transform
-         */
-        hinv64(a, smooth);
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -274,13 +252,9 @@ public class HDecompress {
          * read bit planes for each quadrant
          */
         qtreeDecode64(infile, a.copy(0), ny, nx2, ny2, nbitplanes[0]);
-
         qtreeDecode64(infile, a.copy(ny2), ny, nx2, ny / 2, nbitplanes[1]);
-
         qtreeDecode64(infile, a.copy(ny * nx2), ny, nx / 2, ny2, nbitplanes[1]);
-
         qtreeDecode64(infile, a.copy(ny * nx2 + ny2), ny, nx / 2, ny / 2, nbitplanes[2]);
-
         /*
          * make sure there is an EOF symbol (nybble=0) at end
          */
@@ -369,8 +343,10 @@ public class HDecompress {
             int oddx = nxtop % 2;
             int oddy = nytop % 2;
             for (i = 0; i < nxtop - oddx; i += 2) {
-                int s00 = ny * i; /* s00 is index of a[i,j] */
-                int s10 = s00 + ny; /* s10 is index of a[i+1,j] */
+                int s00 = ny * i;
+                /* s00 is index of a[i,j] */
+                int s10 = s00 + ny;
+                /* s10 is index of a[i+1,j] */
                 for (int j = 0; j < nytop - oddy; j += 2) {
                     long h0 = a.get(s00);
                     long hx = a.get(s10);
@@ -451,7 +427,6 @@ public class HDecompress {
         int i, j;
         int ny2, s10, s00;
         long hm, h0, hp, hmm, hpm, hmp, hpp, hx2, hy2, diff, dmax, dmin, s, smax, m1, m2;
-
         /*
          * Maximum change in coefficients is determined by scale factor. Since we rounded during division (see
          * digitize.c), the biggest permitted change is scale/2.
@@ -470,8 +445,10 @@ public class HDecompress {
          * Adjust x difference hx
          */
         for (i = 2; i < nxtop - 2; i += 2) {
-            s00 = ny * i; /* s00 is index of a[i,j] */
-            s10 = s00 + ny; /* s10 is index of a[i+1,j] */
+            s00 = ny * i;
+            /* s00 is index of a[i,j] */
+            s10 = s00 + ny;
+            /* s10 is index of a[i+1,j] */
             for (j = 0; j < nytop; j += 2) {
                 /*
                  * hp is h0 (mean value) in next x zone, hm is h0 in previous x zone
@@ -585,10 +562,9 @@ public class HDecompress {
     }
 
     private int inputBit(ByteBuffer infile) {
-        if (bitsToGo == 0) { /* Read the next byte if no */
-
+        if (bitsToGo == 0) {
+            /* Read the next byte if no */
             buffer2 = infile.get() & BYTE_MASK;
-
             bitsToGo = BITS_OF_1_BYTE;
         }
         /*
@@ -605,7 +581,6 @@ public class HDecompress {
      */
     private int inputHuffman(ByteBuffer infile) {
         int c;
-
         /*
          * get first 3 bits to start
          */
@@ -624,18 +599,18 @@ public class HDecompress {
             /*
              * OK, 4 bits is enough
              */
-            switch (c) {
-            case N08:
-                return N03;
-            case N09:
-                return N05;
-            case N10:
-                return N10;
-            case N11:
-                return N12;
-            case N12:
-                return N15;
-            default:
+            switch(c) {
+                case N08:
+                    return N03;
+                case N09:
+                    return N05;
+                case N10:
+                    return N10;
+                case N11:
+                    return N12;
+                case N12:
+                    return N15;
+                default:
             }
         }
         /*
@@ -646,18 +621,18 @@ public class HDecompress {
             /*
              * OK, 5 bits is enough
              */
-            switch (c) {
-            case N26:
-                return N06;
-            case N27:
-                return N07;
-            case N28:
-                return N09;
-            case N29:
-                return N11;
-            case N30:
-                return N13;
-            default:
+            switch(c) {
+                case N26:
+                    return N06;
+                case N27:
+                    return N07;
+                case N28:
+                    return N09;
+                case N29:
+                    return N11;
+                case N30:
+                    return N13;
+                default:
             }
         }
         /*
@@ -675,7 +650,6 @@ public class HDecompress {
             /*
              * need another byte's worth of bits
              */
-
             buffer2 = buffer2 << BITS_OF_1_BYTE | infile.get() & BYTE_MASK;
             bitsToGo += BITS_OF_1_BYTE;
         }
@@ -683,21 +657,17 @@ public class HDecompress {
          * now pick off the first n bits
          */
         bitsToGo -= n;
-
         /* there was a slight gain in speed by replacing the following line */
         /* return( (buffer2>>bits_to_go) & ((1<<n)-1) ); */
         return buffer2 >> bitsToGo & MASKS[n];
     }
 
     /* INITIALIZE BIT INPUT */
-
     private int inputNnybble(ByteBuffer infile, int n, byte[] array) {
         /*
          * copy n 4-bit nybbles from infile to the lower 4 bits of tiledImageOperation
          */
-
         int ii, kk, shift1, shift2;
-
         /*
          * forcing byte alignment doesn;t help, and even makes it go slightly slower if (bits_to_go != 8)
          * input_nbits(infile, bits_to_go);
@@ -706,7 +676,6 @@ public class HDecompress {
             array[0] = (byte) inputNybble(infile);
             return 0;
         }
-
         if (bitsToGo == BITS_OF_1_BYTE) {
             /*
              * already have 2 full nybbles in buffer2, so backspace the infile tiledImageOperation to reuse last char
@@ -714,16 +683,15 @@ public class HDecompress {
             infile.position(infile.position() - 1);
             bitsToGo = 0;
         }
-
         /* bits_to_go now has a value in the range 0 - 7. After adding */
         /* another byte, bits_to_go effectively will be in range 8 - 15 */
-
-        shift1 = bitsToGo + BITS_OF_1_NYBBLE; /*
+        shift1 = bitsToGo + BITS_OF_1_NYBBLE;
+        /*
                                                * shift1 will be in range 4 - 11
                                                */
-        shift2 = bitsToGo; /* shift2 will be in range 0 - 7 */
+        shift2 = bitsToGo;
+        /* shift2 will be in range 0 - 7 */
         kk = 0;
-
         /* special case */
         if (bitsToGo == 0) {
             for (ii = 0; ii < n / 2; ii++) {
@@ -732,7 +700,8 @@ public class HDecompress {
                  */
                 buffer2 = buffer2 << BITS_OF_1_BYTE | infile.get() & BYTE_MASK;
                 array[kk] = (byte) (buffer2 >> BITS_OF_1_NYBBLE & NYBBLE_MASK);
-                array[kk + 1] = (byte) (buffer2 & NYBBLE_MASK); /*
+                array[kk + 1] = (byte) (buffer2 & NYBBLE_MASK);
+                /*
                                                                  * no shift required
                                                                  */
                 kk += 2;
@@ -748,11 +717,10 @@ public class HDecompress {
                 kk += 2;
             }
         }
-
-        if (ii * 2 != n) { /* have to read last odd byte */
+        if (ii * 2 != n) {
+            /* have to read last odd byte */
             array[n - 1] = (byte) inputNybble(infile);
         }
-
         return buffer2 >> bitsToGo & NYBBLE_MASK;
     }
 
@@ -761,7 +729,6 @@ public class HDecompress {
             /*
              * need another byte's worth of bits
              */
-
             buffer2 = buffer2 << BITS_OF_1_BYTE | infile.get() & BYTE_MASK;
             bitsToGo += BITS_OF_1_BYTE;
         }
@@ -769,7 +736,6 @@ public class HDecompress {
          * now pick off the first 4 bits
          */
         bitsToGo -= BITS_OF_1_NYBBLE;
-
         return buffer2 >> bitsToGo & NYBBLE_MASK;
     }
 
@@ -782,9 +748,11 @@ public class HDecompress {
         int i, j, s00;
         long planeVal = 1L << bit;
         // expand each 2x2 block
-        ByteBuffer k = ByteBuffer.wrap(a); /* k is index of a[i/2,j/2] */
+        ByteBuffer k = ByteBuffer.wrap(a);
+        /* k is index of a[i/2,j/2] */
         for (i = 0; i < lnx - 1; i += 2) {
-            s00 = n * i; /* s00 is index of b[i,j] */
+            s00 = n * i;
+            /* s00 is index of b[i,j] */
             // Note: this code appears to run very slightly faster on a 32-bit
             // linux machine using s00+n rather than the s10 intermediate
             // variable
@@ -834,8 +802,9 @@ public class HDecompress {
                 }
                 if ((value & BIT_FOUR) != ZERO) {
                     b.bitOr(s00, planeVal);
-                } // b.bitOr(s00+1, ((((LONGLONG)a[k])>>2) & 1) << bit;
-                  // b.bitOr(s00 , ((((LONGLONG)a[k])>>3) & 1) << bit;
+                }
+                // b.bitOr(s00+1, ((((LONGLONG)a[k])>>2) & 1) << bit;
+                // b.bitOr(s00 , ((((LONGLONG)a[k])>>3) & 1) << bit;
                 s00 += 2;
             }
             if (j < lny) {
@@ -860,21 +829,26 @@ public class HDecompress {
         // tiledImageOperation
         nx2 = (lnx + 1) / 2;
         ny2 = (lny + 1) / 2;
-        k = ny2 * (nx2 - 1) + ny2 - 1; /* k is index of a[i,j] */
+        k = ny2 * (nx2 - 1) + ny2 - 1;
+        /* k is index of a[i,j] */
         for (i = nx2 - 1; i >= 0; i--) {
-            s00 = 2 * (n * i + ny2 - 1); /* s00 is index of b[2*i,2*j] */
+            s00 = 2 * (n * i + ny2 - 1);
+            /* s00 is index of b[2*i,2*j] */
             for (j = ny2 - 1; j >= 0; j--) {
                 b[s00] = a[k];
                 k--;
                 s00 -= 2;
             }
         }
-        for (i = 0; i < lnx - 1; i += 2) { // now expand each 2x2 block
+        for (i = 0; i < lnx - 1; i += 2) {
+            // now expand each 2x2 block
             // Note: Unlike the case in qtree_bitins, this code runs faster on a
             // 32-bit linux machine using the s10 intermediate variable, rather
             // that using s00+n. Go figure!
-            s00 = n * i; // s00 is index of b[i,j]
-            s10 = s00 + n; // s10 is index of b[i+1,j]
+            // s00 is index of b[i,j]
+            s00 = n * i;
+            // s10 is index of b[i+1,j]
+            s10 = s00 + n;
             for (j = 0; j < lny - 1; j += 2) {
                 b[s10 + 1] = (b[s00] & BIT_ONE) == ZERO ? ZERO : BIT_ONE;
                 b[s10] = (b[s00] & BIT_TWO) == ZERO ? ZERO : BIT_ONE;
@@ -917,7 +891,6 @@ public class HDecompress {
         int k, bit, b;
         int nx2, ny2, nfx, nfy, c;
         byte[] scratch;
-
         /*
          * log2n is log2 of max(nqx,nqy) rounded up to next power of 2
          */
@@ -929,7 +902,6 @@ public class HDecompress {
         int nqx2 = (nqx + 1) / 2;
         int nqy2 = (nqy + 1) / 2;
         scratch = new byte[nqx2 * nqy2];
-
         /*
          * now decode each bit plane, starting at the top A is assumed to be initialized to zero
          */
@@ -938,7 +910,6 @@ public class HDecompress {
              * Was bitplane was quadtree-coded or written directly?
              */
             b = inputNybble(infile);
-
             if (b == 0) {
                 /*
                  * bit map was written directly
@@ -993,7 +964,6 @@ public class HDecompress {
      */
     private void qtreeExpand(ByteBuffer infile, byte[] a, int nx2, int ny2, byte[] b) {
         int i;
-
         /*
          * first copy a to b, expanding each 4-bit value
          */
@@ -1016,7 +986,6 @@ public class HDecompress {
          * int i; for (i = 0; i < ((nqx+1)/2) * ((nqy+1)/2); i++) { scratch[i] = input_nybble(infile); }
          */
         inputNnybble(infile, (nqx + 1) / 2 * ((nqy + 1) / 2), scratch);
-
         /*
          * insert in bitplane BIT of image A
          */
@@ -1035,17 +1004,16 @@ public class HDecompress {
 
     private void undigitize64(LongArrayPointer a) {
         long scale64;
-
         /*
          * multiply by scale
          */
         if (scale <= 1) {
             return;
         }
-        scale64 = scale; /*
+        scale64 = scale;
+        /*
                           * use a 64-bit int for efficiency in the big loop
                           */
-
         for (int index = 0; index < a.a.length; index++) {
             a.a[index] = a.a[index] * scale64;
         }
@@ -1059,13 +1027,13 @@ public class HDecompress {
         int i;
         int nhalf;
         LongArrayPointer p1, p2, pt;
-
         /*
          * copy 2nd half of tiledImageOperation to tmp
          */
         nhalf = n + 1 >> 1;
         pt = new LongArrayPointer(tmp);
-        p1 = a.copy(n2 * nhalf); /* pointer to a[i] */
+        p1 = a.copy(n2 * nhalf);
+        /* pointer to a[i] */
         for (i = nhalf; i < n; i++) {
             pt.set(p1.get());
             p1.offset += n2;
@@ -1074,8 +1042,10 @@ public class HDecompress {
         /*
          * distribute 1st half of tiledImageOperation to even elements
          */
-        p2 = a.copy(n2 * (nhalf - 1)); /* pointer to a[i] */
-        p1 = a.copy(n2 * (nhalf - 1) << 1); /* pointer to a[2*i] */
+        p2 = a.copy(n2 * (nhalf - 1));
+        /* pointer to a[i] */
+        p1 = a.copy(n2 * (nhalf - 1) << 1);
+        /* pointer to a[2*i] */
         for (i = nhalf - 1; i >= 0; i--) {
             p1.set(p2.get());
             p2.offset -= n2;
@@ -1085,7 +1055,8 @@ public class HDecompress {
          * now distribute 2nd half of tiledImageOperation (in tmp) to odd elements
          */
         pt = new LongArrayPointer(tmp);
-        p1 = a.copy(n2); /* pointer to a[i] */
+        p1 = a.copy(n2);
+        /* pointer to a[i] */
         for (i = 1; i < n; i += 2) {
             p1.set(pt.get());
             p1.offset += n2 + n2;

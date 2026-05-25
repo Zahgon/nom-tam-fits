@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -38,7 +37,6 @@ import java.util.logging.Logger;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.FitsException;
 import nom.tam.fits.Header;
 import nom.tam.fits.compression.algorithm.api.ICompressOption;
@@ -58,10 +56,11 @@ import nom.tam.util.type.ElementType;
 /**
  * Class to extract individually compressed tiles from a compressed image. This class supports the FITS 3.0 standard and
  * up, and will stream the results to a provided {@link nom.tam.util.ArrayDataOutput}.
- * 
+ *
  * @see nom.tam.image.compression.hdu.CompressedImageHDU
  */
 public class CompressedImageTiler implements ImageTiler {
+
     private static final Logger LOGGER = Logger.getLogger(CompressedImageTiler.class.getName());
 
     static final int DEFAULT_BLOCK_SIZE = 32;
@@ -78,16 +77,7 @@ public class CompressedImageTiler implements ImageTiler {
      * @return         <code>true</code> if the current array was changed
      */
     static boolean incrementPosition(int[] start, int[] current, int[] lengths, int[] steps) {
-        for (int i = start.length - 2; i >= 0; i--) {
-            if (current[i] - start[i] < lengths[i] - steps[i]) {
-                current[i] += steps[i];
-                if (start.length - 1 - (i + 1) >= 0) {
-                    System.arraycopy(start, i + 1, current, i + 1, start.length - 1 - (i + 1));
-                }
-                return true;
-            }
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -100,7 +90,7 @@ public class CompressedImageTiler implements ImageTiler {
      * @return           True if valid, False otherwise.
      */
     static boolean isValidSegment(final int position, final int length, final int dimension) {
-        return position + length >= 0 && position < dimension;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private final CompressedImageHDU compressedImageHDU;
@@ -118,19 +108,11 @@ public class CompressedImageTiler implements ImageTiler {
     }
 
     void init() {
-        final int columnCount = compressedImageHDU.getData().getNCols();
-        final Header header = compressedImageHDU.getHeader();
-
-        for (int index = 0; index < columnCount; index++) {
-            final String ttype = header.getStringValue(Standard.TTYPEn.n(index + 1));
-            if (ttype != null) {
-                addColumn(ttype.trim());
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void addColumn(final String column) {
-        columnNames.add(column);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -145,71 +127,8 @@ public class CompressedImageTiler implements ImageTiler {
      * @throws IOException     if the underlying stream failed
      * @throws FitsException   if any header values cannot be retrieved, or the dimensions are incorrect.
      */
-    void getTile(final ArrayDataOutput output, final int[] imageDimensions, final int[] corners, final int[] lengths,
-            final int[] steps) throws IOException, FitsException {
-
-        final int n = imageDimensions.length;
-        final int[] posits = new int[n];
-
-        // This is the step value for this segment (current row)
-        final int segmentStepValue = steps[n - 1];
-
-        final int segment = lengths[n - 1];
-
-        // The primitive base class of this image's data.
-        final Class<?> base = getBaseType().primitiveClass();
-
-        System.arraycopy(corners, 0, posits, 0, n);
-        final int[] tileDimensions = ArrayFuncs.reverseIndices(getTileDimensions());
-
-        do {
-            // This implies there is some overlap
-            // in the last index (in conjunction
-            // with other tests)
-            final int mx = imageDimensions.length - 1;
-            boolean validSegment = CompressedImageTiler.isValidSegment(posits[mx], lengths[mx], imageDimensions[mx]);
-
-            if (validSegment) {
-                int stepOffset = 0;
-                int pixelsRead = 0;
-                final int[] tileRowPositions = new int[n];
-                System.arraycopy(posits, 0, tileRowPositions, 0, n);
-                while (pixelsRead < segment) {
-                    final int[] tileOffsets = getTileOffsets(tileRowPositions, tileDimensions);
-                    // Multidimensional array
-                    final Object tileData = getDecompressedTileData(tileRowPositions, tileDimensions);
-                    final StandardImageTiler standardImageTiler = new StandardImageTiler(null, -1, tileDimensions, base) {
-                        @Override
-                        protected Object getMemoryImage() {
-                            return tileData;
-                        }
-                    };
-                    final int remaining = segment - pixelsRead;
-
-                    // Apply any remaining steps that didn't get read from the last tile.
-                    tileOffsets[mx] += stepOffset;
-                    final int segmentLength = Math.min(segment, tileDimensions[mx] - tileOffsets[mx]);
-                    final int tileReadLength = Math.max(1, Math.min(remaining, segmentLength));
-
-                    final int[] tileReadLengths = new int[tileDimensions.length];
-                    Arrays.fill(tileReadLengths, 1);
-                    tileReadLengths[tileReadLengths.length - 1] = tileReadLength;
-
-                    final int[] tileSteps = new int[tileDimensions.length];
-                    Arrays.fill(tileSteps, 1);
-                    tileSteps[tileSteps.length - 1] = segmentStepValue;
-
-                    // Slice out a 1-dimensional array as we're reading Pixels row by row.
-                    standardImageTiler.getTile(output, tileOffsets, tileReadLengths, tileSteps);
-                    final int unreadSteps = tileReadLength % segmentStepValue;
-
-                    stepOffset = (unreadSteps > 0) ? segmentStepValue - unreadSteps : 0;
-                    pixelsRead += tileReadLength;
-                    tileRowPositions[mx] = tileRowPositions[mx] + tileReadLength;
-                }
-            }
-        } while (CompressedImageTiler.incrementPosition(corners, posits, lengths, steps));
-        output.flush();
+    void getTile(final ArrayDataOutput output, final int[] imageDimensions, final int[] corners, final int[] lengths, final int[] steps) throws IOException, FitsException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -223,34 +142,11 @@ public class CompressedImageTiler implements ImageTiler {
      * @throws FitsException  For any header read errors.
      */
     Object getDecompressedTileData(final int[] positions, final int[] tileDimensions) throws FitsException {
-        final int compressedDataColumnIndex = columnNames.indexOf(Compression.COMPRESSED_DATA_COLUMN);
-        final int uncompressedDataColumnIndex = columnNames.indexOf(Compression.UNCOMPRESSED_DATA_COLUMN);
-        final int gZipCompressedDataColumnIndex = columnNames.indexOf(Compression.GZIP_COMPRESSED_DATA_COLUMN);
-        final Object[] row = getRow(positions, tileDimensions);
-        final Object decompressedArray;
-
-        final byte[] compressedRowData = (byte[]) row[compressedDataColumnIndex];
-        if (compressedRowData.length > 0) {
-            decompressedArray = decompressRow(compressedDataColumnIndex, row);
-        } else if (gZipCompressedDataColumnIndex >= 0) {
-            decompressedArray = decompressRow(gZipCompressedDataColumnIndex, row);
-        } else if (uncompressedDataColumnIndex >= 0) {
-            decompressedArray = row[uncompressedDataColumnIndex];
-        } else {
-            throw new FitsException("Nothing in row to read: (" + Arrays.deepToString(row) + ").");
-        }
-
-        return ArrayFuncs.curl(decompressedArray, tileDimensions);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int[] getTileIndexes(final int[] pixelPositions, final int[] tileDimensions) {
-        final int[] tileIndexes = new int[pixelPositions.length];
-
-        for (int i = 0; i < pixelPositions.length; i++) {
-            tileIndexes[i] = pixelPositions[i] / tileDimensions[i];
-        }
-
-        return tileIndexes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -264,25 +160,7 @@ public class CompressedImageTiler implements ImageTiler {
      * @throws FitsException If there is no array, or it cannot be decompressed.
      */
     Object decompressRow(final int columnIndex, final Object[] row) throws FitsException {
-        final byte[] compressedRowData = (byte[]) row[columnIndex];
-
-        // Decompress the row into pixel values.
-        final ByteBuffer compressed = ByteBuffer.wrap(compressedRowData);
-        compressed.rewind();
-
-        try {
-            final Buffer tileBuffer = decompressIntoBuffer(row, compressed);
-            if (hasData(tileBuffer)) {
-                return tileBuffer.array();
-            }
-            throw new FitsException("No tile available at column " + columnIndex + ": (" + Arrays.deepToString(row) + ")");
-        } catch (IllegalStateException illegalStateException) {
-            // This can sometimes happen if the compressed data (or surrounding data) are of incorrect length. The
-            // input is invalid in that case.
-            LOGGER.severe(
-                    "Unable to decompress row data from column " + columnIndex + ": (" + Arrays.deepToString(row) + ")");
-            throw new FitsException(illegalStateException.getMessage(), illegalStateException);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -294,43 +172,19 @@ public class CompressedImageTiler implements ImageTiler {
      * @return            Buffer instance. Never null.
      */
     Buffer decompressIntoBuffer(final Object[] row, final ByteBuffer compressed) {
-        final ElementType<Buffer> bufferElementType = getBaseType();
-        final Buffer tileBuffer = bufferElementType.newBuffer(getTileSize());
-        tileBuffer.rewind();
-        final ICompressorControl compressorControl = getCompressorControl(getBaseType());
-        final ICompressOption option = initCompressionOption(compressorControl.option(), bufferElementType.size());
-        initRowOption(option, row);
-        compressorControl.decompress(compressed, tileBuffer, option);
-
-        tileBuffer.rewind();
-        return tileBuffer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ICompressorControl getCompressorControl(final ElementType<? extends Buffer> elementType) {
-        return CompressorProvider.findCompressorControl(getQuantizAlgorithmName(), getCompressionAlgorithmName(),
-                elementType.primitiveClass());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ICompressOption initCompressionOption(final ICompressOption option, final int bytePix) {
-        if (option instanceof RiceCompressOption) {
-            ((RiceCompressOption) option).setBlockSize(getBlockSize());
-            ((RiceCompressOption) option).setBytePix(bytePix);
-        } else if (option instanceof QuantizeOption) {
-            initCompressionOption(((QuantizeOption) option).getCompressOption(), bytePix);
-        }
-
-        option.setTileHeight(getTileHeight()).setTileWidth(getTileWidth());
-
-        return option;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     ElementType<Buffer> getBaseType() {
-        final int zBitPix = getZBitPix();
-        final ElementType<Buffer> bufferElementType = ElementType.forBitpix(zBitPix);
-        if (bufferElementType == null) {
-            return ElementType.forNearestBitpix(zBitPix);
-        }
-        return bufferElementType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -341,7 +195,7 @@ public class CompressedImageTiler implements ImageTiler {
      * @return        True if there is an array, even an empty one. False otherwise.
      */
     boolean hasData(final Buffer buffer) {
-        return buffer.hasArray();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -355,23 +209,11 @@ public class CompressedImageTiler implements ImageTiler {
      * @throws FitsException  If the row doesn't exist, or cannot be read.
      */
     Object[] getRow(final int[] positions, final int[] tileDimensions) throws FitsException {
-        final int[] tileIndexes = getTileIndexes(ArrayFuncs.reverseIndices(positions),
-                ArrayFuncs.reverseIndices(tileDimensions));
-        final int rowNumber = getRowNumber(tileIndexes);
-        return compressedImageHDU.getRow(rowNumber);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getRowNumber(final int[] tileIndexes) throws FitsException {
-        int offset = 0;
-        final int[] tableDimensions = getTableDimensions();
-        for (int i = 0; i < tableDimensions.length; i++) {
-            if (i > 0) {
-                offset += tileIndexes[i] * tableDimensions[i - 1];
-            } else {
-                offset += tileIndexes[i];
-            }
-        }
-        return offset;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -382,98 +224,35 @@ public class CompressedImageTiler implements ImageTiler {
      * @return         Multidimensional array of pixel corners
      */
     int[] getTileOffsets(final int[] corners, final int[] tileDimensions) {
-        final int numberOfDimensions = getNumberOfDimensions();
-        final int[] tileOffsets = new int[numberOfDimensions];
-
-        for (int i = 0; i < numberOfDimensions; i++) {
-            final int tileDimension = tileDimensions[i];
-            final int pixelOffset = corners[i];
-            if (pixelOffset % tileDimension == 0 || tileDimension == 1) {
-                tileOffsets[i] = 0;
-            } else {
-                final int currentTile = corners[i] / tileDimensions[i];
-                final int lastTile = Math.max(0, currentTile - 1);
-
-                // Account for the zeroth index by adding another tile dimension at the end.
-                final int pixelsToEndOfLastTile = (lastTile * tileDimension) + tileDimension;
-                final int tileOffset;
-                if (pixelOffset < tileDimension) {
-                    tileOffset = pixelOffset;
-                } else {
-                    tileOffset = pixelOffset - pixelsToEndOfLastTile;
-                }
-
-                tileOffsets[i] = tileOffset;
-            }
-        }
-
-        return tileOffsets;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object getCompleteImage() throws IOException {
-        try {
-            return compressedImageHDU.asImageHDU().getData().getData();
-        } catch (FitsException fitsException) {
-            throw new IOException(fitsException.getMessage(), fitsException);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getTile(Object output, int[] corners, int[] lengths) throws IOException {
-        final int[] steps = new int[lengths.length];
-        Arrays.fill(steps, 1);
-        getTile(output, corners, lengths, steps);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void getTile(Object output, int[] corners, int[] lengths, int[] steps) throws IOException {
-        final int[] imageDimensions = getImageDimensions();
-
-        if (corners.length != imageDimensions.length || lengths.length != imageDimensions.length
-                || steps.length != imageDimensions.length) {
-            throw new IOException("Inconsistent sub-image request");
-        }
-        if (output == null) {
-            throw new IOException("Attempt to write to null data output");
-        }
-        for (int i = 0; i < imageDimensions.length; i++) {
-            if (corners[i] < 0 || lengths[i] < 0 || corners[i] + lengths[i] > imageDimensions[i]) {
-                throw new IOException("Sub-image not within image");
-            }
-        }
-
-        if (!(output instanceof ArrayDataOutput)) {
-            throw new UnsupportedOperationException("Only streaming to ArrayDataOutput is supported.  "
-                    + "See getTile(ArrayDataOutput, int[], int[], int[].");
-        }
-        try {
-            getTile((ArrayDataOutput) output, imageDimensions, corners, lengths, steps);
-        } catch (FitsException fitsException) {
-            throw new IOException(fitsException.getMessage(), fitsException);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object getTile(int[] corners, int[] lengths) throws IOException {
-        throw new UnsupportedOperationException(
-                "Only streaming to ArrayDataOutput is supported.  " + "See getTile(ArrayDataOutput, int[], int[], int[].");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     void initRowOption(final ICompressOption option, final Object[] row) {
-        final int zScaleColumnIndex = columnNames.indexOf(Compression.ZSCALE_COLUMN);
-        final int zZeroColumnIndex = columnNames.indexOf(Compression.ZZERO_COLUMN);
-        if (option instanceof QuantizeOption) {
-            final double bScale = zScaleColumnIndex >= 0 ? ((double[]) row[zScaleColumnIndex])[0] : Double.NaN;
-            ((QuantizeOption) option).setBScale(bScale);
-
-            final double bZero = zZeroColumnIndex >= 0 ? ((double[]) row[zZeroColumnIndex])[0] : Double.NaN;
-            ((QuantizeOption) option).setBZero(bZero);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Header getHeader() {
-        return compressedImageHDU.getHeader();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private String getQuantizAlgorithmName() {
@@ -485,16 +264,7 @@ public class CompressedImageTiler implements ImageTiler {
     }
 
     int getBlockSize() {
-        final int axesLength = getNumberOfDimensions();
-        for (int i = 0; i < axesLength; i++) {
-            final int nextAxis = i + 1;
-            final String zNameValue = getHeader().getStringValue(Compression.ZNAMEn.n(nextAxis));
-            if (Compression.BLOCKSIZE.equals(zNameValue)) {
-                return getHeader().getIntValue(Compression.ZVALn.n(nextAxis));
-            }
-        }
-
-        return DEFAULT_BLOCK_SIZE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -503,28 +273,19 @@ public class CompressedImageTiler implements ImageTiler {
      * @return integer of dimension count. Never null.
      */
     int getNumberOfDimensions() {
-        return getHeader().getIntValue(Compression.ZNAXIS);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getZBitPix() {
-        return getHeader().getIntValue(Compression.ZBITPIX);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getImageAxisLength(final int axis) {
-        return getHeader().getIntValue(Compression.ZNAXISn.n(axis));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int[] getTableDimensions() throws FitsException {
-        final int n = getNumberOfDimensions();
-        final int[] tableDimensions = new int[n];
-        for (int i = 0; i < n; i++) {
-            tableDimensions[i] = Double
-                    .valueOf(Math
-                            .ceil(Integer.valueOf(getImageAxisLength(i + 1)).doubleValue() / getTileDimensionLength(i + 1)))
-                    .intValue();
-        }
-
-        return tableDimensions;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -533,63 +294,26 @@ public class CompressedImageTiler implements ImageTiler {
      * @return The image dimensions.
      */
     int[] getImageDimensions() {
-        final int n = getNumberOfDimensions();
-        final int[] imageDimensions = new int[n];
-        final Header header = getHeader();
-        for (int i = 0; i < n; i++) {
-            imageDimensions[n - i - 1] = header.getIntValue(Compression.ZNAXISn.n(i + 1));
-        }
-
-        return imageDimensions;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getTileHeight() {
-        return getHeader().getIntValue(Compression.ZTILEn.n(2), 1);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getTileWidth() {
-        return getHeader().getIntValue(Compression.ZTILEn.n(1), getHeader().getIntValue(Compression.ZNAXISn.n(1)));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int[] getTileDimensions() throws FitsException {
-        final int totalDimensions = getNumberOfDimensions();
-        final int[] tileDimensions = new int[totalDimensions];
-        for (int n = 0; n < totalDimensions; n++) {
-            tileDimensions[n] = getTileDimensionLength(n + 1);
-        }
-
-        return tileDimensions;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getTileDimensionLength(final int dimension) throws FitsException {
-        final int totalDimensions = getNumberOfDimensions();
-
-        if (dimension < 1) {
-            throw new FitsException("Dimensions are 1-based (got " + dimension + ").");
-        }
-        if (dimension > totalDimensions) {
-            throw new FitsException("Trying to get tile for dimension " + dimension + " where there are only "
-                    + totalDimensions + " dimensions in total.");
-        }
-
-        final int dimensionLength;
-        if (dimension == 1) {
-            dimensionLength = getHeader().getIntValue(Compression.ZTILEn.n(1),
-                    getHeader().getIntValue(Compression.ZNAXISn.n(1)));
-        } else {
-            dimensionLength = getHeader().getIntValue(Compression.ZTILEn.n(dimension), 1);
-        }
-
-        return dimensionLength;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int getTileSize() {
-        final int n = getNumberOfDimensions();
-        int tileSize = getHeader().getIntValue(Compression.ZTILEn.n(1), getHeader().getIntValue(Compression.ZNAXISn.n(1)));
-        for (int i = 2; i <= n; i++) {
-            tileSize *= getHeader().getIntValue(Compression.ZTILEn.n(i), 1);
-        }
-
-        return tileSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

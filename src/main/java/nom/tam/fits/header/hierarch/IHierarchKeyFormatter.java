@@ -30,7 +30,6 @@ package nom.tam.fits.header.hierarch;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.utilities.FitsLineAppender;
 
 /**
@@ -38,7 +37,7 @@ import nom.tam.fits.utilities.FitsLineAppender;
  * starting with the string <code>HIERARCH.</code> followed by a dot-separated hierarchy, or just an unusually long FITS
  * keywords that cannot be represented by a standard 8-byte keyword. The HIERARCH formatted will take such string
  * keywords and will format them according to its rules when writing them to FITS headers.
- * 
+ *
  * @see nom.tam.fits.FitsFactory#setHierarchFormater(IHierarchKeyFormatter)
  * @see Hierarch
  */
@@ -59,7 +58,7 @@ public interface IHierarchKeyFormatter {
     /**
      * Appends the formatted HIERARCH keyword to the Fits line buffer. For example as a step towards builing up the
      * header card for this keyword.
-     * 
+     *
      * @param key    The HIERARCH keyword in out own internal representation (<code>HIERARCH.</code> followed by the
      *                   dot-sepatated hierarchical components).
      * @param buffer The FITS line buffer to which we want the formatted HIERARCH-style keyword to be appended.
@@ -106,38 +105,31 @@ public interface IHierarchKeyFormatter {
      * common to surround it with spaces before and after (3 bytes). As the spaces before an after are optional, the
      * assignment can occupy anywhere between 1 to 3 bytes in the header card. So we can use the 3-byte version if there
      * is room, or squeeze it down as needed.
-     * 
+     *
      * @param  space (bytes) Number of characters available for the assignment marker to separate the keyword from the
      *                   value part.
-     * 
+     *
      * @return       The string to use for the assignment marker. If the space is smaller than the minimum assignment
      *                   string length, then it returns the minimal assignment string.
-     * 
+     *
      * @since        1.20.2
-     * 
+     *
      * @see          #getMinAssignLength()
      */
     default String getAssignStringForSpace(int space) {
-        switch (space) {
-        case 1:
-            return "="; // minimal '='
-        case 2:
-            return "= "; // standard FITS style assigmnment marker
-        default:
-            return " = "; // easy to read commonly used marker
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the minimum length of the sequence that separates keywords from values.
-     * 
+     *
      * @return the length of the minimal key/value separator string.
-     * 
+     *
      * @since  1.20.2
-     * 
+     *
      * @see    #getAssignStringForSpace(int)
      */
     default int getMinAssignLength() {
-        return 1;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

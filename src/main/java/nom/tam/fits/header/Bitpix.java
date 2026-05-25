@@ -1,7 +1,6 @@
 package nom.tam.fits.header;
 
 import java.util.logging.Logger;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import java.util.logging.Logger;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.FitsException;
 import nom.tam.fits.FitsFactory;
 import nom.tam.fits.Header;
@@ -49,53 +47,79 @@ import nom.tam.util.type.ElementType;
  * @since  1.16
  */
 public enum Bitpix {
-    /** For FITS data stored as bytes */
+
+    /**
+     * For FITS data stored as bytes
+     */
     BYTE(Byte.TYPE, ElementType.BYTE, "bytes"),
-
-    /** For FITS data stored as 16-bit integers */
+    /**
+     * For FITS data stored as 16-bit integers
+     */
     SHORT(Short.TYPE, ElementType.SHORT, "16-bit integers"),
-
-    /** For FITS data stored as 32-bit integers */
+    /**
+     * For FITS data stored as 32-bit integers
+     */
     INTEGER(Integer.TYPE, ElementType.INT, "32-bit integers"),
-
-    /** For FITS data stored as 64-bit integers */
+    /**
+     * For FITS data stored as 64-bit integers
+     */
     LONG(Long.TYPE, ElementType.LONG, "64-bit integers"),
-
-    /** For FITS data stored as 32-bit single-precision floating point values */
+    /**
+     * For FITS data stored as 32-bit single-precision floating point values
+     */
     FLOAT(Float.TYPE, ElementType.FLOAT, "32-bit floating point"),
-
-    /** For FITS data stored as 64-bit double-precision floating point values */
+    /**
+     * For FITS data stored as 64-bit double-precision floating point values
+     */
     DOUBLE(Double.TYPE, ElementType.DOUBLE, "64-bit floating point");
 
     private static final Logger LOG = Logger.getLogger("nom.tam.fits.HeaderCardParser");
 
     private static final int BITS_TO_BYTES_SHIFT = 3;
 
-    /** BITPIX value for <code>byte</code> type data */
+    /**
+     * BITPIX value for <code>byte</code> type data
+     */
     public static final int VALUE_FOR_BYTE = 8;
 
-    /** BITPIX value for <code>short</code> type data */
+    /**
+     * BITPIX value for <code>short</code> type data
+     */
     public static final int VALUE_FOR_SHORT = 16;
 
-    /** BITPIX value for <code>int</code> type data */
+    /**
+     * BITPIX value for <code>int</code> type data
+     */
     public static final int VALUE_FOR_INT = 32;
 
-    /** BITPIX value for <code>long</code> type data */
+    /**
+     * BITPIX value for <code>long</code> type data
+     */
     public static final int VALUE_FOR_LONG = 64;
 
-    /** BITPIX value for <code>float</code> type data */
+    /**
+     * BITPIX value for <code>float</code> type data
+     */
     public static final int VALUE_FOR_FLOAT = -32;
 
-    /** BITPIX value for <code>double</code> type data */
+    /**
+     * BITPIX value for <code>double</code> type data
+     */
     public static final int VALUE_FOR_DOUBLE = -64;
 
-    /** the number subclass represented this BITPIX instance */
+    /**
+     * the number subclass represented this BITPIX instance
+     */
     private Class<? extends Number> numberType;
 
-    /** the library's element type */
+    /**
+     * the library's element type
+     */
     private ElementType<?> elementType;
 
-    /** a concise description of the data type represented */
+    /**
+     * a concise description of the data type represented
+     */
     private String description;
 
     /**
@@ -113,11 +137,11 @@ public enum Bitpix {
 
     /**
      * Returns the FITS element type corresponding to this bitpix value
-     * 
+     *
      * @return the FITS element type that corresponds to this bitpix value.
      */
     public final ElementType<?> getElementType() {
-        return elementType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -129,7 +153,7 @@ public enum Bitpix {
      * @see    Bitpix#forNumberType(Class)
      */
     public final Class<? extends Number> getNumberType() {
-        return numberType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -142,7 +166,7 @@ public enum Bitpix {
      * @see    Bitpix#forPrimitiveType(Class)
      */
     public final Class<?> getPrimitiveType() {
-        return elementType.primitiveClass();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -154,7 +178,7 @@ public enum Bitpix {
      * @see    #getHeaderCard()
      */
     public final int getHeaderValue() {
-        return elementType.bitPix();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -167,7 +191,7 @@ public enum Bitpix {
      * @see    Bitpix#forArrayID(char)
      */
     public final char getArrayID() {
-        return elementType.type();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -176,7 +200,7 @@ public enum Bitpix {
      * @return a brief description of the corresponding data type.
      */
     public final String getDescription() {
-        return description;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -185,7 +209,7 @@ public enum Bitpix {
      * @return the size of a data element in bytes.
      */
     public final int byteSize() {
-        return Math.abs(getHeaderValue()) >>> BITS_TO_BYTES_SHIFT;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -196,7 +220,7 @@ public enum Bitpix {
      * @see    #getHeaderValue()
      */
     public final HeaderCard getHeaderCard() {
-        return HeaderCard.create(Standard.BITPIX, getHeaderValue());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -214,29 +238,7 @@ public enum Bitpix {
      * @see                  #getPrimitiveType()
      */
     public static Bitpix forPrimitiveType(Class<?> dataType) throws FitsException {
-        if (dataType == byte.class) {
-            return BYTE;
-        }
-        if (dataType == short.class) {
-            return SHORT;
-        }
-        if (dataType == int.class) {
-            return INTEGER;
-        }
-        if (dataType == long.class) {
-            return LONG;
-        }
-        if (dataType == float.class) {
-            return FLOAT;
-        }
-        if (dataType == double.class) {
-            return DOUBLE;
-        }
-        if (Object.class.isAssignableFrom(dataType)) {
-            throw new FitsException("No BITPIX for type: " + dataType + " (expected primitive type)");
-        }
-
-        throw new FitsException("No BITPIX for primitive type: " + dataType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -253,25 +255,7 @@ public enum Bitpix {
      * @see                  #getNumberType()
      */
     public static Bitpix forNumberType(Class<? extends Number> dataType) throws FitsException {
-        if (Byte.class.isAssignableFrom(dataType)) {
-            return BYTE;
-        }
-        if (Short.class.isAssignableFrom(dataType)) {
-            return SHORT;
-        }
-        if (Integer.class.isAssignableFrom(dataType)) {
-            return INTEGER;
-        }
-        if (Long.class.isAssignableFrom(dataType)) {
-            return LONG;
-        }
-        if (Float.class.isAssignableFrom(dataType)) {
-            return FLOAT;
-        }
-        if (Double.class.isAssignableFrom(dataType)) {
-            return DOUBLE;
-        }
-        throw new FitsException("No BITPIX for Number type " + dataType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -291,7 +275,7 @@ public enum Bitpix {
      * @see                  FitsFactory#setAllowHeaderRepairs(boolean)
      */
     public static Bitpix fromHeader(Header h) throws FitsException {
-        return forValue(h.getIntValue(Standard.BITPIX, 0));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -310,7 +294,7 @@ public enum Bitpix {
      * @see                  Bitpix#forValue(int, boolean)
      */
     public static Bitpix fromHeader(Header h, boolean allowRepair) throws FitsException {
-        return forValue(h.getIntValue(Standard.BITPIX, 0), allowRepair);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -329,11 +313,7 @@ public enum Bitpix {
      * @see                  #getHeaderValue()
      */
     public static Bitpix forValue(int ival) throws FitsException {
-        try {
-            return forValue(ival, FitsFactory.isAllowHeaderRepairs());
-        } catch (FitsException e) {
-            throw new FitsException(e.getMessage() + "\n\n" + " --> Try FitsFactory.setAllowHeaderRepairs(true).\n");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -352,50 +332,7 @@ public enum Bitpix {
      * @see                  #getHeaderValue()
      */
     public static Bitpix forValue(int ival, boolean allowRepair) throws FitsException {
-
-        if (ival == 0) {
-            throw new FitsException("Invalid BITPIX value:" + ival);
-        }
-
-        // Normally BITPIX must be one one of the supported values. Unfortunately, some
-        // commercial cameras fill illegal values, such as 20.
-        // We can 'repair' them by rounding up to the next valid value, so 20 repairs to 32, and
-        // maxing at +/- 64, so for example -80 repairs to -64.
-        if (allowRepair) {
-            int fixed = 0;
-
-            if (ival < 0) {
-                fixed = ival < VALUE_FOR_FLOAT ? VALUE_FOR_DOUBLE : VALUE_FOR_FLOAT;
-            } else if (ival < VALUE_FOR_BYTE) {
-                fixed = VALUE_FOR_BYTE;
-            } else if (ival > VALUE_FOR_LONG) {
-                fixed = VALUE_FOR_LONG;
-            } else if (ival > Integer.highestOneBit(ival)) {
-                fixed = (Integer.highestOneBit(ival) << 1);
-            }
-
-            if (fixed != 0) {
-                LOG.warning("Repaired invalid BITPIX value:" + ival + " --> " + fixed);
-                ival = fixed;
-            }
-        }
-
-        switch (ival) {
-        case VALUE_FOR_BYTE:
-            return BYTE;
-        case VALUE_FOR_SHORT:
-            return SHORT;
-        case VALUE_FOR_INT:
-            return INTEGER;
-        case VALUE_FOR_LONG:
-            return LONG;
-        case VALUE_FOR_FLOAT:
-            return FLOAT;
-        case VALUE_FOR_DOUBLE:
-            return DOUBLE;
-        default:
-            throw new FitsException("Invalid BITPIX value:" + ival);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -411,21 +348,6 @@ public enum Bitpix {
      * @throws FitsException if the data type is unknown or does not have a BITPIX ewquivalent.
      */
     public static Bitpix forArrayID(char id) throws FitsException {
-        switch (id) {
-        case 'B':
-            return BYTE;
-        case 'S':
-            return SHORT;
-        case 'I':
-            return INTEGER;
-        case 'J':
-            return LONG;
-        case 'F':
-            return FLOAT;
-        case 'D':
-            return DOUBLE;
-        default:
-            throw new FitsException("Invalid BITPIX data ID: '" + id + "'");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

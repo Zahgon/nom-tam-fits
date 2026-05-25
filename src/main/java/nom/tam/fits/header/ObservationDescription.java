@@ -30,19 +30,19 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
- * This data dictionary contains FITS keywords that have been widely used within the astronomical community. It is
- * recommended that these keywords only be used as defined here. These are the Keywords that describe the observation.
+ *  This data dictionary contains FITS keywords that have been widely used within the astronomical community. It is
+ *  recommended that these keywords only be used as defined here. These are the Keywords that describe the observation.
  *
- * <pre>
- * See <a href=
-"http://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html">http://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html</a>
- * </pre>
+ *  <pre>
+ *  See <a href=
+ * "http://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html">http://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html</a>
+ *  </pre>
  *
- * @author Richard van Nieuwenhoven
+ *  @author Richard van Nieuwenhoven
  */
 public enum ObservationDescription implements IFitsHeader {
+
     /**
      * The value field shall contain a floating point number giving the air mass during the observation by a ground
      * based telescope. The value of the airmass is often approximated by the secant of the elevation angle and has a
@@ -191,6 +191,6 @@ public enum ObservationDescription implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

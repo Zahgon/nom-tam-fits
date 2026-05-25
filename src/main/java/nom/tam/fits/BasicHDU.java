@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.header.Bitpix;
 import nom.tam.fits.header.Checksum;
 import nom.tam.fits.header.IFitsHeader;
@@ -15,7 +14,6 @@ import nom.tam.util.ArrayDataInput;
 import nom.tam.util.ArrayDataOutput;
 import nom.tam.util.FitsOutput;
 import nom.tam.util.RandomAccess;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -46,7 +44,6 @@ import nom.tam.util.RandomAccess;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Standard.AUTHOR;
 import static nom.tam.fits.header.Standard.BLANK;
 import static nom.tam.fits.header.Standard.BSCALE;
@@ -122,17 +119,21 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
     @Deprecated
     public static final int BITPIX_DOUBLE = -64;
 
-    /** The associated header. */
+    /**
+     * The associated header.
+     */
     protected Header myHeader = null;
 
-    /** The associated data unit. */
+    /**
+     * The associated data unit.
+     */
     protected DataClass myData = null;
 
     /**
      * Creates a new HDU from the specified FITS header and associated data object.
-     * 
+     *
      * @deprecated          intended for internal use. Its visibility should be reduced to package level in the future.
-     * 
+     *
      * @param      myHeader the FITS header describing the data and any user-specific keywords
      * @param      myData   the corresponding data object
      */
@@ -162,7 +163,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
     /**
      * Checks that this is a valid header for the HDU. This method is static but should be implemented by all
      * subclasses.
-     * 
+     *
      * @deprecated        (<i>for internal use</i>) Will be removed as it serves no purpose.
      *
      * @param      header to validate.
@@ -176,7 +177,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
 
     /**
      * @deprecated   (<i>for internal use</i>) Will be removed as it serves no purpose.
-     * 
+     *
      * @return       if this object can be described as a FITS image. This method is static but should be implemented by
      *                   all subclasses.
      *
@@ -194,14 +195,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  val                 value for the key to add
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(IFitsHeader, int)
      * @see                        #addValue(IFitsHeader, double)
      * @see                        #addValue(IFitsHeader, String)
      */
     public void addValue(IFitsHeader key, boolean val) throws HeaderCardException {
-        myHeader.addValue(key.key(), val, key.comment());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -211,14 +212,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  val                 value for the key to add
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(IFitsHeader, boolean)
      * @see                        #addValue(IFitsHeader, int)
      * @see                        #addValue(IFitsHeader, String)
      */
     public void addValue(IFitsHeader key, double val) throws HeaderCardException {
-        myHeader.addValue(key.key(), val, key.comment());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -228,14 +229,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  val                 value for the key to add
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(IFitsHeader, boolean)
      * @see                        #addValue(IFitsHeader, double)
      * @see                        #addValue(IFitsHeader, String)
      */
     public void addValue(IFitsHeader key, int val) throws HeaderCardException {
-        myHeader.addValue(key.key(), val, key.comment());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -245,14 +246,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  val                 value for the key to add
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(IFitsHeader, boolean)
      * @see                        #addValue(IFitsHeader, int)
      * @see                        #addValue(IFitsHeader, double)
      */
     public void addValue(IFitsHeader key, String val) throws HeaderCardException {
-        myHeader.addValue(key.key(), val, key.comment());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -263,14 +264,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  comment             comment for the key/value pair
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(IFitsHeader, boolean)
      * @see                        #addValue(String, int, String)
      * @see                        #addValue(String, double, String)
      * @see                        #addValue(String, String, String)
      */
     public void addValue(String key, boolean val, String comment) throws HeaderCardException {
-        myHeader.addValue(key, val, comment);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -281,14 +282,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  comment             comment for the key/value pair
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(IFitsHeader, double)
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(String, int, String)
      * @see                        #addValue(String, String, String)
      */
     public void addValue(String key, double val, String comment) throws HeaderCardException {
-        myHeader.addValue(key, val, comment);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -299,14 +300,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  comment             comment for the key/value pair
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(IFitsHeader, int)
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(String, double, String)
      * @see                        #addValue(String, String, String)
      */
     public void addValue(String key, int val, String comment) throws HeaderCardException {
-        myHeader.addValue(key, val, comment);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -317,14 +318,14 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @param  comment             comment for the key/value pair
      *
      * @throws HeaderCardException if the card does not follow the specification
-     * 
+     *
      * @see                        #addValue(IFitsHeader, String)
      * @see                        #addValue(String, boolean, String)
      * @see                        #addValue(String, double, String)
      * @see                        #addValue(String, int, String)
      */
     public void addValue(String key, String val, String comment) throws HeaderCardException {
-        myHeader.addValue(key, val, comment);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -332,12 +333,12 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * appear at the head of FITS files. Further HDU types can only be added as extensions after the first HDU. If this
      * call returns <code>false</code> you may need to add e.g. a dummy {@link NullDataHDU} as the primary HDU at the
      * beginning of the FITS before you can add this one.
-     * 
+     *
      * @return Indicate whether HDU can be primary HDU. This method must be overriden in HDU types which can appear at
      *             the beginning of a FITS file.
      */
     final boolean canBePrimary() {
-        return Standard.XTENSION_IMAGE.equals(getCanonicalXtension());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -346,7 +347,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getAuthor() {
-        return myHeader.getStringValue(AUTHOR);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -370,24 +371,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @throws FitsException if the axis are configured wrong.
      */
     public int[] getAxes() throws FitsException {
-        int nAxis = myHeader.getIntValue(NAXIS, 0);
-        if (nAxis < 0) {
-            throw new FitsException("Negative NAXIS value " + nAxis);
-        }
-        if (nAxis > MAX_NAXIS_ALLOWED) {
-            throw new FitsException("NAXIS value " + nAxis + " too large");
-        }
-
-        if (nAxis == 0) {
-            return null;
-        }
-
-        int[] axes = new int[nAxis];
-        for (int i = 1; i <= nAxis; i++) {
-            axes[nAxis - i] = myHeader.getIntValue(NAXISn.n(i), 0);
-        }
-
-        return axes;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -400,7 +384,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @since                1.16
      */
     public Bitpix getBitpix() throws FitsException {
-        return Bitpix.fromHeader(myHeader);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -411,7 +395,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @throws     FitsException if the BITPIX value in the header is absent or invalid.
      *
      * @deprecated               (<i>for internal use</i>) Will reduce visibility or remove entirely in the future.
-     * 
+     *
      * @see                      #getBitpix()
      */
     @Deprecated
@@ -421,10 +405,10 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
 
     /**
      * Returns the name of the physical unit in which images are represented.
-     * 
+     *
      * @deprecated This is only applicable to {@link ImageHDU} or {@link RandomGroupsHDU} and not for other HDU or data
      *                 types.
-     * 
+     *
      * @return     the standard name of the physical unit in which the image is expressed, e.g.
      *                 <code>"Jy beam^{-1}"</code>.
      */
@@ -435,12 +419,12 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
 
     /**
      * Returns the integer value that signifies blank (missing or <code>null</code>) data in an integer image.
-     * 
+     *
      * @deprecated               This is only applicable to {@link ImageHDU} or {@link RandomGroupsHDU} with integer
      *                               type data and not for other HDU or data types.
-     * 
+     *
      * @return                   the integer value used for identifying blank / missing data in integer images.
-     * 
+     *
      * @throws     FitsException if the header does not specify a blanking value.
      */
     @Deprecated
@@ -453,12 +437,12 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
 
     /**
      * Returns the floating-point increment between adjacent integer values in the image.
-     * 
+     *
      * @deprecated This is only applicable to {@link ImageHDU} or {@link RandomGroupsHDU} with integer type data and not
      *                 for other HDU or data types.
-     * 
+     *
      * @return     the floating-point quantum that corresponds to the increment of 1 in the integer data representation.
-     * 
+     *
      * @see        #getBZero()
      */
     @Deprecated
@@ -468,12 +452,12 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
 
     /**
      * Returns the floating-point value that corresponds to an 0 integer value in the image.
-     * 
+     *
      * @deprecated This is only applicable to {@link ImageHDU} or {@link RandomGroupsHDU} with integer type data and not
      *                 for other HDU or data types.
-     * 
+     *
      * @return     the floating point value that correspond to the integer 0 in the image data.
-     * 
+     *
      * @see        #getBScale()
      */
     @Deprecated
@@ -487,12 +471,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a Date object
      */
     public Date getCreationDate() {
-        try {
-            return new FitsDate(myHeader.getStringValue(DATE)).toDate();
-        } catch (FitsException e) {
-            LOG.log(Level.SEVERE, "Unable to convert string to FITS date", e);
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -501,7 +480,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return the associated Data object
      */
     public DataClass getData() {
-        return myData;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -524,24 +503,24 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public double getEquinox() {
-        return myHeader.getDoubleValue(EQUINOX, -1.0);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getFileOffset() {
-        return myHeader.getFileOffset();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the number of data objects (of identical shape and size) that are group together in this HDUs data
      * segment. For most data types this would be simply 1, except for {@link RandomGroupsData}, where other values are
      * possible.
-     * 
+     *
      * @return     the number of data objects (of identical shape and size) that are grouped together in the data
      *                 segment.
-     * 
+     *
      * @deprecated Should not be exposed outside of {@link RandomGroupsHDU} -- will reduce visibility in the future/
-     * 
+     *
      * @see        #getParameterCount()
      */
     @Deprecated
@@ -593,7 +572,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @since                1.17
      */
     public long getStoredDatasum() throws FitsException {
-        return FitsCheckSum.getStoredDatasum(myHeader);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -615,7 +594,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @since                1.17
      */
     public void setChecksum() throws FitsException {
-        FitsCheckSum.setChecksum(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -623,65 +602,41 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * performing the same checks as {@link #verifyDataIntegrity()}, it also checks the overall checksum of the HDU if
      * possible. When the header has a CHECKSUM keyword stored, the overall checksum of the HDU must be
      * <code>0xffffffff</code>, that is -1 in 32-bit representation.
-     * 
+     *
      * @return               <code>true</code> if the HDU has a CHECKSUM and/or DATASUM record to check against,
      *                           otherwise <code>false</code>
-     * 
+     *
      * @throws FitsException if the HDU fails the integrity test.
      * @throws IOException   if there was an I/O error accessing the input.
-     * 
+     *
      * @see                  #verifyDataIntegrity()
      * @see                  Fits#verifyIntegrity()
-     * 
+     *
      * @since                1.18.1
      */
     @SuppressWarnings("resource")
     public boolean verifyIntegrity() throws FitsException, IOException {
-        boolean result = verifyDataIntegrity();
-
-        if (myHeader.getCard(Checksum.CHECKSUM) == null) {
-            return result;
-        }
-
-        long fsum = (myHeader.getStreamChecksum() < 0) ?
-                FitsCheckSum.checksum(myHeader.getRandomAccessInput(), getFileOffset(), getSize()) :
-                FitsCheckSum.sumOf(myHeader.getStreamChecksum(), myData.getStreamChecksum());
-
-        if (fsum != FitsCheckSum.HDU_CHECKSUM) {
-            throw new FitsIntegrityException("checksum", fsum, FitsCheckSum.HDU_CHECKSUM);
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks that the HDUs data checksum is correct. The recorded DATASUM will be used, if available, to check the
      * integrity of the data segment.
-     * 
+     *
      * @return               <code>true</code> if the HDU has DATASUM record to check against, otherwise
      *                           <code>false</code>
-     * 
+     *
      * @throws FitsException if the HDU fails the integrity test.
      * @throws IOException   if there was an I/O error accessing the input.
-     * 
+     *
      * @see                  #verifyIntegrity()
      * @see                  Fits#verifyIntegrity()
-     * 
+     *
      * @since                1.18.1
      */
     @SuppressWarnings("resource")
     public boolean verifyDataIntegrity() throws FitsException, IOException {
-        if (getHeader().getCard(Checksum.DATASUM) == null) {
-            return false;
-        }
-
-        Data d = getData();
-        RandomAccess rin = myData.getRandomAccessInput();
-        long fsum = (rin != null) ? FitsCheckSum.checksum(rin, d.getFileOffset(), d.getSize()) : d.getStreamChecksum();
-
-        if (fsum != getStoredDatasum()) {
-            throw new FitsIntegrityException("datasum", fsum, getStoredDatasum());
-        }
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -689,7 +644,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * the FITS header. This method always computes the checksum from data fully loaded in memory. As such it will load
      * deferred read mode data into RAM to perform the calculation. If you prefer to leave the data in deferred read
      * mode, you can use {@link Fits#calcChecksum(int)} instead.
-     * 
+     *
      * @deprecated               Use {@link #verifyIntegrity()} instead when appropriate. It's not particularly useful
      *                               since integrity checking does not use or require knowledge of this sum. May be
      *                               removed from future releases.
@@ -711,16 +666,16 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
 
     /**
      * Returns the FITS header component of this HDU
-     * 
+     *
      * @return the associated header
-     * 
+     *
      * @see    Fits#getPrimaryHeader()
      * @see    Fits#getCompleteHeader(int)
      * @see    Fits#getCompleteHeader(String)
      * @see    Fits#getCompleteHeader(String, int)
      */
     public Header getHeader() {
-        return myHeader;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -731,7 +686,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return     the builder for header cards.
      */
     public HeaderCardBuilder card(IFitsHeader key) {
-        return myHeader.card(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -740,21 +695,16 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getInstrument() {
-        return myHeader.getStringValue(INSTRUME);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the underlying Java object (usually an array of some type) that stores the data internally.
-     * 
+     *
      * @return the non-FITS data object. Same as {@link #getData()}.<code>getKernel()</code>.
      */
     public final Object getKernel() {
-        try {
-            return myData.getKernel();
-        } catch (FitsException e) {
-            LOG.log(Level.SEVERE, "Unable to get kernel data", e);
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -763,7 +713,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return minimum value.
      */
     public double getMaximumValue() {
-        return myHeader.getDoubleValue(DATAMAX);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -772,7 +722,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return minimum value.
      */
     public double getMinimumValue() {
-        return myHeader.getDoubleValue(DATAMIN);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -781,7 +731,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getObject() {
-        return myHeader.getStringValue(OBJECT);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -790,12 +740,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a Date object
      */
     public Date getObservationDate() {
-        try {
-            return new FitsDate(myHeader.getStringValue(DATE_OBS)).toDate();
-        } catch (FitsException e) {
-            LOG.log(Level.SEVERE, "Unable to convert string to FITS observation date", e);
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -804,7 +749,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getObserver() {
-        return myHeader.getStringValue(OBSERVER);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -813,16 +758,16 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getOrigin() {
-        return myHeader.getStringValue(ORIGIN);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the number of parameter bytes (per data group) accompanying each data object in the group.
-     * 
+     *
      * @return     the number of bytes used for arbitrary extra parameters accompanying each data object in the group.
-     * 
+     *
      * @deprecated Should not be exposed outside of {@link RandomGroupsHDU} -- will reduce visibility in the future.
-     * 
+     *
      * @see        #getGroupCount()
      */
     @Deprecated
@@ -836,20 +781,12 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getReference() {
-        return myHeader.getStringValue(REFERENC);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getSize() {
-        long size = 0;
-
-        if (myHeader != null) {
-            size += myHeader.getSize();
-        }
-        if (myData != null) {
-            size += myData.getSize();
-        }
-        return size;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -858,7 +795,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @return either <CODE>null</CODE> or a String object
      */
     public String getTelescope() {
-        return myHeader.getStringValue(TELESCOP);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -867,7 +804,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * retained otherwise.
      *
      * @param      keyword the FITS keyword
-     * 
+     *
      * @deprecated         (<i>for internal use</i>) Will reduced visibility in the future. Use
      *                         {@link Header#getStringValue(IFitsHeader)} or similar instead followed by
      *                         {@link String#trim()} if necessary.
@@ -889,7 +826,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * considered significant, and are retained otherwise.
      *
      * @param      keyword the FITS keyword
-     * 
+     *
      * @deprecated         (<i>for internal use</i>) Will reduced visibility in the future. Use
      *                         {@link Header#getStringValue(String)} or similar instead followed by
      *                         {@link String#trim()} if necessary.
@@ -905,38 +842,30 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * Print out some information about this HDU.
      *
      * @param  stream        the printstream to write the info on
-     * 
+     *
      * @throws FitsException if the HDU is malformed
      */
     public abstract void info(PrintStream stream) throws FitsException;
 
     @Override
-    @SuppressWarnings({"unchecked", "deprecation"})
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public void read(ArrayDataInput stream) throws FitsException, IOException {
-        setHeader(Header.readHeader(stream));
-        myData = (DataClass) FitsFactory.dataFactory(myHeader);
-        myData.read(stream);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean reset() {
-        return myHeader.reset();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void rewrite() throws FitsException, IOException {
-        if (!rewriteable()) {
-            throw new FitsException("Invalid attempt to rewrite HDU");
-        }
-        myHeader.rewrite();
-        if (!myData.isDeferred()) {
-            myData.rewrite();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean rewriteable() {
-        return myHeader.rewriteable() && myData.rewriteable();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -947,14 +876,7 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @throws FitsException if the operation failed
      */
     void setPrimaryHDU(boolean value) throws FitsException {
-        if (value && !canBePrimary()) {
-            throw new FitsException("Invalid attempt to make HDU of type:" + this.getClass().getName() + " primary.");
-        }
-
-        Header.KeywordCheck mode = myHeader.getKeywordChecking();
-        myHeader.setKeywordChecking(Header.KeywordCheck.DATA_TYPE);
-        myHeader.setRequiredKeys(value ? null : getCanonicalXtension());
-        myHeader.setKeywordChecking(mode);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -967,33 +889,11 @@ public abstract class BasicHDU<DataClass extends Data> implements FitsElement {
      * @since  1.18
      */
     protected String getCanonicalXtension() {
-        // TODO this should become an abstract method for 2.0. Prior to that we provide a default
-        // implementation for API back-compatibility reasons for any 3rd-party HDU implementations.
-        // To warn that this should be ovewritten, we'll log a warning...
-        LOG.warning(getClass().getName() + " should override getCanonicalXtension() method as appropriate.");
-        return "UNKNOWN";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(ArrayDataOutput stream) throws FitsException {
-        if (myHeader == null) {
-            setHeader(new Header());
-        }
-
-        if (stream instanceof FitsOutput) {
-            boolean isFirst = ((FitsOutput) stream).isAtStart();
-            setPrimaryHDU(canBePrimary() && isFirst);
-        }
-
-        myHeader.write(stream);
-
-        if (myData != null) {
-            myData.write(stream);
-        }
-        try {
-            stream.flush();
-        } catch (IOException e) {
-            throw new FitsException("Error flushing at end of HDU", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

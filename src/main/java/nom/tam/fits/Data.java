@@ -1,7 +1,6 @@
 package nom.tam.fits;
 
 import java.io.EOFException;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,17 +31,14 @@ import java.io.EOFException;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import nom.tam.fits.utilities.FitsCheckSum;
 import nom.tam.util.ArrayDataInput;
 import nom.tam.util.ArrayDataOutput;
 import nom.tam.util.FitsInputStream;
 import nom.tam.util.RandomAccess;
-
 import static nom.tam.util.LoggerHelper.getLogger;
 
 /**
@@ -84,17 +80,19 @@ public abstract class Data implements FitsElement {
     @Deprecated
     protected RandomAccess input;
 
-    /** The data checksum calculated from the input stream */
+    /**
+     * The data checksum calculated from the input stream
+     */
     private long streamSum = 0L;
 
     /**
      * Returns the random accessible input from which this data can be read, if any.
-     * 
+     *
      * @return the random access input from which we can read the data when needed, or <code>null</code> if this data
      *             object is not associated to an input, or it is not random accessible.
      */
     protected final RandomAccess getRandomAccessInput() {
-        return input;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,12 +109,12 @@ public abstract class Data implements FitsElement {
      *
      * @return <code>true</code> if it is set for deferred reading at a later time, or else <code>false</code> if this
      *             data is currently loaded into RAM. #see {@link #detach()}
-     * 
+     *
      * @since  1.17
      */
     @SuppressWarnings("resource")
     public boolean isDeferred() {
-        return getTrueSize() != 0 && isEmpty() && getRandomAccessInput() != null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -130,7 +128,7 @@ public abstract class Data implements FitsElement {
      * @since  1.18
      */
     public boolean isEmpty() {
-        return getCurrentData() == null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -141,7 +139,7 @@ public abstract class Data implements FitsElement {
      * checksum may differ from that of the file if the file uses a non-standard padding. Hence, for verifying data
      * integrity as stored in a file {@link BasicHDU#verifyDataIntegrity()} or {@link BasicHDU#verifyIntegrity()} should
      * be preferred.
-     * 
+     *
      * @return               the computed FITS checksum from the data (fully loaded in memory).
      *
      * @throws FitsException if there was an error while calculating the checksum
@@ -153,30 +151,30 @@ public abstract class Data implements FitsElement {
      * @since                1.17
      */
     public long calcChecksum() throws FitsException {
-        return FitsCheckSum.checksum(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the checksum value calculated duting reading from a stream. It always returns a value that is greater or
      * equal to zero. It is only populated when reading from {@link FitsInputStream} imputs, and never from other types
      * of inputs. The default return value is zero.
-     * 
+     *
      * @return the checksum calculated for the data read from a stream, or else zero if the data was not read from the
      *             stream.
-     * 
+     *
      * @see    FitsInputStream
      * @see    Header#getStreamChecksum()
-     * 
+     *
      * @since  1.18.1
      */
     final long getStreamChecksum() {
-        return streamSum;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the underlying Java representation of the data contained in this HDU's data segment. Typically it will
      * return a Java array of some kind.
-     * 
+     *
      * @return               the underlying Java representation of the data core object, such as a multi-dimensional
      *                           Java array.
      *
@@ -186,8 +184,7 @@ public abstract class Data implements FitsElement {
      * @see                  #ensureData()
      */
     public Object getData() throws FitsException {
-        ensureData();
-        return getCurrentData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -208,7 +205,7 @@ public abstract class Data implements FitsElement {
 
     @Override
     public long getFileOffset() {
-        return fileOffset;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,12 +216,12 @@ public abstract class Data implements FitsElement {
      * @throws FitsException if the data could not be gathered .
      */
     public final Object getKernel() throws FitsException {
-        return getData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long getSize() {
-        return FitsUtil.addPadding(getTrueSize());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -281,19 +278,7 @@ public abstract class Data implements FitsElement {
      * @since                1.18
      */
     protected void ensureData() throws FitsException {
-        if (!isDeferred()) {
-            return;
-        }
-
-        try {
-            long pos = input.getFilePointer();
-            input.seek(getFileOffset());
-            loadData(input);
-            input.seek(pos);
-        } catch (IOException e) {
-            throw new FitsException("error reading deferred data: " + e, e);
-        }
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -317,96 +302,38 @@ public abstract class Data implements FitsElement {
      */
     @Override
     public void read(ArrayDataInput in) throws PaddingException, FitsException {
-        detach();
-
-        if (in == null) {
-            return;
-        }
-
-        if (in instanceof FitsInputStream) {
-            ((FitsInputStream) in).nextChecksum();
-        }
-        streamSum = 0L;
-
-        setFileOffset(in);
-
-        if (getTrueSize() == 0) {
-            return;
-        }
-
-        if (in instanceof RandomAccess) {
-            // If random accessible, then defer reading....
-            try {
-                in.skipAllBytes(getTrueSize());
-            } catch (IOException e) {
-                throw new FitsException("Unable to skip over data segment:" + e, e);
-            }
-        } else {
-            try {
-                loadData(in);
-            } catch (IOException e) {
-                throw new FitsException("error reading data: " + e, e);
-            }
-        }
-
-        skipPadding(in);
-
-        if (in instanceof FitsInputStream) {
-            streamSum = ((FitsInputStream) in).nextChecksum();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("resource")
     @Override
     public boolean reset() {
-        try {
-            FitsUtil.reposition(getRandomAccessInput(), getFileOffset());
-            return true;
-        } catch (Exception e) {
-            LOG.log(Level.SEVERE, "Unable to reset", e);
-            return false;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("resource")
     @Override
     public void rewrite() throws FitsException {
-        if (isDeferred()) {
-            return; // Nothing to do...
-        }
-
-        if (!rewriteable()) {
-            throw new FitsException("Illegal attempt to rewrite data");
-        }
-
-        FitsUtil.reposition(getRandomAccessInput(), getFileOffset());
-        write((ArrayDataOutput) getRandomAccessInput());
-        try {
-            ((ArrayDataOutput) getRandomAccessInput()).flush();
-        } catch (IOException e) {
-            throw new FitsException("Error in rewrite flush: ", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean rewriteable() {
-        return input != null && getFileOffset() >= 0 && (getTrueSize() + FITS_BLOCK_SIZE_MINUS_ONE)
-                / FitsFactory.FITS_BLOCK_SIZE == (getTrueSize() + FITS_BLOCK_SIZE_MINUS_ONE) / FitsFactory.FITS_BLOCK_SIZE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Detaches this data object from the input (if any), such as a file or stream, but not before loading data from the
      * previously assigned input into memory.
-     * 
+     *
      * @throws FitsException if there was an issue loading the data from the previous input (if any)
-     * 
+     *
      * @see                  #isDeferred()
-     * 
+     *
      * @since                1.18
      */
     public void detach() throws FitsException {
-        ensureData();
-        clearInput();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void clearInput() {
@@ -423,13 +350,7 @@ public abstract class Data implements FitsElement {
      * @see     #isDeferred()
      */
     protected void setFileOffset(ArrayDataInput o) {
-        if (o instanceof RandomAccess) {
-            fileOffset = FitsUtil.findOffset(o);
-            dataSize = getTrueSize();
-            input = (RandomAccess) o;
-        } else {
-            clearInput();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
@@ -438,9 +359,9 @@ public abstract class Data implements FitsElement {
     /**
      * Returns an approprotae HDU object that encapsulates this FITS data, and contains the minimal mandatory header
      * description for that data.
-     * 
+     *
      * @throws FitsException If the data cannot be converted to an HDU for some reason.
-     * 
+     *
      * @return               a HDU object ocntaining the data and its minimal required header description
      */
     public abstract BasicHDU<?> toHDU() throws FitsException;

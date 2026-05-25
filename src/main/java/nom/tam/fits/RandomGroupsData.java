@@ -30,10 +30,8 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.lang.reflect.Array;
-
 import nom.tam.fits.header.Bitpix;
 import nom.tam.fits.header.Standard;
 import nom.tam.util.ArrayDataInput;
@@ -51,13 +49,15 @@ import nom.tam.util.FitsEncoder;
  * Random groups are instantiated as a two-dimensional array of objects. The first dimension of the array is the number
  * of groups. The second dimension is 2. The first object in every row is a one dimensional parameter array. The second
  * element is the n-dimensional data array.
- * 
+ *
  * @see BinaryTable
  */
 public class RandomGroupsData extends Data {
 
     private int groups;
+
     private Object[] sampleRow;
+
     private Object[][] dataArray;
 
     /**
@@ -93,25 +93,19 @@ public class RandomGroupsData extends Data {
         dataArray = x == null ? new Object[0][] : x;
         groups = dataArray.length;
         if (groups > 0) {
-
             if (dataArray[0].length != 2) {
                 throw new IllegalArgumentException("Second array dimension must be 2");
             }
-
             if (Array.getLength(ArrayFuncs.getDimensions(dataArray[0][0])) != 1) {
                 throw new IllegalArgumentException("Expected 1D parameter array.");
             }
-
             if (dataArray[0][1] != null) {
                 Class<?> pbase = ArrayFuncs.getBaseClass(dataArray[0][0]);
                 Class<?> dbase = ArrayFuncs.getBaseClass(dataArray[0][1]);
-
                 if (pbase != dbase) {
-                    throw new IllegalArgumentException(
-                            "Mismatched parameters and data types (" + pbase.getName() + " vs " + dbase.getName() + ")");
+                    throw new IllegalArgumentException("Mismatched parameters and data types (" + pbase.getName() + " vs " + dbase.getName() + ")");
                 }
             }
-
             sampleRow = new Object[2];
             sampleRow[0] = ArrayFuncs.deepClone(dataArray[0][0]);
             sampleRow[1] = ArrayFuncs.deepClone(dataArray[0][1]);
@@ -126,7 +120,7 @@ public class RandomGroupsData extends Data {
      * @since  1.18
      */
     public Class<?> getElementType() {
-        return sampleRow == null ? null : ArrayFuncs.getBaseClass(sampleRow[0]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -139,7 +133,7 @@ public class RandomGroupsData extends Data {
      * @since  1.18
      */
     public int getParameterCount() {
-        return sampleRow == null ? -1 : Array.getLength(sampleRow[0]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -152,126 +146,71 @@ public class RandomGroupsData extends Data {
      * @since  1.18
      */
     public int[] getDataDims() {
-        return sampleRow == null ? null : ArrayFuncs.getDimensions(sampleRow[1]);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("deprecation")
     @Override
     protected void fillHeader(Header h) throws FitsException {
-        if (groups <= 0) {
-            throw new FitsException("Invalid (empty) random group data");
-        }
-        Standard.context(RandomGroupsData.class);
-
-        // We'll assume it's a primary image, until we know better...
-        // Just in case, we don't want an XTENSION key lingering around...
-        h.deleteKey(Standard.XTENSION);
-
-        Cursor<String, HeaderCard> c = h.iterator();
-        c.add(HeaderCard.create(Standard.SIMPLE, true));
-        c.add(HeaderCard.create(Standard.BITPIX, Bitpix.forPrimitiveType(getElementType()).getHeaderValue()));
-
-        int[] dims = getDataDims();
-        c.add(HeaderCard.create(Standard.NAXIS, dims.length + 1));
-        h.addValue(Standard.NAXIS1, 0);
-
-        for (int i = 1; i <= dims.length; i++) {
-            c.add(HeaderCard.create(Standard.NAXISn.n(i + 1), dims[dims.length - i]));
-        }
-
-        // Just in case!
-        c.add(HeaderCard.create(Standard.GROUPS, true));
-        c.add(HeaderCard.create(Standard.PCOUNT, getParameterCount()));
-        c.add(HeaderCard.create(Standard.GCOUNT, groups));
-        c.add(HeaderCard.create(Standard.EXTEND, true));
-
-        Standard.context(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected long getTrueSize() {
-        if (sampleRow == null) {
-            return 0;
-        }
-        return (FitsEncoder.computeSize(sampleRow[0]) + FitsEncoder.computeSize(sampleRow[1])) * groups;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isEmpty() {
-        return dataArray.length == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected void loadData(ArrayDataInput in) throws IOException {
-        dataArray = new Object[groups][2];
-
-        for (int i = 0; i < groups; i++) {
-            dataArray[i][0] = ((Object[]) ArrayFuncs.deepClone(sampleRow))[0];
-            dataArray[i][1] = ((Object[]) ArrayFuncs.deepClone(sampleRow))[1];
-        }
-
-        in.readImage(dataArray);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected Object[][] getCurrentData() {
-        return dataArray;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object[][] getData() throws FitsException {
-        return (Object[][]) super.getData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    @SuppressWarnings({"resource", "deprecation"})
+    @SuppressWarnings({ "resource", "deprecation" })
     @Override
     public void write(ArrayDataOutput str) throws FitsException {
-        if (getTrueSize() <= 0) {
-            return;
-        }
-
-        if (str != getRandomAccessInput()) {
-            ensureData();
-        }
-
-        try {
-            str.writeArray(dataArray);
-            FitsUtil.pad(str, getTrueSize());
-        } catch (IOException e) {
-            throw new FitsException("IO error writing random groups data ", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public RandomGroupsHDU toHDU() throws FitsException {
-        Header h = new Header();
-        fillHeader(h);
-        return new RandomGroupsHDU(h, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the image component stored in the specified group.
-     * 
+     *
      * @param  group                          The zero-based group index
-     * 
+     *
      * @return                                The image array for the specified group
-     * 
+     *
      * @throws ArrayIndexOutOfBoundsException if the group index is out of bounds
      * @throws FitsException                  if the deferred data could not be loaded.
-     * 
+     *
      * @see                                   RandomGroupsHDU#getParameter(String, int)
-     * 
+     *
      * @since                                 1.19
      */
     public Object getImage(int group) throws ArrayIndexOutOfBoundsException, FitsException {
-        ensureData();
-        return dataArray[group][1];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     Object getParameterArray(int group) throws ArrayIndexOutOfBoundsException, FitsException {
-        ensureData();
-        return dataArray[group][0];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

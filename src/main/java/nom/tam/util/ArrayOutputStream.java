@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.BufferedOutputStream;
@@ -37,7 +36,7 @@ import java.io.OutputStream;
 
 /**
  * Efficient writing of binary arrays to streams with custom binary encoding.
- * 
+ *
  * @author Attila Kovacs
  * @since 1.16
  * @see ArrayInputStream
@@ -45,13 +44,15 @@ import java.io.OutputStream;
  */
 public class ArrayOutputStream extends BufferedOutputStream implements OutputWriter {
 
-    /** conversion from Java arrays to FITS binary representation */
+    /**
+     * conversion from Java arrays to FITS binary representation
+     */
     private OutputEncoder encoder;
 
     /**
      * Instantiates a new output stream for efficient array transactions. For
      * use by subclass constructors only.
-     * 
+     *
      * @param o
      *            the underlying output stream
      * @param bufLength
@@ -63,7 +64,7 @@ public class ArrayOutputStream extends BufferedOutputStream implements OutputWri
 
     /**
      * Instantiates a new output stream for efficient array transactions.
-     * 
+     *
      * @param o
      *            the underlying output stream
      * @param bufLength
@@ -80,33 +81,33 @@ public class ArrayOutputStream extends BufferedOutputStream implements OutputWri
     /**
      * Sets the conversion from Java arrays to their binary representation in
      * the stream. For use by subclass constructors only.
-     * 
+     *
      * @param java2bin
      *            the conversion from Java arrays to their binary representation
      *            in stream
      * @see #getEncoder()
      */
     protected void setEncoder(OutputEncoder java2bin) {
-        encoder = java2bin;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the conversion from Java arrays to their binary representation in
      * the stream. Subclass implementeations can use this to access the required
      * conversion when writing data to file.
-     * 
+     *
      * @return the conversion from Java arrays to their binary representation in
      *         stream
      * @see #setEncoder(OutputEncoder)
      */
     protected OutputEncoder getEncoder() {
-        return encoder;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link ArrayDataOutput#writeArray(Object)} for a contract of this
      * method.
-     * 
+     *
      * @param o
      *            an array ot any type.
      * @throws IllegalArgumentException
@@ -116,10 +117,6 @@ public class ArrayOutputStream extends BufferedOutputStream implements OutputWri
      *             if there was an IO error writing to the output.
      */
     public synchronized void writeArray(Object o) throws IOException, IllegalArgumentException {
-        try {
-            encoder.writeArray(o);
-        } catch (IllegalArgumentException e) {
-            throw new IOException(e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

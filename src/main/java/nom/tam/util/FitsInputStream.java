@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 // What do we use in here?
@@ -38,7 +37,6 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.fits.utilities.FitsCheckSum;
 
@@ -63,13 +61,19 @@ import nom.tam.fits.utilities.FitsCheckSum;
 @SuppressWarnings("deprecation")
 public class FitsInputStream extends ArrayInputStream implements ArrayDataInput {
 
-    /** buffer for checksum calculation */
+    /**
+     * buffer for checksum calculation
+     */
     private ByteBuffer check;
 
-    /** aggregated checksum */
+    /**
+     * aggregated checksum
+     */
     private long sum;
 
-    /** the input, as accessible via the <code>DataInput</code> interface */
+    /**
+     * the input, as accessible via the <code>DataInput</code> interface
+     */
     private DataInput data;
 
     /**
@@ -97,33 +101,17 @@ public class FitsInputStream extends ArrayInputStream implements ArrayDataInput 
 
     @Override
     protected FitsDecoder getDecoder() {
-        return (FitsDecoder) super.getDecoder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized int read() throws IOException {
-        int i = super.read();
-        if (i >= 0) {
-            check.put((byte) i);
-            if (check.remaining() <= 0) {
-                aggregate();
-            }
-        }
-        return i;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public synchronized int read(byte[] b, int from, int len) throws IOException {
-        int n = super.read(b, from, len);
-        for (int i = 0; i < n;) {
-            int l = Math.min(n - i, check.remaining());
-            check.put(b, from + i, l);
-            if (check.remaining() <= 0) {
-                aggregate();
-            }
-            i += l;
-        }
-        return n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void aggregate() {
@@ -137,66 +125,64 @@ public class FitsInputStream extends ArrayInputStream implements ArrayDataInput 
      * and after reading the data block -- the first call resets the checksum and the block checksum is returned on the
      * second call. The checksummed block must be a multiple of 2880 bytes (the FITS block size) for the result to be
      * valid.
-     * 
+     *
      * @return the aggregated checksum since the last call to this method, or else since instantiation, on an integer
      *             number of FITS blocks read in the meantime.
-     * 
+     *
      * @since  1.18.1
      */
     public final long nextChecksum() {
-        long ret = sum;
-        sum = 0;
-        return ret;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void readFully(byte[] b) throws IOException {
-        readFully(b, 0, b.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void readFully(byte[] b, int off, int len) throws IOException {
-        getDecoder().readFully(b, off, len);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(boolean[] b, int start, int length) throws IOException {
-        return getDecoder().read(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(Boolean[] b, int start, int length) throws IOException {
-        return getDecoder().read(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(char[] c, int start, int length) throws IOException {
-        return getDecoder().read(c, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(short[] s, int start, int length) throws IOException {
-        return getDecoder().read(s, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(int[] i, int start, int length) throws IOException {
-        return getDecoder().read(i, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(long[] l, int start, int length) throws IOException {
-        return getDecoder().read(l, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(float[] f, int start, int length) throws IOException {
-        return getDecoder().read(f, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(double[] d, int start, int length) throws IOException {
-        return getDecoder().read(d, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -219,105 +205,81 @@ public class FitsInputStream extends ArrayInputStream implements ArrayDataInput 
 
     @Override
     public synchronized long skip(long n) throws IOException {
-        byte[] b = new byte[FitsFactory.FITS_BLOCK_SIZE];
-
-        // Always read so we can checksum.
-        long skipped = 0;
-        while (skipped < n) {
-            int got = read(b, 0, (int) Math.min(n - skipped, b.length));
-            if (got < 0) {
-                break;
-            }
-            skipped += got;
-        }
-        return skipped;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int skipBytes(int n) throws IOException {
-        return (int) super.skip(n);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void skipAllBytes(long toSkip) throws EOFException, IOException {
-        long got = 0;
-
-        while (got < toSkip) {
-            long n = skip(toSkip - got);
-            if (n <= 0) {
-                break;
-            }
-            got += n;
-        }
-
-        if (got != toSkip) {
-            throw new EOFException("Reached end-of-stream after skipping " + got + " of " + toSkip);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean readBoolean() throws IOException {
-        return getDecoder().readBoolean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int readUnsignedByte() throws IOException {
-        return getDecoder().readUnsignedByte();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public byte readByte() throws IOException {
-        return getDecoder().readByte();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public char readChar() throws IOException {
-        return getDecoder().readChar();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int readUnsignedShort() throws IOException {
-        return getDecoder().readUnsignedShort();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public short readShort() throws IOException {
-        return getDecoder().readShort();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int readInt() throws IOException {
-        return getDecoder().readInt();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public long readLong() throws IOException {
-        return getDecoder().readLong();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public float readFloat() throws IOException {
-        return getDecoder().readFloat();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public double readDouble() throws IOException {
-        return getDecoder().readDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String readUTF() throws IOException {
-        return data.readUTF();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final String readLine() throws IOException {
-        return getDecoder().readAsciiLine();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String toString() {
-        return super.toString() + "[count=" + count + ",pos=" + pos + "]";
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

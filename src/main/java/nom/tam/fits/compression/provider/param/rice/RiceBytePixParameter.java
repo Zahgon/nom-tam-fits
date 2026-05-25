@@ -1,7 +1,6 @@
 package nom.tam.fits.compression.provider.param.rice;
 
 import nom.tam.fits.Header;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import nom.tam.fits.Header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.compression.algorithm.rice.RiceCompressOption;
@@ -56,18 +54,11 @@ public final class RiceBytePixParameter extends CompressHeaderParameter<RiceComp
 
     @Override
     public void getValueFromHeader(Header header) throws HeaderCardException {
-        HeaderCard value = findZVal(header);
-        if (value != null) {
-            getOption().setBytePix(value.getValue(Integer.class, getOption().getBytePix()));
-        } else {
-            getOption().setBytePix(RiceCompressOption.DEFAULT_RICE_BYTEPIX);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setValueInHeader(Header header) throws HeaderCardException {
-        int zvalIndex = nextFreeZVal(header);
-        header.addValue(Compression.ZNAMEn.n(zvalIndex), getName());
-        header.addValue(Compression.ZVALn.n(zvalIndex), getOption().getBytePix());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

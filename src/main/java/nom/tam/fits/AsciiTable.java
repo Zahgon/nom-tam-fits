@@ -30,11 +30,9 @@ package nom.tam.fits;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Arrays;
-
 import nom.tam.fits.header.Bitpix;
 import nom.tam.fits.header.IFitsHeader;
 import nom.tam.fits.header.Standard;
@@ -45,7 +43,6 @@ import nom.tam.util.ByteFormatter;
 import nom.tam.util.ByteParser;
 import nom.tam.util.Cursor;
 import nom.tam.util.FormatException;
-
 import static nom.tam.fits.header.Standard.NAXIS1;
 import static nom.tam.fits.header.Standard.NAXIS2;
 import static nom.tam.fits.header.Standard.TBCOLn;
@@ -62,7 +59,7 @@ import static nom.tam.fits.header.Standard.TNULLn;
  * flexible or compact than {@link BinaryTable}. As such, users are generally discouraged from using this type of table
  * to represent FITS table data. This class only supports scalar entries of type <code>int</code>, <code>long</code>,
  * <code>float</code>, <code>double</code>, or else <code>String</code> types.
- * 
+ *
  * @see AsciiTableHDU
  * @see BinaryTable
  */
@@ -79,39 +76,60 @@ public class AsciiTable extends AbstractTableData {
 
     private static final int DOUBLE_MAX_LENGTH = 24;
 
-    /** Whether I10 columns should be treated as <code>int</code> provided that defined limits allow for it. */
+    /**
+     * Whether I10 columns should be treated as <code>int</code> provided that defined limits allow for it.
+     */
     private static boolean isI10PreferInt = true;
 
     // private static final Logger LOG = Logger.getLogger(AsciiTable.class.getName());
-
-    /** The number of rows in the table */
+    /**
+     * The number of rows in the table
+     */
     private int nRows;
 
-    /** The number of fields in the table */
+    /**
+     * The number of fields in the table
+     */
     private int nFields;
 
-    /** The number of bytes in a row */
+    /**
+     * The number of bytes in a row
+     */
     private int rowLen;
 
-    /** The null string for the field */
+    /**
+     * The null string for the field
+     */
     private String[] nulls;
 
-    /** The type of data in the field */
+    /**
+     * The type of data in the field
+     */
     private Class<?>[] types;
 
-    /** The offset from the beginning of the row at which the field starts */
+    /**
+     * The offset from the beginning of the row at which the field starts
+     */
     private int[] offsets;
 
-    /** The number of bytes in the field */
+    /**
+     * The number of bytes in the field
+     */
     private int[] lengths;
 
-    /** The byte buffer used to read/write the ASCII table */
+    /**
+     * The byte buffer used to read/write the ASCII table
+     */
     private byte[] buffer;
 
-    /** Markers indicating fields that are null */
+    /**
+     * Markers indicating fields that are null
+     */
     private boolean[] isNull;
 
-    /** Column names */
+    /**
+     * Column names
+     */
     private String[] names;
 
     /**
@@ -124,10 +142,14 @@ public class AsciiTable extends AbstractTableData {
      */
     private ByteParser bp;
 
-    /** The actual stream used to input data */
+    /**
+     * The actual stream used to input data
+     */
     private ArrayDataInput currInput;
 
-    /** Create an empty ASCII table */
+    /**
+     * Create an empty ASCII table
+     */
     public AsciiTable() {
         data = new Object[0];
         buffer = null;
@@ -149,7 +171,7 @@ public class AsciiTable extends AbstractTableData {
      * @param      hdr           The header describing the table
      *
      * @throws     FitsException if the operation failed
-     * 
+     *
      * @deprecated               (<i>for internal use</i>) Visibility may be reduced to the package level in the future.
      */
     @Deprecated
@@ -167,7 +189,7 @@ public class AsciiTable extends AbstractTableData {
      * integers. Setting it <code>true</code> may make it more likely to avoid unexpected type changes during
      * round-tripping, but it also means that some (large number) data in I10 columns may be impossible to read.
      * </p>
-     * 
+     *
      * @param      hdr           The header describing the table
      * @param      preferInt     if <code>true</code>, format "I10" columns will be assumed <code>int.class</code>,
      *                               provided TLMINn/TLMAXn or TDMINn/TDMAXn limits (if defined) allow it. if
@@ -175,27 +197,23 @@ public class AsciiTable extends AbstractTableData {
      *                               assumed <code>long.class</code>.
      *
      * @throws     FitsException if the operation failed
-     * 
+     *
      * @deprecated               Use {@link #setI10PreferInt(boolean)} instead prior to reading ASCII tables.
      */
     @Deprecated
     public AsciiTable(Header hdr, boolean preferInt) throws FitsException {
         String ext = hdr.getStringValue(Standard.XTENSION, Standard.XTENSION_IMAGE);
-
         if (!ext.equalsIgnoreCase(Standard.XTENSION_ASCIITABLE)) {
             throw new FitsException("Not an ASCII table header (XTENSION = " + hdr.getStringValue(Standard.XTENSION) + ")");
         }
-
         nRows = hdr.getIntValue(NAXIS2);
         nFields = hdr.getIntValue(TFIELDS);
         rowLen = hdr.getIntValue(NAXIS1);
-
         types = new Class[nFields];
         offsets = new int[nFields];
         lengths = new int[nFields];
         nulls = new String[nFields];
         names = new String[nFields];
-
         for (int i = 0; i < nFields; i++) {
             names[i] = hdr.getStringValue(Standard.TTYPEn.n(i + 1), TableHDU.getDefaultColumnName(i));
             offsets[i] = hdr.getIntValue(TBCOLn.n(i + 1)) - 1;
@@ -210,29 +228,27 @@ public class AsciiTable extends AbstractTableData {
                 s = s.substring(0, s.indexOf('.'));
             }
             lengths[i] = Integer.parseInt(s);
-
-            switch (c) {
-            case 'A':
-                types[i] = String.class;
-                break;
-            case 'I':
-                if (lengths[i] == MAX_INTEGER_LENGTH) {
-                    types[i] = guessI10Type(i, hdr, preferInt);
-                } else {
-                    types[i] = lengths[i] > MAX_INTEGER_LENGTH ? long.class : int.class;
-                }
-                break;
-            case 'F':
-            case 'E':
-                types[i] = float.class;
-                break;
-            case 'D':
-                types[i] = double.class;
-                break;
-            default:
-                throw new FitsException("could not parse column type of ascii table");
+            switch(c) {
+                case 'A':
+                    types[i] = String.class;
+                    break;
+                case 'I':
+                    if (lengths[i] == MAX_INTEGER_LENGTH) {
+                        types[i] = guessI10Type(i, hdr, preferInt);
+                    } else {
+                        types[i] = lengths[i] > MAX_INTEGER_LENGTH ? long.class : int.class;
+                    }
+                    break;
+                case 'F':
+                case 'E':
+                    types[i] = float.class;
+                    break;
+                case 'D':
+                    types[i] = double.class;
+                    break;
+                default:
+                    throw new FitsException("could not parse column type of ascii table");
             }
-
             nulls[i] = hdr.getStringValue(TNULLn.n(i + 1));
             if (nulls[i] != null) {
                 nulls[i] = nulls[i].trim();
@@ -247,34 +263,24 @@ public class AsciiTable extends AbstractTableData {
      *                           <code>long[]</code>, <code>float[]</code>, <code>double[]</code>, or else
      *                           <code>String[]</code>, containing the same number of elements in each column (the
      *                           number of rows).
-     * 
+     *
      * @return               a new ASCII table with the data. The tables data may be partially independent from the
      *                           argument. Modifications to the table data, or that to the argument have undefined
      *                           effect on the other object. If it is important to decouple them, you can use a
      *                           {@link ArrayFuncs#deepClone(Object)} of your original data as an argument.
-     * 
+     *
      * @throws FitsException if the argument is not a suitable representation of FITS data in columns
-     * 
+     *
      * @see                  BinaryTable#fromColumnMajor(Object[])
-     * 
+     *
      * @since                1.19
      */
     public static AsciiTable fromColumnMajor(Object[] columns) throws FitsException {
-        AsciiTable t = new AsciiTable();
-        for (int i = 0; i < columns.length; i++) {
-            try {
-                t.addColumn(columns[i]);
-            } catch (Exception e) {
-                throw new FitsException("col[" + i + "]: " + e.getMessage(), e);
-            }
-        }
-        return t;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    void setColumnName(int col, String value)
-            throws IllegalArgumentException, IndexOutOfBoundsException, HeaderCardException {
-        HeaderCard.validateChars(value);
-        names[col] = value;
+    void setColumnName(int col, String value) throws IllegalArgumentException, IndexOutOfBoundsException, HeaderCardException {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -293,7 +299,6 @@ public class AsciiTable extends AbstractTableData {
         if (l == dft) {
             return false;
         }
-
         return (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE);
     }
 
@@ -317,18 +322,14 @@ public class AsciiTable extends AbstractTableData {
      */
     private Class<?> guessI10Type(int col, Header h, boolean preferInt) {
         col++;
-
-        if (requiresLong(h, TLMINn.n(col), Long.MAX_VALUE) || requiresLong(h, TLMAXn.n(col), Long.MIN_VALUE)
-                || requiresLong(h, TDMINn.n(col), Long.MAX_VALUE) || requiresLong(h, TDMAXn.n(col), Long.MIN_VALUE)) {
+        if (requiresLong(h, TLMINn.n(col), Long.MAX_VALUE) || requiresLong(h, TLMAXn.n(col), Long.MIN_VALUE) || requiresLong(h, TDMINn.n(col), Long.MAX_VALUE) || requiresLong(h, TDMAXn.n(col), Long.MIN_VALUE)) {
             return long.class;
         }
-
-        if ((h.containsKey(TLMINn.n(col)) || h.containsKey(TDMINn.n(col))) //
-                && (h.containsKey(TLMAXn.n(col)) || h.containsKey(TDMAXn.n(col)))) {
+        if (//
+        (h.containsKey(TLMINn.n(col)) || h.containsKey(TDMINn.n(col))) && (h.containsKey(TLMAXn.n(col)) || h.containsKey(TDMAXn.n(col)))) {
             // There are keywords defining both min/max values, and none of them require long types...
             return int.class;
         }
-
         return preferInt ? int.class : long.class;
     }
 
@@ -342,67 +343,16 @@ public class AsciiTable extends AbstractTableData {
      * @since      1.16
      */
     public final Class<?> getColumnType(int col) {
-        return types[col];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     int addColInfo(int col, Cursor<String, HeaderCard> iter) {
-        String tform = null;
-        if (types[col] == String.class) {
-            tform = "A" + lengths[col];
-        } else if (types[col] == int.class || types[col] == long.class) {
-            tform = "I" + lengths[col];
-        } else if (types[col] == float.class) {
-            tform = "E" + lengths[col] + ".0";
-        } else if (types[col] == double.class) {
-            tform = "D" + lengths[col] + ".0";
-        }
-
-        Standard.context(AsciiTable.class);
-        if (names[col] != null) {
-            iter.add(HeaderCard.create(Standard.TTYPEn.n(col + 1), names[col]));
-        }
-        iter.add(HeaderCard.create(Standard.TFORMn.n(col + 1), tform));
-        iter.add(HeaderCard.create(Standard.TBCOLn.n(col + 1), offsets[col] + 1));
-        Standard.context(null);
-        return lengths[col];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int addColumn(Object newCol) throws FitsException, IllegalArgumentException {
-        if (newCol == null) {
-            throw new FitsException("data is null");
-        }
-
-        if (!newCol.getClass().isArray()) {
-            throw new IllegalArgumentException("Not an array: " + newCol.getClass().getName());
-        }
-
-        int maxLen = 1;
-        if (newCol instanceof String[]) {
-            String[] sa = (String[]) newCol;
-            for (String element : sa) {
-                if (element != null && element.length() > maxLen) {
-                    maxLen = element.length();
-                }
-            }
-        } else if (newCol instanceof double[]) {
-            maxLen = DOUBLE_MAX_LENGTH;
-        } else if (newCol instanceof int[]) {
-            maxLen = INT_MAX_LENGTH;
-        } else if (newCol instanceof long[]) {
-            maxLen = LONG_MAX_LENGTH;
-        } else if (newCol instanceof float[]) {
-            maxLen = FLOAT_MAX_LENGTH;
-        } else {
-            throw new FitsException(
-                    "No AsciiTable support for elements of " + newCol.getClass().getComponentType().getName());
-        }
-        addColumn(newCol, maxLen);
-
-        // Invalidate the buffer
-        buffer = null;
-
-        return nFields;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -421,67 +371,11 @@ public class AsciiTable extends AbstractTableData {
      *                                      &le;1.
      * @throws FitsException            if the column us of an unsupported data type or if the number of entries does
      *                                      not match the number of rows already contained in the table.
-     * 
+     *
      * @see                             #addColumn(Object)
      */
     public int addColumn(Object newCol, int width) throws FitsException, IllegalArgumentException {
-        if (width < 1) {
-            throw new IllegalArgumentException("Illegal ASCII column width: " + width);
-        }
-
-        if (!newCol.getClass().isArray()) {
-            throw new IllegalArgumentException("Not an array: " + newCol.getClass().getName());
-        }
-
-        if (nFields > 0 && Array.getLength(newCol) != nRows) {
-            throw new FitsException(
-                    "Mismatched number of rows: expected " + nRows + ", got " + Array.getLength(newCol) + "rows.");
-        }
-
-        if (nFields == 0) {
-            nRows = Array.getLength(newCol);
-        }
-
-        Class<?> type = ArrayFuncs.getBaseClass(newCol);
-        if (type != int.class && type != long.class && type != float.class && type != double.class
-                && type != String.class) {
-            throw new FitsException("No AsciiTable support for elements of " + type.getName());
-        }
-
-        data = Arrays.copyOf(data, nFields + 1);
-        offsets = Arrays.copyOf(offsets, nFields + 1);
-        lengths = Arrays.copyOf(lengths, nFields + 1);
-        types = Arrays.copyOf(types, nFields + 1);
-        nulls = Arrays.copyOf(nulls, nFields + 1);
-        names = Arrays.copyOf(names, nFields + 1);
-
-        data[nFields] = newCol;
-        offsets[nFields] = rowLen + 1;
-        lengths[nFields] = width;
-        types[nFields] = ArrayFuncs.getBaseClass(newCol);
-        names[nFields] = TableHDU.getDefaultColumnName(nFields);
-
-        rowLen += width + 1;
-        if (isNull != null) {
-            boolean[] newIsNull = new boolean[nRows * (nFields + 1)];
-            // Fix the null pointers.
-            int add = 0;
-            for (int i = 0; i < isNull.length; i++) {
-                if (i % nFields == 0) {
-                    add++;
-                }
-                if (isNull[i]) {
-                    newIsNull[i + add] = true;
-                }
-            }
-            isNull = newIsNull;
-        }
-        nFields++;
-
-        // Invalidate the buffer
-        buffer = null;
-
-        return nFields;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -489,92 +383,12 @@ public class AsciiTable extends AbstractTableData {
      */
     @Override
     public int addRow(Object[] newRow) throws FitsException {
-        try {
-            // If there are no fields, then this is the
-            // first row. We need to add in each of the columns
-            // to get the descriptors set up.
-            if (nFields == 0) {
-                for (Object element : newRow) {
-                    addColumn(element);
-                }
-            } else {
-                for (int i = 0; i < nFields; i++) {
-                    Object o = ArrayFuncs.newInstance(types[i], nRows + 1);
-                    System.arraycopy(data[i], 0, o, 0, nRows);
-                    System.arraycopy(newRow[i], 0, o, nRows, 1);
-                    data[i] = o;
-                }
-                nRows++;
-            }
-            // Invalidate the buffer
-            buffer = null;
-            return nRows;
-        } catch (Exception e) {
-            throw new FitsException("Error adding row:" + e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void deleteColumns(int start, int len) throws FitsException {
-        ensureData();
-
-        Object[] newData = new Object[nFields - len];
-        int[] newOffsets = new int[nFields - len];
-        int[] newLengths = new int[nFields - len];
-        Class<?>[] newTypes = new Class[nFields - len];
-        String[] newNulls = new String[nFields - len];
-
-        // Copy in the initial stuff...
-        System.arraycopy(data, 0, newData, 0, start);
-        // Don't do the offsets here.
-        System.arraycopy(lengths, 0, newLengths, 0, start);
-        System.arraycopy(types, 0, newTypes, 0, start);
-        System.arraycopy(nulls, 0, newNulls, 0, start);
-
-        // Copy in the final
-        System.arraycopy(data, start + len, newData, start, nFields - start - len);
-        // Don't do the offsets here.
-        System.arraycopy(lengths, start + len, newLengths, start, nFields - start - len);
-        System.arraycopy(types, start + len, newTypes, start, nFields - start - len);
-        System.arraycopy(nulls, start + len, newNulls, start, nFields - start - len);
-
-        for (int i = start; i < start + len; i++) {
-            rowLen -= lengths[i] + 1;
-        }
-
-        data = newData;
-        offsets = newOffsets;
-        lengths = newLengths;
-        types = newTypes;
-        nulls = newNulls;
-
-        if (isNull != null) {
-            boolean found = false;
-
-            boolean[] newIsNull = new boolean[nRows * (nFields - len)];
-            for (int i = 0; i < nRows; i++) {
-                int oldOff = nFields * i;
-                int newOff = (nFields - len) * i;
-                for (int col = 0; col < start; col++) {
-                    newIsNull[newOff + col] = isNull[oldOff + col];
-                    found = found || isNull[oldOff + col];
-                }
-                for (int col = start + len; col < nFields; col++) {
-                    newIsNull[newOff + col - len] = isNull[oldOff + col];
-                    found = found || isNull[oldOff + col];
-                }
-            }
-            if (found) {
-                isNull = newIsNull;
-            } else {
-                isNull = null;
-            }
-        }
-
-        // Invalidate the buffer
-        buffer = null;
-
-        nFields -= len;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -583,67 +397,17 @@ public class AsciiTable extends AbstractTableData {
      */
     @Override
     public void deleteRows(int start, int len) throws FitsException {
-        if (nRows == 0 || start < 0 || start >= nRows || len <= 0) {
-            return;
-        }
-        if (start + len > nRows) {
-            len = nRows - start;
-        }
-
-        ensureData();
-
-        for (int i = 0; i < nFields; i++) {
-            try {
-                Object o = ArrayFuncs.newInstance(types[i], nRows - len);
-                System.arraycopy(data[i], 0, o, 0, start);
-                System.arraycopy(data[i], start + len, o, start, nRows - len - start);
-                data[i] = o;
-            } catch (Exception e) {
-                throw new FitsException("Error deleting row: " + e.getMessage(), e);
-            }
-
-        }
-        nRows -= len;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected void loadData(ArrayDataInput in) throws IOException, FitsException {
-        currInput = in;
-
-        if (buffer == null) {
-            getBuffer((long) nRows * rowLen, 0);
-        }
-
-        data = new Object[nFields];
-        for (int i = 0; i < nFields; i++) {
-            data[i] = ArrayFuncs.newInstance(types[i], nRows);
-        }
-
-        bp.setOffset(0);
-
-        int rowOffset;
-        for (int i = 0; i < nRows; i++) {
-            rowOffset = rowLen * i;
-            for (int j = 0; j < nFields; j++) {
-                try {
-                    if (!extractElement(rowOffset + offsets[j], lengths[j], data, j, i, nulls[j])) {
-                        if (isNull == null) {
-                            isNull = new boolean[nRows * nFields];
-                        }
-
-                        isNull[j + i * nFields] = true;
-                    }
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new FitsException("not enough data: " + e, e);
-                }
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void read(ArrayDataInput in) throws FitsException {
-        currInput = in;
-        super.read(in);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -658,11 +422,8 @@ public class AsciiTable extends AbstractTableData {
      *
      * @throws FitsException if the operation failed
      */
-    private boolean extractElement(int offset, int length, Object[] array, int col, int row, String nullFld)
-            throws FitsException {
-
+    private boolean extractElement(int offset, int length, Object[] array, int col, int row, String nullFld) throws FitsException {
         bp.setOffset(offset);
-
         if (nullFld != null) {
             String s = bp.getString(length);
             if (s.trim().equals(nullFld)) {
@@ -692,41 +453,19 @@ public class AsciiTable extends AbstractTableData {
 
     @Override
     protected void fillHeader(Header h) {
-        h.deleteKey(Standard.SIMPLE);
-        h.deleteKey(Standard.EXTEND);
-
-        Standard.context(AsciiTable.class);
-
-        Cursor<String, HeaderCard> c = h.iterator();
-        c.add(HeaderCard.create(Standard.XTENSION, Standard.XTENSION_ASCIITABLE));
-        c.add(HeaderCard.create(Standard.BITPIX, Bitpix.BYTE.getHeaderValue()));
-        c.add(HeaderCard.create(Standard.NAXIS, 2));
-        c.add(HeaderCard.create(Standard.NAXIS1, rowLen));
-        c.add(HeaderCard.create(Standard.NAXIS2, nRows));
-        c.add(HeaderCard.create(Standard.PCOUNT, 0));
-        c.add(HeaderCard.create(Standard.GCOUNT, 1));
-        c.add(HeaderCard.create(Standard.TFIELDS, nFields));
-
-        for (int i = 0; i < nFields; i++) {
-            addColInfo(i, c);
-        }
-
-        Standard.context(null);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Read some data into the buffer.
      */
     private void getBuffer(long size, long offset) throws IOException, FitsException {
-
         if (currInput == null) {
             throw new IOException("No stream open to read");
         }
-
         if (size > Integer.MAX_VALUE) {
             throw new FitsException("Cannot read ASCII table > 2 GB");
         }
-
         buffer = new byte[(int) size];
         if (offset != 0) {
             FitsUtil.reposition(currInput, offset);
@@ -740,11 +479,11 @@ public class AsciiTable extends AbstractTableData {
      * Returns the data for a particular column in as a flattened 1D array of elements. See {@link #addColumn(Object)}
      * for more information about the format of data elements in general.
      * </p>
-     * 
+     *
      * @param  col           The 0-based column index.
-     * 
+     *
      * @return               an array of primitives (for scalar columns), or else an <code>Object[]</code> array.
-     * 
+     *
      * @throws FitsException if the table could not be accessed
      *
      * @see                  #setColumn(int, Object)
@@ -753,45 +492,37 @@ public class AsciiTable extends AbstractTableData {
      */
     @Override
     public Object getColumn(int col) throws FitsException {
-        ensureData();
-        return data[col];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected Object[] getCurrentData() {
-        return data;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object[] getData() throws FitsException {
-        return (Object[]) super.getData();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object getElement(int row, int col) throws FitsException {
-        if (data != null) {
-            return singleElement(row, col);
-        }
-        return parseSingleElement(row, col);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getNCols() {
-        return nFields;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int getNRows() {
-        return nRows;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public Object[] getRow(int row) throws FitsException {
-
-        if (data != null) {
-            return singleRow(row);
-        }
-        return parseSingleRow(row);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -800,12 +531,12 @@ public class AsciiTable extends AbstractTableData {
      * @return The number of bytes for a single row in the table.
      */
     public int getRowLen() {
-        return rowLen;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     protected long getTrueSize() {
-        return (long) nRows * rowLen;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -817,10 +548,7 @@ public class AsciiTable extends AbstractTableData {
      * @return     if the given element has been nulled.
      */
     public boolean isNull(int row, int col) {
-        if (isNull != null) {
-            return isNull[row * nFields + col];
-        }
-        return false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -829,7 +557,6 @@ public class AsciiTable extends AbstractTableData {
      * @throws FitsException if the operation failed
      */
     private Object parseSingleElement(int row, int col) throws FitsException {
-
         Object[] res = new Object[1];
         try {
             getBuffer(lengths[col], getFileOffset() + (long) row * (long) rowLen + offsets[col]);
@@ -838,10 +565,8 @@ public class AsciiTable extends AbstractTableData {
             throw new FitsException("Unable to read element", e);
         }
         res[0] = ArrayFuncs.newInstance(types[col], 1);
-
         boolean success = extractElement(0, lengths[col], res, 0, 0, nulls[col]);
         buffer = null;
-
         return success ? res[0] : null;
     }
 
@@ -851,22 +576,18 @@ public class AsciiTable extends AbstractTableData {
      * @throws FitsException if the operation failed
      */
     private Object[] parseSingleRow(int row) throws FitsException {
-
         Object[] res = new Object[nFields];
-
         try {
             getBuffer(rowLen, getFileOffset() + (long) row * (long) rowLen);
         } catch (IOException e) {
             throw new FitsException("Unable to read row", e);
         }
-
         for (int i = 0; i < nFields; i++) {
             res[i] = ArrayFuncs.newInstance(types[i], 1);
             if (!extractElement(offsets[i], lengths[i], res, i, 0, nulls[i])) {
                 res[i] = null;
             }
         }
-
         // Invalidate buffer for future use.
         buffer = null;
         return res;
@@ -874,30 +595,12 @@ public class AsciiTable extends AbstractTableData {
 
     @Override
     public void setColumn(int col, Object newData) throws FitsException {
-        ensureData();
-        if (col < 0 || col >= nFields || newData.getClass() != data[col].getClass()
-                || Array.getLength(newData) != Array.getLength(data[col])) {
-            throw new FitsException("Invalid column/column mismatch:" + col);
-        }
-        data[col] = newData;
-
-        // Invalidate the buffer.
-        buffer = null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setElement(int row, int col, Object newData) throws FitsException {
-        ensureData();
-        try {
-            System.arraycopy(newData, 0, data[col], row, 1);
-        } catch (Exception e) {
-            throw new FitsException("Incompatible element:" + row + "," + col, e);
-        }
-        setNull(row, col, false);
-
-        // Invalidate the buffer
-        buffer = null;
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -909,17 +612,7 @@ public class AsciiTable extends AbstractTableData {
      * @param flag True if the element is to be set to null.
      */
     public void setNull(int row, int col, boolean flag) {
-        if (flag) {
-            if (isNull == null) {
-                isNull = new boolean[nRows * nFields];
-            }
-            isNull[col + row * nFields] = true;
-        } else if (isNull != null) {
-            isNull[col + row * nFields] = false;
-        }
-
-        // Invalidate the buffer
-        buffer = null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -927,36 +620,18 @@ public class AsciiTable extends AbstractTableData {
      * AsciiTableHDU and update the header also.
      */
     void setNullString(int col, String newNull) {
-        if (col >= 0 && col < nulls.length) {
-            nulls[col] = newNull;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setRow(int row, Object[] newData) throws FitsException {
-        if (row < 0 || row > nRows) {
-            throw new FitsException("Invalid row in setRow");
-        }
-        ensureData();
-        for (int i = 0; i < nFields; i++) {
-            try {
-                System.arraycopy(newData[i], 0, data[i], row, 1);
-            } catch (Exception e) {
-                throw new FitsException("Unable to modify row: incompatible data:" + row, e);
-            }
-            setNull(row, i, false);
-        }
-
-        // Invalidate the buffer
-        buffer = null;
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Extract a single element from a table. This returns an array of length 1.
      */
     private Object singleElement(int row, int col) {
-
         Object res = null;
         if (isNull == null || !isNull[row * nFields + col]) {
             res = ArrayFuncs.newInstance(types[col], 1);
@@ -969,7 +644,6 @@ public class AsciiTable extends AbstractTableData {
      * Extract a single row from a table. This returns an array of Objects each of which is an array of length 1.
      */
     private Object[] singleRow(int row) {
-
         Object[] res = new Object[nFields];
         for (int i = 0; i < nFields; i++) {
             if (isNull == null || !isNull[row * nFields + i]) {
@@ -988,7 +662,6 @@ public class AsciiTable extends AbstractTableData {
     @Deprecated
     @Override
     public void updateAfterDelete(int oldNCol, Header hdr) throws FitsException {
-
         int offset = 0;
         for (int i = 0; i < nFields; i++) {
             offsets[i] = offset;
@@ -998,79 +671,17 @@ public class AsciiTable extends AbstractTableData {
         for (int i = nFields; i < oldNCol; i++) {
             hdr.deleteKey(TBCOLn.n(i + 1));
         }
-
         hdr.addValue(NAXIS1, rowLen);
     }
 
     @Override
     public void write(ArrayDataOutput str) throws FitsException {
-        // Make sure we have the data in hand.
-        if (str != currInput) {
-            ensureData();
-        }
-
-        // If buffer is still around we can just reuse it,
-        // since nothing we've done has invalidated it.
-        if (data == null) {
-            throw new FitsException("Attempt to write undefined ASCII Table");
-        }
-
-        if ((long) nRows * rowLen > Integer.MAX_VALUE) {
-            throw new FitsException("Cannot write ASCII table > 2 GB");
-        }
-
-        buffer = new byte[nRows * rowLen];
-
-        bp = new ByteParser(buffer);
-        for (int i = 0; i < buffer.length; i++) {
-            buffer[i] = (byte) ' ';
-        }
-
-        ByteFormatter bf = new ByteFormatter();
-
-        for (int i = 0; i < nRows; i++) {
-
-            for (int j = 0; j < nFields; j++) {
-                int offset = i * rowLen + offsets[j];
-                int len = lengths[j];
-                if (isNull != null && isNull[i * nFields + j]) {
-                    if (nulls[j] == null) {
-                        throw new FitsException("No null value set when needed");
-                    }
-                    bf.format(nulls[j], buffer, offset, len);
-                } else if (types[j] == String.class) {
-                    String[] s = (String[]) data[j];
-                    bf.format(s[i], buffer, offset, len);
-                } else if (types[j] == int.class) {
-                    int[] ia = (int[]) data[j];
-                    bf.format(ia[i], buffer, offset, len);
-                } else if (types[j] == float.class) {
-                    float[] fa = (float[]) data[j];
-                    bf.format(fa[i], buffer, offset, len);
-                } else if (types[j] == double.class) {
-                    double[] da = (double[]) data[j];
-                    bf.format(da[i], buffer, offset, len);
-                } else if (types[j] == long.class) {
-                    long[] la = (long[]) data[j];
-                    bf.format(la[i], buffer, offset, len);
-                }
-            }
-        }
-
-        // Now write the buffer.
-        try {
-            str.write(buffer);
-            FitsUtil.pad(str, buffer.length, (byte) ' ');
-        } catch (IOException e) {
-            throw new FitsException("Error writing ASCII Table data", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public AsciiTableHDU toHDU() {
-        Header h = new Header();
-        fillHeader(h);
-        return new AsciiTableHDU(h, this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -1081,31 +692,31 @@ public class AsciiTable extends AbstractTableData {
      * columns may be impossible to read. The default behavior is to assume <code>true</code>, and thus to treat I10
      * columns as <code>int</code> values.
      * </p>
-     * 
+     *
      * @param value if <code>true</code>, format "I10" columns will be assumed <code>int.class</code>, provided
      *                  TLMINn/TLMAXn or TDMINn/TDMAXn limits (if defined) allow it. if <code>false</code>, I10 columns
      *                  that have no clear indication of data range will be assumed <code>long.class</code>.
      *
      * @since       1.19
-     * 
+     *
      * @see         AsciiTable#isI10PreferInt()
      */
     public static void setI10PreferInt(boolean value) {
-        isI10PreferInt = value;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Checks if I10 columns should be treated as containing 32-bit <code>int</code> values, rather than 64-bit
      * <code>long</code> values, when possible.
-     * 
+     *
      * @return <code>true</code> if I10 columns should be treated as containing 32-bit <code>int</code> values,
      *             otherwise <code>false</code>.
-     * 
+     *
      * @since  1.19
-     * 
+     *
      * @see    #setI10PreferInt(boolean)
      */
     public static boolean isI10PreferInt() {
-        return isI10PreferInt;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

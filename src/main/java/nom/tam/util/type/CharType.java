@@ -30,9 +30,7 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
-
 import nom.tam.fits.FitsFactory;
 
 /**
@@ -40,7 +38,7 @@ import nom.tam.fits.FitsFactory;
  * historical reasons we store Java Unicode characters as 16-bit short values by default, but the more conventional FITS
  * standard is to store them as 8-bit ASCII. You can select which method to use to store <code>char[]</code> arrays in
  * FITS binary tables using {@link FitsFactory#setUseUnicodeChars(boolean)}.
- * 
+ *
  * @see FitsFactory#setUseUnicodeChars(boolean)
  */
 class CharType extends ElementType<ByteBuffer> {
@@ -51,6 +49,6 @@ class CharType extends ElementType<ByteBuffer> {
 
     @Override
     public int size() {
-        return FitsFactory.isUseUnicodeChars() ? ElementType.SHORT.size() : ElementType.BYTE.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

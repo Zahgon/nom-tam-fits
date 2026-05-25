@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.EOFException;
 import java.io.IOException;
 
@@ -49,7 +48,7 @@ public abstract class BufferDecoder extends FitsDecoder {
 
     /**
      * Instantiates a new decoder for FITS data types.
-     * 
+     *
      * @param p Unused, but the position and length fields are set/reset as to pretend that half of the buffer is
      *              perpetually available for reading. However, at no point will there be any data actually in the
      *              buffer of this object, and you should by all means avoid directly loading data from the stream into
@@ -60,26 +59,20 @@ public abstract class BufferDecoder extends FitsDecoder {
     @Deprecated
     public BufferDecoder(BufferPointer p) {
         super();
-
         this.p = p;
-
         pretendHalfPopulated();
-
         setInput(new InputReader() {
+
             private byte[] b1 = new byte[1];
 
             @Override
             public int read() throws IOException {
-                int n = BufferDecoder.this.read(b1, 0, 1);
-                if (n < 0) {
-                    return n;
-                }
-                return b1[0];
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
 
             @Override
             public int read(byte[] b, int from, int length) throws IOException {
-                return BufferDecoder.this.read(b, from, length);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         });
     }
@@ -118,8 +111,7 @@ public abstract class BufferDecoder extends FitsDecoder {
     @Deprecated
     @Override
     protected synchronized int read(byte[] buf, int offset, int length) throws IOException {
-        throw new UnsupportedOperationException(
-                "You need to override this with an implementation that reads from the desired input.");
+        throw new UnsupportedOperationException("You need to override this with an implementation that reads from the desired input.");
     }
 
     /**
@@ -160,5 +152,4 @@ public abstract class BufferDecoder extends FitsDecoder {
             throw new IOException(e);
         }
     }
-
 }

@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.EOFException;
@@ -171,112 +170,112 @@ public class FitsFile extends ArrayDataFile implements FitsOutput, RandomAccess 
 
     @Override
     public FitsEncoder getEncoder() {
-        return (FitsEncoder) super.getEncoder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public FitsDecoder getDecoder() {
-        return (FitsDecoder) super.getDecoder();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean isAtStart() {
-        return getFilePointer() == 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final int readUnsignedByte() throws IOException {
-        return getDecoder().readUnsignedByte();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final byte readByte() throws IOException {
-        return getDecoder().readByte();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public boolean readBoolean() throws IOException {
-        return getDecoder().readBoolean();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public char readChar() throws IOException {
-        return getDecoder().readChar();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final int readUnsignedShort() throws IOException {
-        return getDecoder().readUnsignedShort();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final short readShort() throws IOException {
-        return getDecoder().readShort();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final int readInt() throws IOException {
-        return getDecoder().readInt();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final long readLong() throws IOException {
-        return getDecoder().readLong();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final float readFloat() throws IOException {
-        return getDecoder().readFloat();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final double readDouble() throws IOException {
-        return getDecoder().readDouble();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String readLine() throws IOException {
-        return getDecoder().readAsciiLine();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(boolean[] b, int start, int length) throws IOException {
-        return getDecoder().read(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(Boolean[] buf, int offset, int size) throws IOException {
-        return getDecoder().read(buf, offset, size);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(char[] c, int start, int length) throws IOException {
-        return getDecoder().read(c, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(short[] s, int start, int length) throws IOException {
-        return getDecoder().read(s, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(int[] i, int start, int length) throws IOException {
-        return getDecoder().read(i, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(long[] l, int start, int length) throws IOException {
-        return getDecoder().read(l, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(float[] f, int start, int length) throws IOException {
-        return getDecoder().read(f, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read(double[] d, int start, int length) throws IOException {
-        return getDecoder().read(d, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Deprecated
@@ -287,129 +286,121 @@ public class FitsFile extends ArrayDataFile implements FitsOutput, RandomAccess 
 
     @Override
     public boolean markSupported() {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void mark(int readlimit) throws IOException {
-        marker = getFilePointer();
-        if (!hasAvailable(readlimit)) {
-            FitsFile.LOG.log(Level.FINE, "mark over file limit, so read as far as possible.");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void reset() throws IOException {
-        seek(marker);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int skipBytes(int toSkip) throws IOException {
-        return (int) skip(toSkip);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void skipAllBytes(long toSkip) throws EOFException, IOException {
-        long n = skip(toSkip);
-
-        // Note that we allow negative skips...
-        if (n != toSkip) {
-            throw new EOFException("Skip reached file boundary at " + n + " of " + toSkip);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeByte(int v) throws IOException {
-        getEncoder().writeByte(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeBoolean(boolean v) throws IOException {
-        getEncoder().writeBoolean(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeChar(int v) throws IOException {
-        getEncoder().writeChar(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeShort(int v) throws IOException {
-        getEncoder().writeShort(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeInt(int v) throws IOException {
-        getEncoder().writeInt(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeLong(long v) throws IOException {
-        getEncoder().writeLong(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeFloat(float v) throws IOException {
-        getEncoder().writeFloat(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeDouble(double v) throws IOException {
-        getEncoder().writeDouble(v);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeBytes(String s) throws IOException {
-        getEncoder().writeBytes(s);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void writeChars(String s) throws IOException {
-        getEncoder().writeChars(s);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(boolean[] b, int start, int length) throws IOException {
-        getEncoder().write(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(Boolean[] buf, int offset, int size) throws IOException {
-        getEncoder().write(buf, offset, size);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(char[] c, int start, int length) throws IOException {
-        getEncoder().write(c, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(short[] s, int start, int length) throws IOException {
-        getEncoder().write(s, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(int[] i, int start, int length) throws IOException {
-        getEncoder().write(i, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(long[] l, int start, int length) throws IOException {
-        getEncoder().write(l, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(float[] f, int start, int length) throws IOException {
-        getEncoder().write(f, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(double[] d, int start, int length) throws IOException {
-        getEncoder().write(d, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(String[] s, int start, int length) throws IOException {
-        getEncoder().write(s, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

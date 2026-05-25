@@ -11,7 +11,6 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import nom.tam.fits.compression.algorithm.api.ICompressor;
 import nom.tam.util.ArrayFuncs;
 import nom.tam.util.ByteBufferInputStream;
@@ -49,7 +48,6 @@ import nom.tam.util.type.ElementType;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * (<i>for internal use</i>) The GZIP compression algorithm.
  *
@@ -71,12 +69,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         protected void getPixel(ByteBuffer pixelData, byte[] pixelBytes) {
-            nioBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(ByteBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(nioBuffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -91,12 +89,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         protected void getPixel(DoubleBuffer pixelData, byte[] pixelBytes) {
-            nioBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(DoubleBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(nioBuffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -111,12 +109,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         protected void getPixel(FloatBuffer pixelData, byte[] pixelBytes) {
-            nioBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(FloatBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(nioBuffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -131,12 +129,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         protected void getPixel(IntBuffer pixelData, byte[] pixelBytes) {
-            nioBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(IntBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(nioBuffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -151,12 +149,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         protected void getPixel(LongBuffer pixelData, byte[] pixelBytes) {
-            nioBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(LongBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(nioBuffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -171,12 +169,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
         @Override
         protected void getPixel(ShortBuffer pixelData, byte[] pixelBytes) {
-            nioBuffer.put(pixelData);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void setPixel(ShortBuffer pixelData, byte[] pixelBytes) {
-            pixelData.put(nioBuffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -204,12 +202,7 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
         }
 
         int copy(int byteCount) {
-            fromBuffer.rewind();
-            toBuffer.rewind();
-            from.getArray(fromBuffer, fromArray);
-            ArrayFuncs.copyInto(fromArray, toArray);
-            to.putArray(toBuffer, toArray);
-            return byteCount * to.size() / from.size();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -233,41 +226,12 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
 
     @Override
     public boolean compress(T pixelData, ByteBuffer compressed) {
-        nioBuffer.rewind();
-        int pixelDataLimit = pixelData.limit();
-        try (GZIPOutputStream zip = createGZipOutputStream(pixelDataLimit, compressed)) {
-            while (pixelData.hasRemaining()) {
-                int count = Math.min(pixelData.remaining(), nioBuffer.capacity());
-                pixelData.limit(pixelData.position() + count);
-                getPixel(pixelData, null);
-                zip.write(buffer, 0, nioBuffer.position() * primitiveSize);
-                nioBuffer.rewind();
-                pixelData.limit(pixelDataLimit);
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("could not gzip data", e);
-        }
-        compressed.limit(compressed.position());
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void decompress(ByteBuffer compressed, T pixelData) {
-        nioBuffer.rewind();
-        TypeConversion<Buffer> typeConverter = getTypeConverter(compressed, pixelData.limit());
-        try (GZIPInputStream zip = createGZipInputStream(compressed)) {
-            int count;
-            while ((count = zip.read(buffer)) >= 0) {
-                if (typeConverter != null) {
-                    count = typeConverter.copy(count);
-                }
-                nioBuffer.position(0);
-                nioBuffer.limit(count / primitiveSize);
-                setPixel(pixelData, null);
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("could not gunzip data", e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @SuppressWarnings("unchecked")
@@ -299,17 +263,14 @@ public abstract class GZipCompressor<T extends Buffer> implements ICompressor<T>
     }
 
     protected GZIPInputStream createGZipInputStream(ByteBuffer compressed) throws IOException {
-        return new GZIPInputStream(new ByteBufferInputStream(compressed),
-                Math.min(compressed.limit() * 2, DEFAULT_GZIP_BUFFER_SIZE));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected GZIPOutputStream createGZipOutputStream(int length, ByteBuffer compressed) throws IOException {
-        return new GZIPOutputStream(new ByteBufferOutputStream(compressed),
-                Math.min(Math.max(length * 2, MINIMAL_GZIP_BUFFER_SIZE), DEFAULT_GZIP_BUFFER_SIZE));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected abstract void getPixel(T pixelData, byte[] pixelBytes);
 
     protected abstract void setPixel(T pixelData, byte[] pixelBytes);
-
 }

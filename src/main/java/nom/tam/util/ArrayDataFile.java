@@ -1,7 +1,6 @@
 package nom.tam.util;
 
 import java.io.EOFException;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import java.io.EOFException;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.File;
 import java.io.IOException;
 
@@ -41,7 +39,7 @@ import java.io.IOException;
  * encoding. Compared to its superclass, it add only the translation layer for
  * encoding and decoding binary data to convert between Java arrays and their
  * binary representation in file.
- * 
+ *
  * @author Attila Kovacs
  * @since 1.16
  * @see ArrayInputStream
@@ -49,16 +47,20 @@ import java.io.IOException;
  */
 public class ArrayDataFile extends BufferedFileIO {
 
-    /** conversion from Java arrays to FITS binary representation */
+    /**
+     * conversion from Java arrays to FITS binary representation
+     */
     private OutputEncoder encoder;
 
-    /** conversion from FITS binary representation to Java arrays */
+    /**
+     * conversion from FITS binary representation to Java arrays
+     */
     private InputDecoder decoder;
 
     /**
      * Instantiates a new file for high-performance array IO operations. For use
      * by subclass constructors only
-     * 
+     *
      * @param f
      *            the file
      * @param mode
@@ -77,7 +79,7 @@ public class ArrayDataFile extends BufferedFileIO {
     /**
      * Instantiates a new file for high-performance array IO operations. For use
      * by subclass constructors only
-     * 
+     *
      * @param f
      *            the RandomAccessFileIO file
      * @param bufferSize
@@ -90,7 +92,7 @@ public class ArrayDataFile extends BufferedFileIO {
     /**
      * Sets the conversion from Java arrays to their binary representation in
      * file. For use by subclass constructors only.
-     * 
+     *
      * @param java2bin
      *            the conversion from Java arrays to their binary representation
      *            in file
@@ -98,27 +100,27 @@ public class ArrayDataFile extends BufferedFileIO {
      * @see #setDecoder(InputDecoder)
      */
     protected void setEncoder(OutputEncoder java2bin) {
-        encoder = java2bin;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the conversion from Java arrays to their binary representation in
      * file. Subclass implementations can use this to access the required
      * conversion when writing data to file.
-     * 
+     *
      * @return the conversion from Java arrays to their binary representation in
      *         file
      * @see #setEncoder(OutputEncoder)
      * @see #getDecoder()
      */
     public OutputEncoder getEncoder() {
-        return encoder;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Sets the conversion from the binary representation of arrays in file to
      * Java arrays. For use by subclass constructors only.
-     * 
+     *
      * @param bin2java
      *            the conversion from the binary representation of arrays in the
      *            file to Java arrays.
@@ -126,27 +128,27 @@ public class ArrayDataFile extends BufferedFileIO {
      * @see #setEncoder(OutputEncoder)
      */
     protected void setDecoder(InputDecoder bin2java) {
-        decoder = bin2java;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the conversion from the binary representation of arrays in file
      * to Java arrays. Subclass implementeations can use this to access the
      * required conversion when writing data to file.
-     * 
+     *
      * @return the conversion from the binary representation of arrays in the
      *         file to Java arrays
      * @see #setDecoder(InputDecoder)
      * @see #getEncoder()
      */
     public InputDecoder getDecoder() {
-        return decoder;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link ArrayDataInput#readLArray(Object)} for a contract of this
      * method.
-     * 
+     *
      * @param o
      *            an array, to be populated
      * @return the actual number of bytes read from the input, or -1 if already
@@ -160,13 +162,13 @@ public class ArrayDataFile extends BufferedFileIO {
      * @see #readImage(Object)
      */
     public synchronized long readLArray(Object o) throws IOException, IllegalArgumentException {
-        return decoder.readArray(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link ArrayDataInput#readArrayFully(Object)} for a contract of this
      * method.
-     * 
+     *
      * @param o
      *            an array, to be populated
      * @throws IllegalArgumentException
@@ -178,13 +180,13 @@ public class ArrayDataFile extends BufferedFileIO {
      * @see #readImage(Object)
      */
     public synchronized void readArrayFully(Object o) throws IOException, IllegalArgumentException {
-        decoder.readArrayFully(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Like {@link #readArrayFully(Object)} but strictly for numerical types
      * only.
-     * 
+     *
      * @param o
      *            An any-dimensional array containing only numerical types
      * @throws IllegalArgumentException
@@ -198,13 +200,13 @@ public class ArrayDataFile extends BufferedFileIO {
      * @since 1.18
      */
     public void readImage(Object o) throws EOFException, IOException, IllegalArgumentException {
-        decoder.readImage(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * See {@link ArrayDataOutput#writeArray(Object)} for a contract of this
      * method.
-     * 
+     *
      * @param o
      *            an array ot any type.
      * @throws IllegalArgumentException
@@ -214,10 +216,6 @@ public class ArrayDataFile extends BufferedFileIO {
      *             if there was an IO error writing to the output.
      */
     public synchronized void writeArray(Object o) throws IOException, IllegalArgumentException {
-        try {
-            getEncoder().writeArray(o);
-        } catch (IllegalArgumentException e) {
-            throw new IOException(e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

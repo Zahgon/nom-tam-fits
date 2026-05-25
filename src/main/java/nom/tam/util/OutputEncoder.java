@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.EOFException;
@@ -36,7 +35,6 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
 import nom.tam.fits.FitsFactory;
 import nom.tam.util.type.ElementType;
 
@@ -99,7 +97,7 @@ public abstract class OutputEncoder {
      * @param o the new output to which encoded data is to be written.
      */
     protected synchronized void setOutput(OutputWriter o) {
-        out = o;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,7 +109,7 @@ public abstract class OutputEncoder {
      * @see    RandomAccess#getFilePointer()
      */
     public synchronized long getCount() {
-        return count + buf.buffer.position();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -121,7 +119,7 @@ public abstract class OutputEncoder {
      * @return the conversion buffer used by this encoder.
      */
     protected OutputBuffer getOutputBuffer() {
-        return buf;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -136,13 +134,7 @@ public abstract class OutputEncoder {
      *                         conversion.
      */
     void need(int bytes) throws IOException {
-        // TODO Once the deprecated {@link BufferEncoder} is retired, this
-        // should become
-        // a private method of OutputBuffer, with leading 'buf.' references
-        // stripped.
-        if (buf.buffer.remaining() < bytes) {
-            flush();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -151,10 +143,7 @@ public abstract class OutputEncoder {
      * @throws IOException if there was an IO error writing the contents of this buffer to the output.
      */
     protected synchronized void flush() throws IOException {
-        int n = buf.buffer.position();
-        out.write(buf.data, 0, n);
-        count += n;
-        buf.rewind();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,8 +157,7 @@ public abstract class OutputEncoder {
      * @see                java.io.DataOutputStream#write(int)
      */
     protected synchronized void write(int b) throws IOException {
-        flush();
-        out.write(b);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -186,8 +174,7 @@ public abstract class OutputEncoder {
      * @see                java.io.DataOutputStream#write(byte[], int, int)
      */
     protected synchronized void write(byte[] b, int start, int length) throws IOException {
-        flush();
-        out.write(b, start, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -247,10 +234,14 @@ public abstract class OutputEncoder {
          */
         private final byte[] data;
 
-        /** the buffer wrapped for NIO access */
+        /**
+         * the buffer wrapped for NIO access
+         */
         private final ByteBuffer buffer;
 
-        /** The current type-specific view of the buffer or null */
+        /**
+         * The current type-specific view of the buffer or null
+         */
         private Buffer view;
 
         private OutputBuffer(int size) {
@@ -267,7 +258,7 @@ public abstract class OutputEncoder {
          * @see         ByteBuffer#order(ByteOrder)
          */
         protected void setByteOrder(ByteOrder order) {
-            buffer.order(order);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -279,7 +270,7 @@ public abstract class OutputEncoder {
          * @see    ByteBuffer#order()
          */
         protected ByteOrder byteOrder() {
-            return buffer.order();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private boolean isViewingAs(Class<? extends Buffer> type) {
@@ -312,9 +303,7 @@ public abstract class OutputEncoder {
          * @see                #flush()
          */
         protected void putByte(byte b) throws IOException {
-            need(1);
-            view = null;
-            buffer.put(b);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -329,9 +318,7 @@ public abstract class OutputEncoder {
          * @see                #flush()
          */
         protected void putShort(short s) throws IOException {
-            need(Short.BYTES);
-            view = null;
-            buffer.putShort(s);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -346,9 +333,7 @@ public abstract class OutputEncoder {
          * @see                #flush()
          */
         protected void putInt(int i) throws IOException {
-            need(Integer.BYTES);
-            view = null;
-            buffer.putInt(i);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -363,9 +348,7 @@ public abstract class OutputEncoder {
          * @see                #flush()
          */
         protected void putLong(long l) throws IOException {
-            need(Long.BYTES);
-            view = null;
-            buffer.putLong(l);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -380,9 +363,7 @@ public abstract class OutputEncoder {
          * @see                #flush()
          */
         protected void putFloat(float f) throws IOException {
-            need(Float.BYTES);
-            view = null;
-            buffer.putFloat(f);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -397,9 +378,7 @@ public abstract class OutputEncoder {
          * @see                #flush()
          */
         protected void putDouble(double d) throws IOException {
-            need(Double.BYTES);
-            view = null;
-            buffer.putDouble(d);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -414,22 +393,7 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         protected void put(byte[] src, int start, int length) throws IOException {
-            if (length == 1) {
-                need(1);
-                buffer.put(src[start]);
-                return;
-            }
-
-            view = null;
-
-            int got = 0;
-
-            while (got < length) {
-                need(1);
-                int m = Math.min(length - got, buffer.remaining());
-                buffer.put(src, start + got, m);
-                got += m;
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -444,11 +408,7 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         protected void put(short[] src, int start, int length) throws IOException {
-            if (length == 1 && !isViewingAs(ElementType.SHORT.bufferClass())) {
-                putShort(src[start]);
-            } else {
-                put(ElementType.SHORT, src, start, length);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -463,11 +423,7 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         protected void put(int[] src, int start, int length) throws IOException {
-            if (length == 1 && !isViewingAs(ElementType.INT.bufferClass())) {
-                putInt(src[start]);
-            } else {
-                put(ElementType.INT, src, start, length);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -482,11 +438,7 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         protected void put(long[] src, int start, int length) throws IOException {
-            if (length == 1 && !isViewingAs(ElementType.LONG.bufferClass())) {
-                putLong(src[start]);
-            } else {
-                put(ElementType.LONG, src, start, length);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -501,11 +453,7 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         protected void put(float[] src, int start, int length) throws IOException {
-            if (length == 1 && !isViewingAs(ElementType.FLOAT.bufferClass())) {
-                putFloat(src[start]);
-            } else {
-                put(ElementType.FLOAT, src, start, length);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -520,11 +468,7 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         protected void put(double[] src, int start, int length) throws IOException {
-            if (length == 1 && !isViewingAs(ElementType.DOUBLE.bufferClass())) {
-                putDouble(src[start]);
-            } else {
-                put(ElementType.DOUBLE, src, start, length);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         /**
@@ -540,10 +484,8 @@ public abstract class OutputEncoder {
          *                         conversion.
          */
         @SuppressWarnings("unchecked")
-        private <B extends Buffer> void put(ElementType<B> e, Object array, int start, int length)
-                throws EOFException, IOException {
+        private <B extends Buffer> void put(ElementType<B> e, Object array, int start, int length) throws EOFException, IOException {
             int got = 0;
-
             while (got < length) {
                 need(e.size());
                 assertView(e);

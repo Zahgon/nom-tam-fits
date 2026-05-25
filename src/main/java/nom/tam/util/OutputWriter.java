@@ -30,13 +30,12 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
  * Interface for basic binary output writing functionality.
- * 
+ *
  * @author Attila Kovacs
  * @since 1.16
  * @see InputReader
@@ -46,7 +45,7 @@ public interface OutputWriter {
     /**
      * Writes a byte. See the general contract of
      * {@link java.io.DataOutputStream#write(int)}.
-     * 
+     *
      * @param b
      *            the (unsigned) byte value to write.
      * @throws IOException
@@ -59,7 +58,7 @@ public interface OutputWriter {
      * Writes up to the specified number of bytes from a buffer to the stream.
      * See the general contract of
      * {@link java.io.DataOutputStream#write(byte[], int, int)}.
-     * 
+     *
      * @param b
      *            the buffer
      * @param from
@@ -74,23 +73,12 @@ public interface OutputWriter {
 
     /**
      * Wraps an output stream with this interface.
-     * 
+     *
      * @param o
      *            any output stream
      * @return the stream wrapped to this interface
      */
     static OutputWriter from(final OutputStream o) {
-        return new OutputWriter() {
-
-            @Override
-            public void write(int b) throws IOException {
-                o.write(b);
-            }
-
-            @Override
-            public void write(byte[] b, int from, int length) throws IOException {
-                o.write(b, from, length);
-            }
-        };
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

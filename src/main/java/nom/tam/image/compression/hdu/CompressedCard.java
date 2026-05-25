@@ -1,7 +1,6 @@
 package nom.tam.image.compression.hdu;
 
 import java.util.Map;
-
 import nom.tam.fits.HeaderCard;
 import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.header.Compression;
@@ -9,7 +8,6 @@ import nom.tam.fits.header.GenericKey;
 import nom.tam.fits.header.IFitsHeader;
 import nom.tam.fits.header.IFitsHeader.VALUE;
 import nom.tam.util.Cursor;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -40,7 +38,6 @@ import nom.tam.util.Cursor;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import static nom.tam.fits.header.Checksum.CHECKSUM;
 import static nom.tam.fits.header.Checksum.DATASUM;
 import static nom.tam.fits.header.Compression.ZBITPIX;
@@ -84,100 +81,123 @@ import static nom.tam.fits.header.Standard.XTENSION;
  */
 @SuppressWarnings("deprecation")
 enum CompressedCard {
+
     MAP_ANY(null) {
 
         @Override
         protected void backupCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            // unhandled card so just copy it to the uncompressed header
-            headerIterator.add(card.copy());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void restoreCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            // unhandled card so just copy it to the uncompressed header
-            headerIterator.add(card.copy());
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
-    MAP_BITPIX(BITPIX), MAP_CHECKSUM(CHECKSUM), MAP_DATASUM(DATASUM), MAP_EXTNAME(EXTNAME) {
+    }
+    ,
+    MAP_BITPIX(BITPIX),
+    MAP_CHECKSUM(CHECKSUM),
+    MAP_DATASUM(DATASUM),
+    MAP_EXTNAME(EXTNAME) {
 
         @Override
         protected void backupCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            if (!card.getValue().equals("COMPRESSED_IMAGE")) {
-                super.backupCard(card, headerIterator);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-    },
-    MAP_GCOUNT(GCOUNT), MAP_NAXIS(NAXIS), MAP_NAXISn(NAXISn), MAP_PCOUNT(PCOUNT), MAP_ZFORMn(ZFORMn) {
+    }
+    ,
+    MAP_GCOUNT(GCOUNT),
+    MAP_NAXIS(NAXIS),
+    MAP_NAXISn(NAXISn),
+    MAP_PCOUNT(PCOUNT),
+    MAP_ZFORMn(ZFORMn) {
 
         @Override
         protected void backupCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            String newKey = uncompressedHeaderKey().n(GenericKey.getN(card.getKey())).key();
-            headerIterator.add(new HeaderCard(newKey, card.getValue(String.class, ""), card.getComment()));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void restoreCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            String newKey = compressedHeaderKey().n(GenericKey.getN(card.getKey())).key();
-            headerIterator.add(new HeaderCard(newKey, card.getValue(String.class, ""), card.getComment()));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
-    },
-
-    MAP_TFORMn(TFORMn), MAP_XTENSION(XTENSION), MAP_ZBITPIX(ZBITPIX), MAP_ZBLANK(ZBLANK), //
-    MAP_ZTILELEN(ZTILELEN), MAP_ZCTYPn(ZCTYPn), MAP_ZBLOCKED(ZBLOCKED), MAP_ZCMPTYPE(ZCMPTYPE), //
-    MAP_ZDATASUM(ZDATASUM), MAP_ZDITHER0(ZDITHER0), MAP_ZEXTEND(ZEXTEND), MAP_ZGCOUNT(ZGCOUNT), //
-    MAP_ZHECKSUM(ZHECKSUM), MAP_ZIMAGE(ZIMAGE), MAP_ZTABLE(ZTABLE), MAP_ZNAMEn(ZNAMEn), //
-    MAP_ZNAXIS(ZNAXIS), MAP_THEAP(THEAP),
-
+    }
+    ,
+    //
+    MAP_TFORMn(TFORMn),
+    //
+    MAP_XTENSION(XTENSION),
+    //
+    MAP_ZBITPIX(ZBITPIX),
+    //
+    MAP_ZBLANK(ZBLANK),
+    //
+    MAP_ZTILELEN(ZTILELEN),
+    //
+    MAP_ZCTYPn(ZCTYPn),
+    //
+    MAP_ZBLOCKED(ZBLOCKED),
+    //
+    MAP_ZCMPTYPE(ZCMPTYPE),
+    //
+    MAP_ZDATASUM(ZDATASUM),
+    //
+    MAP_ZDITHER0(ZDITHER0),
+    //
+    MAP_ZEXTEND(ZEXTEND),
+    //
+    MAP_ZGCOUNT(ZGCOUNT),
+    //
+    MAP_ZHECKSUM(ZHECKSUM),
+    //
+    MAP_ZIMAGE(ZIMAGE),
+    //
+    MAP_ZTABLE(ZTABLE),
+    //
+    MAP_ZNAMEn(ZNAMEn),
+    MAP_ZNAXIS(ZNAXIS),
+    MAP_THEAP(THEAP),
     MAP_ZNAXISn(ZNAXISn) {
 
         @Override
         protected void backupCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            String newKey = uncompressedHeaderKey().n(GenericKey.getN(card.getKey())).key();
-            headerIterator.add(new HeaderCard(newKey, card.getValue(Integer.class, 0), card.getComment()));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void restoreCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-            String newKey = compressedHeaderKey().n(GenericKey.getN(card.getKey())).key();
-            headerIterator.add(new HeaderCard(newKey, card.getValue(Integer.class, 0), card.getComment()));
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
-
-    },
-
-    MAP_ZPCOUNT(ZPCOUNT), MAP_ZTHEAP(ZTHEAP), MAP_ZQUANTIZ(ZQUANTIZ), MAP_ZSIMPLE(ZSIMPLE), MAP_ZTENSION(
-            ZTENSION), MAP_ZTILEn(ZTILEn), MAP_ZVALn(ZVALn);
+    }
+    ,
+    MAP_ZPCOUNT(ZPCOUNT),
+    MAP_ZTHEAP(ZTHEAP),
+    MAP_ZQUANTIZ(ZQUANTIZ),
+    MAP_ZSIMPLE(ZSIMPLE),
+    MAP_ZTENSION(ZTENSION),
+    MAP_ZTILEn(ZTILEn),
+    MAP_ZVALn(ZVALn);
 
     private final IFitsHeader compressedHeaderKey;
 
     private final IFitsHeader uncompressedHeaderKey;
 
     public static void backup(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-        CompressedCard mapping = selectMapping(CompressedImageHDU.UNCOMPRESSED_HEADER_MAPPING, card);
-        mapping.backupCard(card, headerIterator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public static void restore(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-        CompressedCard mapping = selectMapping(CompressedImageHDU.COMPRESSED_HEADER_MAPPING, card);
-        mapping.restoreCard(card, headerIterator);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected static CompressedCard selectMapping(Map<IFitsHeader, CompressedCard> mappings, HeaderCard card) {
-        IFitsHeader key = GenericKey.lookup(card.getKey());
-        if (key != null) {
-            CompressedCard mapping = mappings.get(key);
-            if (mapping != null) {
-                return mapping;
-            }
-        }
-        return MAP_ANY;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     CompressedCard(IFitsHeader header) {
         compressedHeaderKey = header;
         if (header instanceof Compression) {
             uncompressedHeaderKey = ((Compression) compressedHeaderKey).getUncompressedKey();
-
         } else {
             uncompressedHeaderKey = null;
         }
@@ -187,8 +207,7 @@ enum CompressedCard {
         }
     }
 
-    private void addHeaderCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator, IFitsHeader targetKey)
-            throws HeaderCardException {
+    private void addHeaderCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator, IFitsHeader targetKey) throws HeaderCardException {
         if (targetKey != null) {
             if (targetKey.valueType() == VALUE.INTEGER) {
                 headerIterator.add(new HeaderCard(targetKey.key(), card.getValue(Integer.class, 0), card.getComment()));
@@ -210,19 +229,18 @@ enum CompressedCard {
      * @throws HeaderCardException if the card could not be copied
      */
     protected void backupCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-        IFitsHeader uncompressedKey = uncompressedHeaderKey;
-        addHeaderCard(card, headerIterator, uncompressedKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected IFitsHeader compressedHeaderKey() {
-        return compressedHeaderKey;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected void restoreCard(HeaderCard card, Cursor<String, HeaderCard> headerIterator) throws HeaderCardException {
-        addHeaderCard(card, headerIterator, compressedHeaderKey);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected IFitsHeader uncompressedHeaderKey() {
-        return uncompressedHeaderKey;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

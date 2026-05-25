@@ -30,18 +30,16 @@ package nom.tam.fits.compression.algorithm.quant;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressor;
 
 /**
  * (<i>for internal use</i>) Qunatization step processor as part of compression.
  */
-@SuppressWarnings({"javadoc", "deprecation"})
+@SuppressWarnings({ "javadoc", "deprecation" })
 public class QuantizeProcessor {
 
     public static class DoubleQuantCompressor extends QuantizeProcessor implements ICompressor<DoubleBuffer> {
@@ -55,23 +53,12 @@ public class QuantizeProcessor {
 
         @Override
         public boolean compress(DoubleBuffer buffer, ByteBuffer compressed) {
-            IntBuffer intData = IntBuffer.wrap(new int[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()]);
-            double[] doubles = new double[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()];
-            buffer.get(doubles);
-            if (!this.quantize(doubles, intData)) {
-                return false;
-            }
-            intData.rewind();
-            postCompressor.compress(intData, compressed);
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, DoubleBuffer buffer) {
-            IntBuffer intData = IntBuffer.wrap(new int[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()]);
-            postCompressor.decompress(compressed, intData);
-            intData.rewind();
-            unquantize(intData, buffer);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -89,32 +76,12 @@ public class QuantizeProcessor {
 
         @Override
         public boolean compress(FloatBuffer buffer, ByteBuffer compressed) {
-            float[] floats = new float[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()];
-            double[] doubles = new double[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()];
-            buffer.get(floats);
-            for (int index = 0; index < doubles.length; index++) {
-                doubles[index] = floats[index];
-            }
-            IntBuffer intData = IntBuffer.wrap(new int[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()]);
-            if (!this.quantize(doubles, intData)) {
-                return false;
-            }
-            intData.rewind();
-            postCompressor.compress(intData, compressed);
-            return true;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void decompress(ByteBuffer compressed, FloatBuffer buffer) {
-            IntBuffer intData = IntBuffer.wrap(new int[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()]);
-            postCompressor.decompress(compressed, intData);
-            intData.rewind();
-            double[] doubles = new double[quantizeOption.getTileHeight() * quantizeOption.getTileWidth()];
-            DoubleBuffer doubleBuffer = DoubleBuffer.wrap(doubles);
-            unquantize(intData, doubleBuffer);
-            for (double d : doubles) {
-                buffer.put((float) d);
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -126,16 +93,17 @@ public class QuantizeProcessor {
 
         @Override
         protected void nextPixel() {
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected double toDouble(int pixel) {
-            return (pixel + ROUNDING_HALF) * bScale + bZero;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int toInt(double pixel) {
-            return nint((pixel - bZero) / bScale + ROUNDING_HALF);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -153,8 +121,7 @@ public class QuantizeProcessor {
         }
 
         public void initialize(long ditherSeed) {
-            iseed = (int) ((ditherSeed - 1) % RandomSequence.length());
-            initI1();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         private void initI1() {
@@ -162,29 +129,22 @@ public class QuantizeProcessor {
         }
 
         public double nextRandom() {
-            return RandomSequence.get(nextRandom);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected void nextPixel() {
-            nextRandom++;
-            if (nextRandom >= RandomSequence.length()) {
-                iseed++;
-                if (iseed >= RandomSequence.length()) {
-                    iseed = 0;
-                }
-                initI1();
-            }
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected double toDouble(int pixel) {
-            return (pixel - nextRandom() + ROUNDING_HALF) * bScale + bZero;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int toInt(double pixel) {
-            return nint((pixel - bZero) / bScale + nextRandom() - ROUNDING_HALF);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -204,23 +164,17 @@ public class QuantizeProcessor {
         }
 
         public final boolean isNull(double pixel) {
-            return isNaN ? Double.isNaN(pixel) : nullValue == pixel;
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected double toDouble(int pixel) {
-            if (pixel == nullValueIndicator) {
-                return nullValue;
-            }
-            return super.toDouble(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int toInt(double pixel) {
-            if (isNull(pixel)) {
-                return nullValueIndicator;
-            }
-            return super.toInt(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -233,15 +187,15 @@ public class QuantizeProcessor {
         }
 
         protected void nextPixel() {
-            next.nextPixel();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         protected double toDouble(int pixel) {
-            return next.toDouble(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         protected int toInt(double pixel) {
-            return next.toInt(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -253,18 +207,12 @@ public class QuantizeProcessor {
 
         @Override
         protected double toDouble(int pixel) {
-            if (pixel == ZERO_VALUE) {
-                return 0.0;
-            }
-            return super.toDouble(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         protected int toInt(double pixel) {
-            if (pixel == 0.0) {
-                return ZERO_VALUE;
-            }
-            return super.toInt(pixel);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 
@@ -319,15 +267,12 @@ public class QuantizeProcessor {
 
                 @Override
                 protected int findNextValidPixelWithNullCheck(int nx, DoubleArrayPointer rowpix, int ii) {
-                    while (ii < nx && nullFilter.isNull(rowpix.get(ii))) {
-                        ii++;
-                    }
-                    return ii;
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
 
                 @Override
                 protected boolean isNull(double d) {
-                    return nullFilter.isNull(d);
+                    throw new UnsupportedOperationException("STUB: not implemented");
                 }
             };
         } else {
@@ -338,30 +283,19 @@ public class QuantizeProcessor {
     }
 
     public Quantize getQuantize() {
-        return quantize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public boolean quantize(double[] doubles, IntBuffer quants) {
-        boolean success = quantize.quantize(doubles, quantizeOption.getTileWidth(), quantizeOption.getTileHeight());
-        if (success) {
-            calculateBZeroAndBscale();
-            quantize(DoubleBuffer.wrap(doubles, 0, quantizeOption.getTileWidth() * quantizeOption.getTileHeight()), quants);
-        }
-        return success;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void quantize(final DoubleBuffer fdata, final IntBuffer intData) {
-        while (fdata.hasRemaining()) {
-            intData.put(pixelFilter.toInt(fdata.get()));
-            pixelFilter.nextPixel();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void unquantize(final IntBuffer intData, final DoubleBuffer fdata) {
-        while (fdata.hasRemaining()) {
-            fdata.put(pixelFilter.toDouble(intData.get()));
-            pixelFilter.nextPixel();
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void calculateBZeroAndBscale() {

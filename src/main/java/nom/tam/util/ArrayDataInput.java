@@ -2,7 +2,6 @@ package nom.tam.util;
 
 import java.io.DataInput;
 import java.io.EOFException;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -33,7 +32,6 @@ import java.io.EOFException;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 
 /**
@@ -58,7 +56,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @return true if this stream instance supports the mark and reset methods; false otherwise.
      */
     default boolean markSupported() {
-        return true;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -87,7 +85,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(boolean[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -110,14 +108,14 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @return              number of bytes read.
      *
      * @param  buf          array of boolean's.
-     * 
+     *
      * @throws EOFException if already at the end of file.
      * @throws IOException  if one of the underlying read operations failed
      *
      * @since               1.16
      */
     default int read(Boolean[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -138,11 +136,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @since               1.16
      */
     default int read(Boolean[] buf, int offset, int size) throws EOFException, IOException {
-        int to = offset + size;
-        for (int i = offset; i < to; i++) {
-            buf[i] = readBoolean();
-        }
-        return size;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,7 +150,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(char[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -184,7 +178,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(double[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -212,7 +206,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(float[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -240,7 +234,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(int[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -268,7 +262,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(long[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -296,7 +290,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @throws IOException  if one of the underlying read operations failed
      */
     default int read(short[] buf) throws EOFException, IOException {
-        return read(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -370,9 +364,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @since                           1.16
      */
     default void readArrayFully(Object o) throws EOFException, IOException, IllegalArgumentException {
-        if (readLArray(o) != FitsEncoder.computeSize(o)) {
-            throw new EOFException("Incomplete array read (assuming default FITS format).");
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -391,7 +383,7 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
      * @since                           1.18
      */
     default void readImage(Object o) throws IOException, IllegalArgumentException {
-        readArrayFully(o);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -463,5 +455,4 @@ public interface ArrayDataInput extends InputReader, DataInput, FitsIO {
 
     @Override
     void readFully(byte[] b, int off, int len) throws IOException;
-
 }

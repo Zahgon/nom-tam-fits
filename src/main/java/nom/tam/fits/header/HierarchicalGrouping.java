@@ -30,7 +30,6 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * This data dictionary contains FITS keywords that have been widely used within the astronomical community. It is
@@ -44,6 +43,7 @@ package nom.tam.fits.header;
  * @author Richard van Nieuwenhoven
  */
 public enum HierarchicalGrouping implements IFitsHeader {
+
     /**
      * TODO: find description?
      */
@@ -65,6 +65,6 @@ public enum HierarchicalGrouping implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

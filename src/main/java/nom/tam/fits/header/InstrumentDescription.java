@@ -30,7 +30,6 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * This data dictionary contains FITS keywords that have been widely used within the astronomical community. It is
@@ -45,6 +44,7 @@ package nom.tam.fits.header;
  * @author Richard van Nieuwenhoven
  */
 public enum InstrumentDescription implements IFitsHeader {
+
     /**
      * The value field shall contain a character string which gives the name of the instrumental aperture though which
      * the observation was made. This keyword is typically used in instruments which have a selection of apertures which
@@ -101,14 +101,14 @@ public enum InstrumentDescription implements IFitsHeader {
 
     /**
      * Standard {@link #FILTER} name when no filter was used.
-     * 
+     *
      * @since 1.20.1
      */
     public static final String FILTER_NONE = "NONE";
 
     /**
      * Standard {@link #GRATING} name when no filter was used.
-     * 
+     *
      * @since 1.20.1
      */
     public static final String GRATING_NONE = "NONE";
@@ -121,6 +121,6 @@ public enum InstrumentDescription implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,7 +30,6 @@ package nom.tam.fits.header;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * This data dictionary contains FITS keywords that have been widely used within the astronomical community. Many of
@@ -44,16 +43,17 @@ package nom.tam.fits.header;
  * </p>
  *
  * @author Richard van Nieuwenhoven
- * 
+ *
  * @see    DateTime
  */
 public enum ObservationDurationDescription implements IFitsHeader {
+
     /**
      * The value field shall contain a character string that gives the date on which the observation ended. This keyword
      * has the same format, and is used in conjunction with, the standard DATA-OBS keyword that gives the starting date
      * of the observation. These 2 keywords may give either the calendar date using the 'yyyy-mm-dd' format, or may give
      * the full date and time using the 'yyyy-mm-ddThh:mm:ss.sss' format.
-     * 
+     *
      * @deprecated Part of the FITS standard, use {@link DateTime#DATE_END} instead
      */
     @Deprecated
@@ -61,7 +61,7 @@ public enum ObservationDurationDescription implements IFitsHeader {
     /**
      * The value field shall contain a floating point number giving the difference between the stop and start times of
      * the observation in units of seconds. This keyword is synonymous with the {@link #TELAPSE} keyword.
-     * 
+     *
      * @see #TELAPSE
      */
     ELAPTIME(SOURCE.UCOLICK, HDU.ANY, VALUE.REAL, "[s] elapsed time of the observation"),
@@ -70,7 +70,7 @@ public enum ObservationDurationDescription implements IFitsHeader {
      * seconds. The exact definition of 'exposure time' is mission dependent and may, for example, include corrections
      * for shutter open and close duration, detector dead time, vignetting, or other effects. This keyword is synonymous
      * with the EXPTIME keyword.
-     * 
+     *
      * @see DateTime#XPOSURE
      */
     EXPOSURE(SOURCE.HEASARC, HDU.ANY, VALUE.REAL, "[s] exposure time"),
@@ -79,7 +79,7 @@ public enum ObservationDurationDescription implements IFitsHeader {
      * seconds. The exact definition of 'exposure time' is mission dependent and may, for example, include corrections
      * for shutter open and close duration, detector dead time, vignetting, or other effects. This keyword is synonymous
      * with the EXPOSURE keyword.
-     * 
+     *
      * @see DateTime#XPOSURE
      */
     EXPTIME(SOURCE.NOAO, HDU.ANY, VALUE.REAL, "[s] exposure time"),
@@ -93,14 +93,14 @@ public enum ObservationDurationDescription implements IFitsHeader {
      * The value field shall contain a floating point number giving the total integrated exposure time of the
      * observation in units of seconds. ONTIME may be less than TELAPSE if there were intevals during the observation in
      * which the target was not observed (e.g., the shutter was closed, or the detector power was turned off).
-     * 
+     *
      * @see DateTime#XPOSURE
      */
     ONTIME(SOURCE.HEASARC, HDU.ANY, VALUE.REAL, "[s] integration time during the observation"),
     /**
      * The value field shall contain a floating point number giving the difference between the stop and start times of
      * the observation in units of seconds. This keyword is synonymous with the ELAPTIME keyword.
-     * 
+     *
      * @deprecated Part of the FITS standard, use {@link DateTime#TELAPSE} instead.
      */
     @Deprecated
@@ -111,7 +111,7 @@ public enum ObservationDurationDescription implements IFitsHeader {
      * gives the ending calendar date, with format 'yyyy-mm-dd', and TIME-END gives the time within that day using the
      * format 'hh:mm:ss.sss...'. This keyword should not be used if the time is included directly as part of the
      * DATE-END keyword value with the format 'yyyy-mm-ddThh:mm:ss.sss'.
-     * 
+     *
      * @see DateTime#TSTOP
      */
     TIME_END("TIME-END", SOURCE.HEASARC, HDU.ANY, VALUE.STRING, "time at the end of the observation"),
@@ -121,7 +121,7 @@ public enum ObservationDurationDescription implements IFitsHeader {
      * the DATE-OBS keyword gives the starting calendar date, with format 'yyyy-mm-dd', and TIME-OBS gives the time
      * within that day using the format 'hh:mm:ss.sss...'. This keyword should not be used if the time is included
      * directly as part of the DATE-OBS keyword value with the format 'yyyy-mm-ddThh:mm:ss.sss'.
-     * 
+     *
      * @see DateTime#TSTART
      */
     TIME_OBS("TIME-OBS", SOURCE.HEASARC, HDU.ANY, VALUE.STRING, "time at the start of the observation");
@@ -138,7 +138,6 @@ public enum ObservationDurationDescription implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

@@ -30,12 +30,10 @@ package nom.tam.image.compression.bintable;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-
 import nom.tam.fits.BinaryTable;
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
 import nom.tam.image.compression.hdu.CompressedTableData;
@@ -57,12 +55,16 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
 
     private final CompressedTableData compressed;
 
-    /** The original (uncompressed) binary table, if known (otherwise we cannot handle variable-sized columns) */
+    /**
+     * The original (uncompressed) binary table, if known (otherwise we cannot handle variable-sized columns)
+     */
     private BinaryTable orig;
 
     // Intermediate data stored between parallel compression and serialization steps.
     private byte[][] compressedBytes;
+
     private long[][] cdesc;
+
     private Object udesc;
 
     /**
@@ -71,21 +73,19 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
      *                 tables with variable-length columns.
      */
     @Deprecated
-    public BinaryTableTileCompressor(CompressedTableData compressedTable, ColumnTable<?> columnTable,
-            BinaryTableTileDescription description) {
+    public BinaryTableTileCompressor(CompressedTableData compressedTable, ColumnTable<?> columnTable, BinaryTableTileDescription description) {
         super(columnTable, description);
         this.compressed = compressedTable;
     }
 
     /**
      * (<i>for internal use</i>)
-     * 
+     *
      * @param compressedTable a compressed table in which we'll insert the data for the compressed tile
      * @param table           the original uncompressed binary table
      * @param description     the tile description.
      */
-    public BinaryTableTileCompressor(CompressedTableData compressedTable, BinaryTable table,
-            BinaryTableTileDescription description) {
+    public BinaryTableTileCompressor(CompressedTableData compressedTable, BinaryTable table, BinaryTableTileDescription description) {
         this(compressedTable, table.getData(), description);
         this.orig = table;
     }
@@ -97,34 +97,26 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
 
     private byte[] getCompressedBytes(ByteBuffer buffer, ElementType<?> t, ICompressorControl compressor) {
         buffer.flip();
-
         // give the compression 10% more space and a minimum of 1024 bytes
         int need = getCushion(getUncompressedSizeInBytes(), NORMAL_OVERHEAD);
         ByteBuffer cbuf = ByteBuffer.allocateDirect(need);
-
         Buffer tb = t.asTypedBuffer(buffer);
-
         if (!compressor.compress(tb, cbuf, null)) {
             throw new IllegalStateException("Compression error");
         }
-
         cbuf.flip();
         byte[] cdata = new byte[cbuf.limit()];
         cbuf.get(cdata);
-
         buffer.clear();
-
         return cdata;
     }
 
     private void compressRegular() throws IOException {
         compressedBytes = new byte[1][];
-
         ByteBuffer buffer = ByteBuffer.allocateDirect(getUncompressedSizeInBytes());
         try (FitsOutputStream os = new FitsOutputStream(new ByteBufferOutputStream(buffer))) {
             data.write(os, rowStart, rowEnd, column);
         }
-
         compressedBytes[0] = getCompressedBytes(buffer, type, getCompressorControl());
     }
 
@@ -132,14 +124,12 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
         int nRows = rowEnd - rowStart;
         boolean longPointers = orig.getDescriptor(column).hasLongPointers();
         long max = 0;
-
-        udesc = longPointers ? new long[nRows][] : new int[nRows][2]; // Original Q or P type heap pointers
-
+        // Original Q or P type heap pointers
+        udesc = longPointers ? new long[nRows][] : new int[nRows][2];
         // Find out what's the largest variable-sized entry and store the original pointers for the tile
         for (int r = 0; r < nRows; r++) {
             Object desc = data.getElement(rowStart + r, column);
             long n = 0;
-
             if (longPointers) {
                 ((long[][]) udesc)[r] = (long[]) desc;
                 n = ((long[]) desc)[0];
@@ -147,51 +137,33 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
                 ((int[][]) udesc)[r] = (int[]) desc;
                 n = ((int[]) desc)[0];
             }
-
             if (n > max) {
                 max = n;
             }
         }
-
         max *= type.size();
-
         // Uh-oh, we can only handle 32-bit address space...
         if (max > Integer.MAX_VALUE) {
             throw new IllegalStateException("Uncompressed data too large for Java arrays: max=" + max);
         }
-
         // Buffer for the original data chunks to compress
         ByteBuffer buffer = ByteBuffer.allocateDirect((int) max);
         ElementType<?> dataType = ElementType.forClass(orig.getDescriptor(column).getElementClass());
-
         ICompressorControl compressor = getCompressorControl(dataType.primitiveClass());
         compressedBytes = new byte[nRows][];
-
         for (int r = 0; r < nRows; r++) {
             try (FitsOutputStream os = new FitsOutputStream(new ByteBufferOutputStream(buffer))) {
                 // Get the VLA data from the heap
                 Object entry = orig.get(rowStart + r, column);
                 os.writeArray(entry);
             }
-
             compressedBytes[r] = getCompressedBytes(buffer, dataType, compressor);
         }
-
     }
 
     @Override
     public void run() {
-        try {
-            if (orig != null && orig.getDescriptor(column).isVariableSize()) {
-                // binary table with variable sized column
-                compressVariable();
-            } else {
-                // regular column table with fixed width columns
-                compressRegular();
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException(e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private Object setCompressedData(byte[] data) {
@@ -204,20 +176,16 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
                 Arrays.fill((int[]) p, 0);
             }
             compressed.getData().setElement(getTileIndex(), column, p);
-
             // Now set the variable size data, which we'll place on a new heap location.
             compressed.setElement(getTileIndex(), column, data);
-
             // Retrieve the heap pointers for the compressed data
             // We only really handle 32-bit heap descriptors...
             return compressed.getData().getElement(getTileIndex(), column);
         }
-
     }
 
     private void setRegularData() {
         setCompressedData(compressedBytes[0]);
-
         // Discard temporary resources.
         compressedBytes = null;
     }
@@ -225,16 +193,12 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
     private void setVariableData() throws IOException {
         int nRows = compressedBytes.length;
         boolean longPointers = orig.getDescriptor(column).hasLongPointers();
-
-        cdesc = new long[nRows][2]; // Compressed Q-type heap pointers
-
-        ByteBuffer buffer = ByteBuffer
-                .allocateDirect((nRows * 2) * (Long.SIZE + (longPointers ? Long.BYTES : Integer.BYTES)));
-
+        // Compressed Q-type heap pointers
+        cdesc = new long[nRows][2];
+        ByteBuffer buffer = ByteBuffer.allocateDirect((nRows * 2) * (Long.SIZE + (longPointers ? Long.BYTES : Integer.BYTES)));
         for (int r = 0; r < nRows; r++) {
             // Now set the variable size data, which we'll place on a new heap location.
             Object cp = setCompressedData(compressedBytes[r]);
-
             if (cp instanceof long[]) {
                 cdesc[r] = (long[]) cp;
             } else {
@@ -243,7 +207,6 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
                 cdesc[r][1] = ((int[]) cp)[1];
             }
         }
-
         try (ArrayOutputStream os = new FitsOutputStream(new ByteBufferOutputStream(buffer))) {
             // --- The fpack / funpack way ---
             // Serialize the original heap descritors
@@ -251,11 +214,9 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
             // Append the compressed heap descriptors
             os.writeArray(cdesc);
         }
-
         // Compress the combined descriptors with GZIP_1 -- and we'll store the pointers to that in the
         // compressed table
         setCompressedData(getCompressedBytes(buffer, ElementType.BYTE, getGZipCompressorControl()));
-
         // Discard temporary resources.
         compressedBytes = null;
         cdesc = null;
@@ -264,18 +225,6 @@ public class BinaryTableTileCompressor extends BinaryTableTile {
 
     @Override
     public void waitForResult() {
-        super.waitForResult();
-
-        if (orig != null && orig.getDescriptor(column).isVariableSize()) {
-            try {
-                setVariableData();
-            } catch (IOException e) {
-                throw new IllegalStateException(e.getMessage(), e);
-            }
-        } else {
-            setRegularData();
-        }
-
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

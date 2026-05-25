@@ -30,7 +30,6 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -49,28 +48,30 @@ import java.util.logging.Logger;
  * example, with the NIO SPI file system provider to Amazon S3.
  *
  * @author Dustin Jenkins, Attila Kovacs
- * 
+ *
  * @since  1.21
  *
  * @see    <a href="https://github.com/awslabs/aws-java-nio-spi-for-s3">AWS NIO SPI library</a>
  * @see    FitsFile
  */
 public class RandomAccessFileChannel implements RandomAccessFileIO {
+
     private static final Logger LOGGER = LoggerHelper.getLogger(RandomAccessFileChannel.class);
 
     private final long fileSize;
+
     private final FileChannel fileChannel;
 
     /**
      * Constructor for a readable/writable random accessible {@link FileChannel}, which can be used for accessing FITS
      * files.
-     * 
+     *
      * @param  filePath    The path to the file
-     * 
+     *
      * @throws IOException if the file is not accessible
-     * 
+     *
      * @since              1.21
-     * 
+     *
      * @see                #RandomAccessFileChannel(Path, boolean)
      */
     public RandomAccessFileChannel(final Path filePath) throws IOException {
@@ -80,20 +81,19 @@ public class RandomAccessFileChannel implements RandomAccessFileIO {
     /**
      * Constructor for a random accessible {@link FileChannel}, for reading or for reading and writing. It may be used
      * for accessing FITS files.
-     * 
+     *
      * @param  filePath    The path to the file
      * @param  readOnly    <code>true</code> if the file should only be used for reading, otherwise <code>false</code>.
-     * 
+     *
      * @throws IOException if the file is not accessible
-     * 
+     *
      * @since              1.21
-     * 
+     *
      * @see                #RandomAccessFileChannel(Path, boolean)
      */
     @SuppressWarnings("resource")
     public RandomAccessFileChannel(final Path filePath, final boolean readOnly) throws IOException {
-        this(Files.size(filePath), FileChannel.open(filePath, readOnly ? new OpenOption[] {StandardOpenOption.READ} :
-                new OpenOption[] {StandardOpenOption.READ, StandardOpenOption.WRITE}));
+        this(Files.size(filePath), FileChannel.open(filePath, readOnly ? new OpenOption[] { StandardOpenOption.READ } : new OpenOption[] { StandardOpenOption.READ, StandardOpenOption.WRITE }));
     }
 
     /**
@@ -110,52 +110,52 @@ public class RandomAccessFileChannel implements RandomAccessFileIO {
     // Read UTF string (mock implementation)
     @Override
     public String readUTF() {
-        throw new UnsupportedOperationException("readUTF is not implemented for FileChannels.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final FileChannel getChannel() {
-        return this.fileChannel;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public FileDescriptor getFD() {
-        throw new UnsupportedOperationException("FileDescriptor is not implemented for FileChannels.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void setLength(long l) {
-        throw new UnsupportedOperationException("Setting file length is not implemented for FileChannels.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void writeUTF(String s) {
-        throw new UnsupportedOperationException("writeUTF operation is not implemented for FileChannels.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void close() throws IOException {
-        fileChannel.close();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final long position() throws IOException {
-        return fileChannel.position();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final void position(long l) throws IOException {
-        fileChannel.position(l);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final long length() {
-        return this.fileSize;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public int read() {
-        throw new UnsupportedOperationException("read is not implemented for FileChannels.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -164,25 +164,19 @@ public class RandomAccessFileChannel implements RandomAccessFileIO {
      * @param  bytes       The byte array to read into.
      * @param  offset      The offset in the FileChannel to start reading.
      * @param  readLength  The number of bytes to read.
-     * 
+     *
      * @return             The number of bytes read.
-     * 
+     *
      * @throws IOException If an error occurs reading from the FileChannel.
      */
     @Override
     public int read(byte[] bytes, int offset, int readLength) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.allocate(Math.min(bytes.length, readLength));
-        position(offset);
-        final int bytesRead = fileChannel.read(buffer);
-        System.arraycopy(buffer.array(), 0, bytes, 0, bytesRead);
-
-        LOGGER.log(Level.FINE, "Read {0} bytes from the file channel.", bytesRead);
-        return bytesRead;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public void write(int i) {
-        throw new UnsupportedOperationException("write is not implemented for FileChannels.");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -191,14 +185,11 @@ public class RandomAccessFileChannel implements RandomAccessFileIO {
      * @param  bytes       The byte array to write.
      * @param  offset      The offset in the FileChannel to start writing from.
      * @param  writeLength The number of bytes to write.
-     * 
+     *
      * @throws IOException If an error occurs writing to the FileChannel.
      */
     @Override
     public void write(byte[] bytes, int offset, int writeLength) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        position(offset);
-        final int bytesWritten = this.fileChannel.write(buffer);
-        LOGGER.log(Level.FINE, "Wrote {0} bytes to the file channel.", bytesWritten);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

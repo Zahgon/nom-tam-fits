@@ -30,7 +30,6 @@ package nom.tam.image.compression.bintable;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.header.Compression;
 
 /**
@@ -45,13 +44,15 @@ public final class BinaryTableTileDescription {
 
     private int column;
 
-    /** 1-based tile index */
+    /**
+     * 1-based tile index
+     */
     private int tileIndex;
 
     private String compressionAlgorithm;
 
     public static BinaryTableTileDescription tile() {
-        return new BinaryTableTileDescription();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private BinaryTableTileDescription() {
@@ -59,57 +60,49 @@ public final class BinaryTableTileDescription {
     }
 
     public BinaryTableTileDescription column(int value) {
-        column = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public BinaryTableTileDescription compressionAlgorithm(String value) {
-        compressionAlgorithm = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public BinaryTableTileDescription rowEnd(int value) {
-        rowEnd = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public BinaryTableTileDescription rowStart(int value) {
-        rowStart = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Set the FITS table tile index
-     * 
+     *
      * @param  value The 1-based table tile index
-     * 
+     *
      * @return       itself
      */
     public BinaryTableTileDescription tileIndex(int value) {
-        tileIndex = value;
-        return this;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected int getColumn() {
-        return column;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected String getCompressionAlgorithm() {
-        if (compressionAlgorithm == null) {
-            return Compression.ZCMPTYPE_GZIP_2;
-        }
-        return compressionAlgorithm;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected int getRowEnd() {
-        return rowEnd;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected int getRowStart() {
-        return rowStart;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected int getTileIndex() {
-        return tileIndex;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

@@ -30,18 +30,17 @@ package nom.tam.util;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.util.logging.Logger;
 
 /**
  * Access to {@link Logger} instances by class. Many of the FITS classes log minor issues they encounter during
  * processing (such as small FITS standard violations in 3rd pary FITS files). This tool provides access to these class
  * logs simply by the class itself. E.g. to get the log of {@link nom.tam.fits.Header}, you'd simply call:
- * 
+ *
  * <pre>
  * Logger headerLog = LoggerHelper(Header.class);
  * </pre>
- * 
+ *
  * without needing to know what name the log is being stored under. You can then use this to access the log, or to mute
  * unwanted messages on a per-class basis.
  */
@@ -53,12 +52,12 @@ public final class LoggerHelper {
 
     /**
      * Returns the logger for a given class.
-     * 
+     *
      * @param  aClass the class to get the logger for.
      *
      * @return        a Java {@code Logger} for the specified class.
      */
     public static Logger getLogger(Class<?> aClass) {
-        return Logger.getLogger(aClass.getName());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

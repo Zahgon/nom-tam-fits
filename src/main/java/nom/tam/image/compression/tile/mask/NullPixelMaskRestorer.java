@@ -30,14 +30,12 @@ package nom.tam.image.compression.tile.mask;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
-
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
 import nom.tam.image.tile.operation.buffer.TileBuffer;
 import nom.tam.util.type.ElementType;
@@ -45,7 +43,7 @@ import nom.tam.util.type.ElementType;
 /**
  * (<i>for internal use</i>) Restores blank (<code>null</code>) values in
  * deccompressed images.
- * 
+ *
  * @see nom.tam.image.compression.hdu.CompressedImageHDU
  */
 public class NullPixelMaskRestorer extends AbstractNullPixelMask {
@@ -53,7 +51,7 @@ public class NullPixelMaskRestorer extends AbstractNullPixelMask {
     /**
      * Creates a new instance for restoring the null values to a specific image
      * tile when decompressing the tile.
-     * 
+     *
      * @param tileBuffer
      *            the buffer containing the serialized tile data (still
      *            uncompressed)
@@ -75,25 +73,7 @@ public class NullPixelMaskRestorer extends AbstractNullPixelMask {
      * the null pixel mask that was stored along with the compressed data.
      */
     public void restoreNulls() {
-        // if the mask is not present the tile contains no null pixels.
-        if (getMask() != null) {
-            ByteBuffer decompressed = ByteBuffer.allocate(getTileBuffer().getPixelSize());
-            getCompressorControl().decompress(getMask(), decompressed, getCompressorControl().option());
-            setMask(decompressed);
-            if (getTileBuffer().getBaseType().is(ElementType.DOUBLE)) {
-                restoreNullDoubles();
-            } else if (getTileBuffer().getBaseType().is(ElementType.FLOAT)) {
-                restoreNullFloats();
-            } else if (getTileBuffer().getBaseType().is(ElementType.LONG)) {
-                restoreNullLongs();
-            } else if (getTileBuffer().getBaseType().is(ElementType.INT)) {
-                restoreNullInts();
-            } else if (getTileBuffer().getBaseType().is(ElementType.SHORT)) {
-                restoreNullShorts();
-            } else if (getTileBuffer().getBaseType().is(ElementType.BYTE)) {
-                restoreNullBytes();
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private void restoreNullBytes() {

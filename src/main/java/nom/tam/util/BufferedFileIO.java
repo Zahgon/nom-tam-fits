@@ -28,7 +28,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 package nom.tam.util;
 
 import java.io.Closeable;
@@ -50,28 +49,44 @@ import java.nio.channels.FileChannel;
  */
 class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable {
 
-    /** Bit mask for a single byte */
+    /**
+     * Bit mask for a single byte
+     */
     protected static final int BYTE_MASK = 0xFF;
 
-    /** The underlying unbuffered random access file IO */
+    /**
+     * The underlying unbuffered random access file IO
+     */
     private final RandomAccessFileIO file;
 
-    /** The file position at which the buffer begins */
+    /**
+     * The file position at which the buffer begins
+     */
     private long startOfBuf;
 
-    /** The buffer */
+    /**
+     * The buffer
+     */
     private final byte[] buf;
 
-    /** Pointer to the next byte to read/write */
+    /**
+     * Pointer to the next byte to read/write
+     */
     private int offset;
 
-    /** The last legal element in the buffer */
+    /**
+     * The last legal element in the buffer
+     */
     private int end;
 
-    /** Whether the buffer has been modified locally, so it needs to be written back to stream before discarding. */
+    /**
+     * Whether the buffer has been modified locally, so it needs to be written back to stream before discarding.
+     */
     private boolean isModified;
 
-    /** Whether the current position is beyond the current ennd-of-file */
+    /**
+     * Whether the current position is beyond the current ennd-of-file
+     */
     private boolean writeAhead;
 
     /**
@@ -110,39 +125,14 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
 
     /**
      * Sets a new position in the file for subsequent reading or writing.
-     * 
+     *
      * @param  newPos      the new byte offset from the beginning of the file. It may be beyond the current end of the
      *                         file, for example for writing more data after some 'gap'.
-     * 
+     *
      * @throws IOException if the position is negative or cannot be set.
      */
     public final synchronized void seek(long newPos) throws IOException {
-        // Check that the new position is valid
-        if (newPos < 0) {
-            throw new IllegalArgumentException("seek at " + newPos);
-        }
-
-        if (newPos <= startOfBuf + end) {
-            // AK: Do not invoke checking length (costly) if not necessary
-            writeAhead = false;
-        } else {
-            writeAhead = newPos > length();
-        }
-
-        if (newPos < startOfBuf || newPos >= startOfBuf + end) {
-            // The new position is outside the currently buffered region.
-            // Write the current buffer back to the stream, and start anew.
-            flush();
-
-            // We'll start buffering at the new position next.
-            startOfBuf = newPos;
-            end = 0;
-        }
-
-        // Position within the new buffer...
-        offset = (int) (newPos - startOfBuf);
-
-        matchBufferPos();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -154,7 +144,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @return the file channel
      */
     public final FileChannel getChannel() {
-        return file.getChannel();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -166,7 +156,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if the descriptor could not be accessed.
      */
     public final FileDescriptor getFD() throws IOException {
-        return file.getFD();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -175,7 +165,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @return the current byte offset from the beginning of the file.
      */
     public final synchronized long getFilePointer() {
-        return startOfBuf + offset;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -202,15 +192,12 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
         if (offset < end) {
             return true;
         }
-
         if (getRemaining() <= 0) {
             return false;
         }
-
         // Buffer as much as we can.
         seek(getFilePointer());
         end = file.read(buf, 0, buf.length);
-
         return end > 0;
     }
 
@@ -225,10 +212,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if there was an IO error accessing the file.
      */
     public final synchronized boolean hasAvailable(int need) throws IOException {
-        if (end >= offset + need) {
-            return true;
-        }
-        return file.length() >= getFilePointer() + need;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -239,11 +223,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if the operation failed
      */
     public final synchronized long length() throws IOException {
-        // It's either the file's length or that of the end of the (yet) unsynched buffer...
-        if (end > 0) {
-            return Math.max(file.length(), startOfBuf + end);
-        }
-        return file.length();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -254,22 +234,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if the resizing of the underlying stream fails
      */
     public synchronized void setLength(long newLength) throws IOException {
-        // Check if we can change the length inside the current buffer.
-        final long bufEnd = startOfBuf + end;
-        if (newLength >= startOfBuf && newLength < bufEnd) {
-            // If truncated in the buffered region, then truncate the buffer also...
-            end = (int) (newLength - startOfBuf);
-        } else {
-            flush();
-            end = 0;
-        }
-
-        if (getFilePointer() > newLength) {
-            seek(newLength);
-        }
-
-        // Change the length of the file itself...
-        file.setLength(newLength);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -292,11 +257,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
 
     @Override
     public synchronized void close() throws IOException {
-        flush();
-        file.close();
-        startOfBuf = 0;
-        offset = 0;
-        end = 0;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -310,120 +271,27 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
 
     @Override
     public synchronized void flush() throws IOException {
-        if (!isModified) {
-            return;
-        }
-
-        // the buffer was modified locally, so we need to write it back to the stream
-        if (end > 0) {
-            file.position(startOfBuf);
-            file.write(buf, 0, end);
-        }
-        isModified = false;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized void write(int b) throws IOException {
-        if (writeAhead) {
-            setLength(getFilePointer());
-        }
-
-        if (offset >= buf.length) {
-            // The buffer is full, it's time to write it back to stream, and start anew
-            moveBuffer();
-        }
-
-        isModified = true;
-        buf[offset++] = (byte) b;
-
-        if (offset > end) {
-            // We are writing at the end of the file, and we need to grow the buffer with the file...
-            end = offset;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized int read() throws IOException {
-        if (!makeAvailable()) {
-            // By contract of read(), it returns -1 at th end of file.
-            return -1;
-        }
-
-        // Return the unsigned(!) byte.
-        return buf[offset++] & BYTE_MASK;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized void write(byte[] b, int from, int len) throws IOException {
-        if (len <= 0) {
-            return;
-        }
-
-        if (writeAhead) {
-            setLength(getFilePointer());
-        }
-
-        if (len > 2 * buf.length) {
-            // Large direct write...
-            matchBufferPos();
-            file.write(b, from, len);
-            matchFilePos();
-            return;
-        }
-
-        while (len > 0) {
-            if (offset >= buf.length) {
-                // The buffer is full, it's time to write it back to stream, and start anew.
-                moveBuffer();
-            }
-
-            isModified = true;
-            int n = Math.min(len, buf.length - offset);
-            System.arraycopy(b, from, buf, offset, n);
-
-            offset += n;
-            from += n;
-            len -= n;
-
-            if (offset > end) {
-                // We are growing the file, so grow the buffer also...
-                end = offset;
-            }
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public final synchronized int read(byte[] b, int from, int len) throws IOException {
-        if (len <= 0) {
-            // Nothing to do.
-            return 0;
-        }
-
-        if (len > 2 * buf.length) {
-            // Large direct read...
-            matchBufferPos();
-            int l = file.read(b, from, len);
-            matchFilePos();
-            return l;
-        }
-
-        int got = 0;
-
-        while (got < len) {
-            if (!makeAvailable()) {
-                return got > 0 ? got : -1;
-            }
-
-            int n = Math.min(len - got, end - offset);
-
-            System.arraycopy(buf, offset, b, from, n);
-
-            got += n;
-            offset += n;
-            from += n;
-        }
-
-        return got;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -436,7 +304,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException  if there was an IO error before the buffer could be fully populated.
      */
     public final synchronized void readFully(byte[] b) throws EOFException, IOException {
-        readFully(b, 0, b.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -452,14 +320,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException  if there was an IO error before the requested number of bytes could all be read.
      */
     public synchronized void readFully(byte[] b, int off, int len) throws EOFException, IOException {
-        while (len > 0) {
-            int n = read(b, off, len);
-            if (n < 0) {
-                throw new EOFException();
-            }
-            off += n;
-            len -= n;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -470,10 +331,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if there was an IO error while reading from the file.
      */
     public final synchronized String readUTF() throws IOException {
-        matchBufferPos();
-        String s = file.readUTF();
-        matchFilePos();
-        return s;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -484,9 +342,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if there was an IO error while writing to the file.
      */
     public final synchronized void writeUTF(String s) throws IOException {
-        matchBufferPos();
-        file.writeUTF(s);
-        matchFilePos();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -501,18 +357,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if there was an IO error.
      */
     public final synchronized long skip(long n) throws IOException {
-        if (offset + n >= 0 && offset + n <= end) {
-            // Skip within the buffered region...
-            offset = (int) (offset + n);
-            return n;
-        }
-
-        long pos = getFilePointer();
-
-        n = Math.max(n, -pos);
-
-        seek(pos + n);
-        return n;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -526,7 +371,7 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if there was an IO error while reading, other than the end-of-file.
      */
     public final synchronized int read(byte[] b) throws IOException {
-        return read(b, 0, b.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -537,25 +382,26 @@ class BufferedFileIO implements InputReader, OutputWriter, Flushable, Closeable 
      * @throws IOException if there was an IO error while writing to the file...
      */
     public final synchronized void write(byte[] b) throws IOException {
-        write(b, 0, b.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Default implementation of the RandomAccessFileIO interface.
      */
     static final class RandomFileIO extends RandomAccessFile implements RandomAccessFileIO {
+
         RandomFileIO(File file, String mode) throws FileNotFoundException {
             super(file, mode);
         }
 
         @Override
         public long position() throws IOException {
-            return super.getFilePointer();
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
 
         @Override
         public void position(long n) throws IOException {
-            super.seek(n);
+            throw new UnsupportedOperationException("STUB: not implemented");
         }
     }
 }

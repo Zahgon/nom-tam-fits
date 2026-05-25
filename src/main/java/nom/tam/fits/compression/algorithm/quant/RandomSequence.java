@@ -30,7 +30,6 @@ package nom.tam.fits.compression.algorithm.quant;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * A standard fixed random sequence to use for portable and reversible dither
  * implementations. This is a modified (improved) version of the random sequence
@@ -38,7 +37,7 @@ package nom.tam.fits.compression.algorithm.quant;
  * href="https://fits.gsfc.nasa.gov/standard40/fits_standard40aa-le.pdf">FITS
  * 4.0 standard</a>, using integer arithmetics for better performance -- but
  * still providing the same sequence as the original algorithm.
- * 
+ *
  * @see QuantizeProcessor
  */
 public final class RandomSequence {
@@ -67,13 +66,15 @@ public final class RandomSequence {
         }
     }
 
-    /** We don't instantiate this class */
+    /**
+     * We don't instantiate this class
+     */
     private RandomSequence() {
     }
 
     /**
      * Returns the <i>i</i><sup>th</sup> random value from the sequence
-     * 
+     *
      * @param i
      *            The index between 0 and {@link #length()} (exclusive).
      * @return The fixed uniform random deviate value at that index in the range
@@ -81,15 +82,15 @@ public final class RandomSequence {
      * @see #length()
      */
     public static double get(int i) {
-        return VALUES[i];
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns the number of random values in the sequence.
-     * 
+     *
      * @return The number of random values available from the fixed sequence.
      */
     public static int length() {
-        return VALUES.length;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

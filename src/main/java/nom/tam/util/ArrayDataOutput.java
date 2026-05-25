@@ -1,7 +1,6 @@
 package nom.tam.util;
 
 import java.io.DataOutput;
-
 /*
  * #%L
  * nom.tam FITS library
@@ -32,7 +31,6 @@ import java.io.DataOutput;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.io.IOException;
 
 /**
@@ -55,7 +53,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(boolean[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -79,7 +77,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @since              1.16
      */
     default void write(Boolean[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -96,11 +94,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @since              1.16
      */
     default void write(Boolean[] buf, int offset, int size) throws IOException {
-        int to = offset + size;
-
-        for (int i = offset; i < to; i++) {
-            writeBoolean(buf[i].booleanValue());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -111,7 +105,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(char[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -133,7 +127,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(double[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -155,7 +149,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(float[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -177,7 +171,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(int[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -199,7 +193,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(long[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -221,7 +215,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(short[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -243,7 +237,7 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      * @throws IOException if one of the underlying write operations failed
      */
     default void write(String[] buf) throws IOException {
-        write(buf, 0, buf.length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -269,5 +263,4 @@ public interface ArrayDataOutput extends OutputWriter, DataOutput, FitsIO {
      *                                      not supported by the encoder.
      */
     void writeArray(Object o) throws IOException, IllegalArgumentException;
-
 }

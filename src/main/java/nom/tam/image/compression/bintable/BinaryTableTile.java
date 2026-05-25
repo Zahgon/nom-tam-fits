@@ -30,11 +30,9 @@ package nom.tam.image.compression.bintable;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.nio.Buffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
 import nom.tam.fits.Header;
 import nom.tam.fits.HeaderCardException;
 import nom.tam.fits.compression.algorithm.api.ICompressorControl;
@@ -70,7 +68,8 @@ public abstract class BinaryTableTile implements Runnable {
 
     protected final int length;
 
-    protected final int tileIndex; /// 0-based tile index
+    /// 0-based tile index
+    protected final int tileIndex;
 
     private Future<?> future;
 
@@ -86,7 +85,7 @@ public abstract class BinaryTableTile implements Runnable {
     }
 
     public void execute(ExecutorService threadPool) {
-        future = threadPool.submit(this);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -99,35 +98,30 @@ public abstract class BinaryTableTile implements Runnable {
 
     /**
      * Returns the zero-based tile index.
-     * 
+     *
      * @return the zero-based tile index (a.k.a. Java index).
      */
     public int getTileIndex() {
-        return tileIndex;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public void waitForResult() {
-        try {
-            future.get();
-        } catch (Exception e) {
-            throw new IllegalStateException(
-                    "could not process tile " + (tileIndex + 1) + ", column " + column + ": " + e.getMessage(), e);
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ICompressorControl getCompressorControl() {
-        return CompressorProvider.findCompressorControl(null, compressionAlgorithm, type.primitiveClass());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ICompressorControl getCompressorControl(Class<?> dataType) {
-        return CompressorProvider.findCompressorControl(null, compressionAlgorithm, dataType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected ICompressorControl getGZipCompressorControl() {
-        return CompressorProvider.findCompressorControl(null, Compression.ZCMPTYPE_GZIP_1, byte.class);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     protected int getUncompressedSizeInBytes() {
-        return length * type.size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

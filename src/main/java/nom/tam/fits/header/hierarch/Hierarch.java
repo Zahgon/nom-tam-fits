@@ -30,14 +30,13 @@ package nom.tam.fits.header.hierarch;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import nom.tam.fits.FitsFactory;
 
 /**
  * Helper class for creating HIERARCH-style (or long) FITS keywords for use within this library.
- * 
+ *
  * @author Attila Kovacs
- * 
+ *
  * @since  1.18
  */
 public final class Hierarch {
@@ -58,49 +57,43 @@ public final class Hierarch {
      * user-specified long or hierarchical keyword. For example, for the argument <code>"group.property"</code>, this
      * will return <code>"HIERARCH.group.property"</code>, which is how we refer to this keyword internally within this
      * library.
-     * 
+     *
      * @param  keyword The user-defined long or hierarchical keyword. Hierarchical keywords should have components
      *                     separated by dots, e.g. <code>system.subsystem.property</code>. Case-sensitivity depends on
      *                     the formatter used, see e.g. {@link IHierarchKeyFormatter#isCaseSensitive()}.
-     * 
+     *
      * @return         The keyword, prepended by "HIERARCH." as per the internal convention for referring to such
      *                     keywords within this library.
-     * 
+     *
      * @since          1.18
-     * 
+     *
      * @see            #key(String...)
      * @see            FitsFactory#getHierarchFormater()
      * @see            IHierarchKeyFormatter#setCaseSensitive(boolean)
      */
     public static String key(String keyword) {
-        return PREFIX + "." + keyword;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Creates a hierarch-style keyword from its hierarchical components to use within this library, For example, for
      * the arguments <code>"group"</code> and <code>"property"</code>, this will return
      * <code>"HIERARCH.group.property"</code>, which is how we refer to this keyword internally within this library.
-     * 
+     *
      * @param  components A list of hierarchical keyword components. These will be concatenated into a dot-separated
      *                        keyword, and prepended by <code>HIERARCH.</code>. Case-sensitivity depends on the
      *                        formatter used, see e.g. {@link IHierarchKeyFormatter#isCaseSensitive()}.
-     * 
+     *
      * @return            The keyword, prepended by "HIERARCH." as per the internal convention for referring to such
      *                        keywords within this library.
-     * 
+     *
      * @since             1.18
-     * 
+     *
      * @see               #key(String)
      * @see               FitsFactory#getHierarchFormater()
      * @see               IHierarchKeyFormatter#setCaseSensitive(boolean)
      */
     public static String key(String... components) {
-        StringBuilder s = new StringBuilder(PREFIX);
-        for (int i = 0; i < components.length; i++) {
-            s.append('.');
-            s.append(components[i]);
-        }
-        return s.toString();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }

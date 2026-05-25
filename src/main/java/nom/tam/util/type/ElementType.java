@@ -30,7 +30,6 @@ package nom.tam.util.type;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -42,7 +41,6 @@ import java.nio.ShortBuffer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
 import nom.tam.fits.FitsException;
 import nom.tam.fits.header.Bitpix;
 
@@ -61,22 +59,30 @@ public abstract class ElementType<B extends Buffer> {
 
     /**
      * Number of bytes to copy as a block
-     * 
+     *
      * @deprecated (<i>for internal use</i>) It's visibility may be reduced to the package level in the future.
      */
     @Deprecated
     public static final int COPY_BLOCK_SIZE = 1024;
 
-    /** The BITPIX integer value associated with this type of element */
+    /**
+     * The BITPIX integer value associated with this type of element
+     */
     private final int bitPix;
 
-    /** The class of NIO Buffer associated with this type of element */
+    /**
+     * The class of NIO Buffer associated with this type of element
+     */
     private final Class<B> bufferClass;
 
-    /** The primitive data class of this element */
+    /**
+     * The primitive data class of this element
+     */
     private final Class<?> primitiveClass;
 
-    /** The fixed size for this element, if any */
+    /**
+     * The fixed size for this element, if any
+     */
     private final int size;
 
     /**
@@ -84,7 +90,9 @@ public abstract class ElementType<B extends Buffer> {
      */
     private final char javaType;
 
-    /** A boxing class for the primitive type */
+    /**
+     * A boxing class for the primitive type
+     */
     private final Class<?> wrapperClass;
 
     /**
@@ -101,8 +109,7 @@ public abstract class ElementType<B extends Buffer> {
      * @param type           The second character of the Java array type, e.g. `J` from `[J` for `long[]`.
      * @param bitPix         The BITPIX header value for an image HDU of this type.
      */
-    protected ElementType(int size, boolean varSize, Class<?> primitiveClass, Class<?> wrapperClass, Class<B> bufferClass,
-            char type, int bitPix) {
+    protected ElementType(int size, boolean varSize, Class<?> primitiveClass, Class<?> wrapperClass, Class<B> bufferClass, char type, int bitPix) {
         this.size = varSize ? VARIABLE_SIZE : size;
         this.primitiveClass = primitiveClass;
         this.wrapperClass = wrapperClass;
@@ -118,7 +125,7 @@ public abstract class ElementType<B extends Buffer> {
      * @param dataToAppend the buffer containing the data segment to append.
      */
     public void appendBuffer(B buffer, B dataToAppend) {
-        throw new UnsupportedOperationException("no primitive type");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -128,26 +135,18 @@ public abstract class ElementType<B extends Buffer> {
      * @param dataToAppend the buffer containing the data segment to append.
      */
     public void appendToByteBuffer(ByteBuffer byteBuffer, B dataToAppend) {
-        byte[] temp = new byte[Math.min(COPY_BLOCK_SIZE * size(), dataToAppend.remaining() * size())];
-        B typedBuffer = asTypedBuffer(ByteBuffer.wrap(temp));
-        Object array = newArray(Math.min(COPY_BLOCK_SIZE, dataToAppend.remaining()));
-        while (dataToAppend.hasRemaining()) {
-            int part = Math.min(COPY_BLOCK_SIZE, dataToAppend.remaining());
-            getArray(dataToAppend, array, part);
-            putArray(typedBuffer, array, part);
-            byteBuffer.put(temp, 0, part * size());
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
      * Returns a typed view of a byte buffer, suitable for transacting elements of this type directly.
-     * 
+     *
      * @param  buffer a byte buffer
-     * 
+     *
      * @return        the typed view of the byte buffer
      */
     public B asTypedBuffer(ByteBuffer buffer) {
-        throw new UnsupportedOperationException("no primitive buffer available");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -156,7 +155,7 @@ public abstract class ElementType<B extends Buffer> {
      * @return The BITPIX value that FITS uses to specify images of this element type.
      */
     public int bitPix() {
-        return bitPix;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -168,7 +167,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see    #putArray(Buffer, Object, int, int)
      */
     public Class<B> bufferClass() {
-        return bufferClass;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -180,10 +179,7 @@ public abstract class ElementType<B extends Buffer> {
      * @return       The FITS serialized representation as a buffer of bytes.
      */
     public ByteBuffer convertToByteBuffer(Object array) {
-        ByteBuffer buffer = ByteBuffer.wrap(new byte[Array.getLength(array) * size()]);
-        putArray(asTypedBuffer(buffer), array);
-        buffer.rewind();
-        return buffer;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -197,7 +193,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see          #putArray(Buffer, Object)
      */
     public final void getArray(B buffer, Object array) {
-        getArray(buffer, array, Array.getLength(array));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -212,7 +208,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see          #putArray(Buffer, Object, int)
      */
     public final void getArray(B buffer, Object array, int length) {
-        getArray(buffer, array, 0, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -227,7 +223,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see          #putArray(Buffer, Object, int, int)
      */
     public void getArray(B buffer, Object array, int offset, int length) {
-        throw new UnsupportedOperationException("no primitive type");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -239,7 +235,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see    #size()
      */
     public boolean isVariableSize() {
-        return size == VARIABLE_SIZE;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -261,7 +257,7 @@ public abstract class ElementType<B extends Buffer> {
      * @return       <code>true</code> if both element types are the same, otherwise <code>false</code>.
      */
     public boolean is(ElementType<? extends Buffer> other) {
-        return bitPix == other.bitPix();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -275,7 +271,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see           #newBuffer(int)
      */
     public Object newArray(int length) {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -289,7 +285,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see           #newBuffer(long)
      */
     public final B newBuffer(int length) {
-        return wrap(newArray(length));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -306,11 +302,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see                             #newBuffer(int)
      */
     public final B newBuffer(long length) throws IllegalArgumentException {
-        if (length > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Currently only buffers of 32-bit integer size are supported.");
-        }
-        // TODO handle big arrays differently by using memory mapped files.
-        return newBuffer((int) length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -323,7 +315,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see    #type()
      */
     public Class<?> primitiveClass() {
-        return primitiveClass;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -339,7 +331,7 @@ public abstract class ElementType<B extends Buffer> {
      * @since        1.18
      */
     public final void putArray(B buffer, Object array) {
-        putArray(buffer, array, Array.getLength(array));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -356,7 +348,7 @@ public abstract class ElementType<B extends Buffer> {
      * @since        1.18
      */
     public final void putArray(B buffer, Object array, int length) {
-        putArray(buffer, array, 0, length);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -373,7 +365,7 @@ public abstract class ElementType<B extends Buffer> {
      * @since        1.18
      */
     public void putArray(B buffer, Object array, int offset, int length) {
-        throw new UnsupportedOperationException("no primitive type");
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -384,7 +376,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see    #isVariableSize()
      */
     public int size() {
-        return size;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -396,21 +388,11 @@ public abstract class ElementType<B extends Buffer> {
      *                                      this element type, or 0 if the object is <code>null</code>.
      *
      * @throws IllegalArgumentException if the object is not of the type expected by this class.
-     * 
+     *
      * @see                             #size()
      */
     public int size(Object instance) {
-        if (instance == null) {
-            return 0;
-        }
-
-        Class<?> cl = instance.getClass();
-        if (!(primitiveClass.isAssignableFrom(cl) || wrapperClass.isAssignableFrom(cl))) {
-            throw new IllegalArgumentException(
-                    "Class " + cl.getName() + " does not match type " + getClass().getSimpleName());
-        }
-
-        return size();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -425,7 +407,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see           Buffer#slice()
      */
     public B sliceBuffer(B buffer) {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -439,7 +421,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see    #forDataID(char)
      */
     public char type() {
-        return javaType;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -451,7 +433,7 @@ public abstract class ElementType<B extends Buffer> {
      * @return       A new buffer for this type of element that uses the specified array as its backing store.
      */
     public B wrap(Object array) {
-        return null;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -463,37 +445,57 @@ public abstract class ElementType<B extends Buffer> {
      * @see    #type()
      */
     public Class<?> wrapperClass() {
-        return wrapperClass;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
-    /** The FITS representation of a boolean value in binary tables */
+    /**
+     * The FITS representation of a boolean value in binary tables
+     */
     public static final ElementType<Buffer> BOOLEAN = new BooleanType();
 
-    /** The FITS representation of a single (signed) byte value in images and binary tables */
+    /**
+     * The FITS representation of a single (signed) byte value in images and binary tables
+     */
     public static final ElementType<ByteBuffer> BYTE = new ByteType();
 
-    /** The FITS representation of a Java <code>char</code> value in binary tables */
+    /**
+     * The FITS representation of a Java <code>char</code> value in binary tables
+     */
     public static final ElementType<ByteBuffer> CHAR = new CharType();
 
-    /** The FITS representation of a 64-bit double precison floating-point value in images and binary tables */
+    /**
+     * The FITS representation of a 64-bit double precison floating-point value in images and binary tables
+     */
     public static final ElementType<DoubleBuffer> DOUBLE = new DoubleType();
 
-    /** The FITS representation of a 32-bit single precison floating-point value in images and binary tables */
+    /**
+     * The FITS representation of a 32-bit single precison floating-point value in images and binary tables
+     */
     public static final ElementType<FloatBuffer> FLOAT = new FloatType();
 
-    /** The FITS representation of a 32-bit sined integer value in images and binary tables */
+    /**
+     * The FITS representation of a 32-bit sined integer value in images and binary tables
+     */
     public static final ElementType<IntBuffer> INT = new IntType();
 
-    /** The FITS representation of a 64-bit sined integer value in images and binary tables */
+    /**
+     * The FITS representation of a 64-bit sined integer value in images and binary tables
+     */
     public static final ElementType<LongBuffer> LONG = new LongType();
 
-    /** The FITS representation of a 16-bit sined integer value in images and binary tables */
+    /**
+     * The FITS representation of a 16-bit sined integer value in images and binary tables
+     */
     public static final ElementType<ShortBuffer> SHORT = new ShortType();
 
-    /** The FITS representation of an ASCII string in binary tables */
+    /**
+     * The FITS representation of an ASCII string in binary tables
+     */
     public static final ElementType<Buffer> STRING = new StringType();
 
-    /** Anything else for which we do not have a supported FITS representation */
+    /**
+     * Anything else for which we do not have a supported FITS representation
+     */
     public static final ElementType<Buffer> UNKNOWN = new UnknownType();
 
     private static Map<Class<?>, ElementType<?>> byClass;
@@ -526,7 +528,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see         #type()
      */
     public static ElementType<Buffer> forDataID(char type) {
-        return cast(byType.get(type));
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -544,17 +546,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see          #forBuffer(Buffer)
      */
     public static <B extends Buffer> ElementType<B> forClass(Class<?> clazz) {
-        ElementType<?> primitiveType = byClass.get(clazz);
-        if (primitiveType == null) {
-            for (Class<?> interf : clazz.getInterfaces()) {
-                primitiveType = byClass.get(interf);
-                if (primitiveType != null) {
-                    return cast(primitiveType);
-                }
-            }
-            return forClass(clazz.getSuperclass());
-        }
-        return cast(primitiveType);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -568,7 +560,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see        #forClass(Class)
      */
     public static <B extends Buffer> ElementType<B> forBuffer(B b) {
-        return forClass(b.getClass());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -582,11 +574,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see           #bitPix()
      */
     public static ElementType<Buffer> forBitpix(int bitPix) {
-        try {
-            return cast(Bitpix.forValue(bitPix).getElementType());
-        } catch (FitsException e) {
-            return null;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -602,11 +590,7 @@ public abstract class ElementType<B extends Buffer> {
      * @see           #bitPix()
      */
     public static ElementType<Buffer> forNearestBitpix(int bitPix) {
-        try {
-            return cast(Bitpix.forValue(bitPix, true).getElementType());
-        } catch (FitsException e) {
-            return UNKNOWN;
-        }
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -623,7 +607,6 @@ public abstract class ElementType<B extends Buffer> {
     }
 
     private static ElementType<?>[] values() {
-        return new ElementType[] {BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT, STRING, UNKNOWN};
+        return new ElementType[] { BOOLEAN, BYTE, CHAR, DOUBLE, FLOAT, INT, LONG, SHORT, STRING, UNKNOWN };
     }
-
 }

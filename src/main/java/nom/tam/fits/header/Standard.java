@@ -37,7 +37,6 @@ import nom.tam.fits.UndefinedData;
  * OTHER DEALINGS IN THE SOFTWARE.
  * #L%
  */
-
 /**
  * <p>
  * This data dictionary lists the 53 keywords currently defined in the FITS Standard.
@@ -51,6 +50,7 @@ import nom.tam.fits.UndefinedData;
  */
 @SuppressWarnings("deprecation")
 public enum Standard implements IFitsHeader {
+
     /**
      * The value field shall contain a character string identifying who compiled the information in the data associated
      * with the key. This keyword is appropriate when the data originate in a published paper or are compiled from many
@@ -60,13 +60,16 @@ public enum Standard implements IFitsHeader {
     /**
      * The value field shall contain an integer. The absolute value is used in computing the sizes of data structures.
      * It shall specify the number of bits that represent a data value. RANGE: -64,-32,8,16,32
-     * 
+     *
      * @see Bitpix
      */
-    BITPIX(SOURCE.MANDATORY, HDU.ANY, VALUE.INTEGER, "bits per data element", //
-            replaceable("header:bitpix", Object.class)//
-    ),
-
+    //
+    BITPIX(//
+    SOURCE.MANDATORY, //
+    HDU.ANY, //
+    VALUE.INTEGER, //
+    "bits per data element", //
+    replaceable("header:bitpix", Object.class)),
     /**
      * This keyword shall be used only in primary array headers or IMAGE extension headers with positive values of
      * BITPIX (i.e., in arrays with integer data). Columns 1-8 contain the string, `BLANK ' (ASCII blanks in columns
@@ -74,13 +77,11 @@ public enum Standard implements IFitsHeader {
      * values are undefined.
      */
     BLANK(SOURCE.RESERVED, HDU.IMAGE, VALUE.INTEGER, "value used for undefined array elements"),
-
     /**
      * Columns 1-8 contain ASCII blanks. This keyword has no associated value. Columns 9-80 may contain any ASCII text.
      * Any number of card images with blank keyword fields may appear in a key.
      */
     BLANKS("", SOURCE.RESERVED, HDU.ANY, VALUE.NONE, null),
-
     /**
      * This keyword may be used only in the primary key. It shall appear within the first 36 card images of the FITS
      * file. (Note: This keyword thus cannot appear if NAXIS is greater than 31, or if NAXIS is greater than 30 and the
@@ -94,7 +95,6 @@ public enum Standard implements IFitsHeader {
      */
     @Deprecated
     BLOCKED(SOURCE.RESERVED, HDU.PRIMARY, VALUE.LOGICAL, "Non-standard FITS block size"),
-
     /**
      * This keyword shall be used, along with the BZERO keyword, when the array pixel values are not the true physical
      * values, to transform the primary data array values to the true physical values they represent, using the
@@ -103,7 +103,6 @@ public enum Standard implements IFitsHeader {
      * value at zero offset. The default value for this keyword is 1.0.
      */
     BSCALE(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "data quantization scaling"),
-
     /**
      * The value field shall contain a character string, describing the physical units in which the quantities in the
      * array, after application of BSCALE and BZERO, are expressed. The units of all FITS key keyword values, with the
@@ -112,7 +111,6 @@ public enum Standard implements IFitsHeader {
      * units (with the units, if specified, given as 'deg').
      */
     BUNIT(SOURCE.RESERVED, HDU.IMAGE, VALUE.STRING, "data physical unit"),
-
     /**
      * This keyword shall be used, along with the BSCALE keyword, when the array pixel values are not the true physical
      * values, to transform the primary data array values to the true values using the equation: physical_value = BZERO
@@ -120,7 +118,6 @@ public enum Standard implements IFitsHeader {
      * corresponding to an array value of zero. The default value for this keyword is 0.0.
      */
     BZERO(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "data quantization offset"),
-
     /**
      * The value field shall contain a floating point number giving the partial derivative of the coordinate specified
      * by the CTYPEn keywords with respect to the pixel index, evaluated at the reference point CRPIXn, in units of the
@@ -130,13 +127,11 @@ public enum Standard implements IFitsHeader {
      * @see WCS#CDELTna
      */
     CDELTn(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "coordinate spacing along axis"),
-
     /**
      * This keyword shall have no associated value; columns 9-80 may contain any ASCII text. Any number of COMMENT card
      * images may appear in a key.
      */
     COMMENT(SOURCE.RESERVED, HDU.ANY, VALUE.NONE, null),
-
     /**
      * The CONTINUE keyword, when followed by spaces in columns 9 and 10 of the card image and a character string
      * enclosed in single quotes starting in column 11 or higher, indicates that the quoted string should be treated as
@@ -147,7 +142,6 @@ public enum Standard implements IFitsHeader {
      * arbitrarily long strings to be written as keyword values.
      */
     CONTINUE(SOURCE.RESERVED, HDU.ANY, VALUE.NONE, null),
-
     /**
      * This keyword is used to indicate a rotation from a standard coordinate system described by the CTYPEn to a
      * different coordinate system in which the values in the array are actually expressed. Rules for such rotations are
@@ -156,17 +150,15 @@ public enum Standard implements IFitsHeader {
      * the coordinate system defined by CTYPEn. In unit degrees.
      */
     CROTAn(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "[deg] coordinate axis rotation angle"),
-
     /**
      * The value field shall contain a floating point number, identifying the location of a reference point along axis
      * n, in units of the axis index. This value is based upon a counter that runs from 1 to NAXISn with an increment of
      * 1 per pixel. The reference point value need not be that for the center of a pixel nor lie within the actual data
      * array. Use comments to indicate the location of the index point relative to the pixel.
-     * 
+     *
      * @see WCS#CRPIXna
      */
     CRPIXn(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "coordinate axis reference pixel"),
-
     /**
      * The value field shall contain a floating point number, giving the value of the coordinate specified by the CTYPEn
      * keyword at the reference point CRPIXn. Units must follow the prescriptions of section 5.3 of the FITS Standard.
@@ -174,49 +166,42 @@ public enum Standard implements IFitsHeader {
      * @see WCS#CRVALna
      */
     CRVALn(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "coordinate axis value at reference pixel"),
-
     /**
      * The value field shall contain a character string, giving the name of the coordinate represented by axis n.
      *
      * @see WCS#CTYPEna
      */
     CTYPEn(SOURCE.RESERVED, HDU.IMAGE, VALUE.STRING, "coordinate axis type / name"),
-
     /**
      * The value field shall always contain a floating point number, regardless of the value of BITPIX. This number
      * shall give the maximum valid physical value represented by the array, exclusive of any special values.
      */
     DATAMAX(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "maximum data value"),
-
     /**
      * The value field shall always contain a floating point number, regardless of the value of BITPIX. This number
      * shall give the minimum valid physical value represented by the array, exclusive of any special values.
      */
     DATAMIN(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "minimum data value"),
-
     /**
      * The date on which the HDU was created, in the format specified in the FITS Standard. The old date format was
      * 'yy/mm/dd' and may be used only for dates from 1900 through 1999. the new Y2K compliant date format is
      * 'yyyy-mm-dd' or 'yyyy-mm-ddTHH:MM:SS[.sss]'.
-     * 
+     *
      * @see DateTime#DATE
      */
     DATE(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "date of file creation"),
-
     /**
      * The date of the observation, in the format specified in the FITS Standard. The old date format was 'yy/mm/dd' and
      * may be used only for dates from 1900 through 1999. The new Y2K compliant date format is 'yyyy-mm-dd' or
      * 'yyyy-mm-ddTHH:MM:SS[.sss]'.
-     * 
+     *
      * @see DateTime#DATE_OBS
      */
     DATE_OBS("DATE-OBS", SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "date of the observation"),
-
     /**
      * This keyword has no associated value. Columns 9-80 shall be filled with ASCII blanks.
      */
     END(SOURCE.MANDATORY, HDU.ANY, VALUE.NONE, null),
-
     /**
      * The value field shall contain a floating point number giving the equinox in years for the celestial coordinate
      * system in which positions are expressed. Starting with Version 1, the Standard has deprecated the use of the
@@ -227,16 +212,14 @@ public enum Standard implements IFitsHeader {
      */
     @Deprecated
     EPOCH(SOURCE.RESERVED, HDU.ANY, VALUE.REAL, "[yr] equinox of celestial coordinate system"),
-
     /**
      * The value field shall contain a floating point number giving the equinox in years for the celestial coordinate
      * system in which positions are expressed. This version of the keyword does not support alternative coordinate
      * systems.
-     * 
+     *
      * @see WCS#EQUINOXa
      */
     EQUINOX(SOURCE.RESERVED, HDU.ANY, VALUE.REAL, "[yr] equinox of celestial coordinate system"),
-
     /**
      * If the FITS file may contain extensions, a card image with the keyword EXTEND and the value field containing the
      * logical value T must appear in the primary key immediately after the last NAXISn card image, or, if NAXIS=0, the
@@ -244,7 +227,6 @@ public enum Standard implements IFitsHeader {
      * extensions be present.
      */
     EXTEND(SOURCE.INTEGRAL, HDU.PRIMARY, VALUE.LOGICAL, "allow extensions"),
-
     /**
      * The value field shall contain an integer, specifying the level in a hierarchy of extension levels of the
      * extension key containing it. The value shall be 1 for the highest level; levels with a higher value of this
@@ -253,14 +235,12 @@ public enum Standard implements IFitsHeader {
      * primary key.RANGE: [1:] DEFAULT: 1
      */
     EXTLEVEL(SOURCE.RESERVED, HDU.ANY, VALUE.INTEGER, "hierarchical level of the extension"),
-
     /**
      * The value field shall contain a character string, to be used to distinguish among different extensions of the
      * same type, i.e., with the same value of XTENSION, in a FITS file. This keyword is used to describe an extension
      * and but may appear in the primary header also.
      */
     EXTNAME(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "HDU name"),
-
     /**
      * The value field shall contain an integer, to be used to distinguish among different extensions in a FITS file
      * with the same type and name, i.e., the same values for XTENSION and EXTNAME. The values need not start with 1 for
@@ -269,84 +249,81 @@ public enum Standard implements IFitsHeader {
      * extension and should not appear in the primary key.RANGE: [1:] DEFAULT: 1
      */
     EXTVER(SOURCE.RESERVED, HDU.ANY, VALUE.INTEGER, "HDU version"),
-
     /**
      * The value field shall contain an integer that shall be used in any way appropriate to define the data structure,
      * consistent with Eq. 5.2 in the FITS Standard. This keyword originated for use in FITS Random Groups where it
      * specifies the number of random groups present. In most other cases this keyword will have the value 1.
      */
-    GCOUNT(SOURCE.MANDATORY, HDU.ANY, VALUE.INTEGER, "group count",
-            replaceable("randomgroupsdata:groups", RandomGroupsData.class), //
-            replaceable("undefineddata:groups", UndefinedData.class), //
-            replaceable("header:groups", RandomGroupsData.class)//
-    ),
-
+    GCOUNT(SOURCE.MANDATORY, HDU.ANY, VALUE.INTEGER, "group count", //
+    replaceable("randomgroupsdata:groups", RandomGroupsData.class), //
+    replaceable("undefineddata:groups", UndefinedData.class), //
+    replaceable("header:groups", RandomGroupsData.class)),
     /**
      * The value field shall contain the logical constant T. The value T associated with this keyword implies that
      * random groups records are present.
      */
-    GROUPS(SOURCE.MANDATORY, HDU.GROUPS, VALUE.LOGICAL, "random groups data", //
-            replaceable("randomgroupsdata:groups", RandomGroupsData.class)//
-    ),
-
+    //
+    GROUPS(//
+    SOURCE.MANDATORY, //
+    HDU.GROUPS, //
+    VALUE.LOGICAL, //
+    "random groups data", //
+    replaceable("randomgroupsdata:groups", RandomGroupsData.class)),
     /**
      * This keyword shall have no associated value; columns 9-80 may contain any ASCII text. The text should contain a
      * history of steps and procedures associated with the processing of the associated data. Any number of HISTORY card
      * images may appear in a key.
      */
     HISTORY(SOURCE.RESERVED, HDU.ANY, VALUE.NONE, "processing history of the data"),
-
     /**
      * The value field shall contain a character string identifying the instrument used to acquire the data associated
      * with the key.
      */
     INSTRUME(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "name of instrument"),
-
     /**
      * The value field shall contain a non-negative integer no greater than 999, representing the number of axes in the
      * associated data array. A value of zero signifies that no data follow the key in the HDU. In the context of FITS
      * 'TABLE' or 'BINTABLE' extensions, the value of NAXIS is always 2.RANGE: [0:999]
      */
     NAXIS(SOURCE.MANDATORY, HDU.ANY, VALUE.INTEGER, "dimensionality of data"),
-
     /**
      * The value field of this indexed keyword shall contain a non-negative integer, representing the number of elements
      * along axis n of a data array. The NAXISn must be present for all values n = 1,...,NAXIS, and for no other values
      * of n. A value of zero for any of the NAXISn signifies that no data follow the key in the HDU. If NAXIS is equal
      * to 0, there should not be any NAXISn keywords.RANGE: [0:]
      */
-    NAXISn(SOURCE.MANDATORY, HDU.ANY, VALUE.INTEGER, "n'th data dimension", //
-            replaceable("tablehdu:naxis1", TableData.class, "Size of table row in bytes"), //
-            replaceable("tablehdu:naxis2", TableData.class, "Number of table rows"),
-            replaceable("header:naxis2", Object.class)),
-
+    //
+    NAXISn(//
+    SOURCE.MANDATORY, //
+    HDU.ANY, //
+    VALUE.INTEGER, //
+    "n'th data dimension", //
+    replaceable("tablehdu:naxis1", TableData.class, "Size of table row in bytes"), replaceable("tablehdu:naxis2", TableData.class, "Number of table rows"), replaceable("header:naxis2", Object.class)),
     /**
      * The value field shall contain a character string giving a name for the object observed.
      */
     OBJECT(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "name of observed object"),
-
     /**
      * The value field shall contain a character string identifying who acquired the data associated with the key.
      */
     OBSERVER(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "observer(s) who acquired the data"),
-
     /**
      * The value field shall contain a character string identifying the organization or institution responsible for
      * creating the FITS file.
      */
     ORIGIN(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "organization responsible for the data"),
-
     /**
      * The value field shall contain an integer that shall be used in any way appropriate to define the data structure,
      * consistent with Eq. 5.2 in the FITS Standard. This keyword was originated for use with FITS Random Groups and
      * represented the number of parameters preceding each group. It has since been used in 'BINTABLE' extensions to
      * represent the size of the data heap following the main data table. In most other cases its value will be zero.
      */
-    PCOUNT(SOURCE.MANDATORY, HDU.ANY, VALUE.INTEGER, "associated parameter count", //
-            replaceable("binarytable:pcount", TableData.class, "heap size in bytes"),
-            replaceable("randomgroups:pcount", RandomGroupsData.class, "parameter values per group"),
-            replaceable("undefineddata:pcount", UndefinedData.class), replaceable("header:pcount", Object.class)),
-
+    //
+    PCOUNT(//
+    SOURCE.MANDATORY, //
+    HDU.ANY, //
+    VALUE.INTEGER, //
+    "associated parameter count", replaceable("binarytable:pcount", TableData.class, "heap size in bytes"), replaceable("randomgroups:pcount", RandomGroupsData.class, "parameter values per group"), replaceable("undefineddata:pcount", UndefinedData.class), replaceable("header:pcount", Object.class)),
     /**
      * This keyword is reserved for use within the FITS Random Groups structure. This keyword shall be used, along with
      * the PZEROn keyword, when the nth FITS group parameter value is not the true physical value, to transform the
@@ -356,7 +333,6 @@ public enum Standard implements IFitsHeader {
      * The default value for this keyword is 1.0.
      */
     PSCALn(SOURCE.INTEGRAL, HDU.GROUPS, VALUE.REAL, "parameter quantization scaling"),
-
     /**
      * This keyword is reserved for use within the FITS Random Groups structure. The value field shall contain a
      * character string giving the name of parameter n. If the PTYPEn keywords for more than one value of n have the
@@ -366,7 +342,6 @@ public enum Standard implements IFitsHeader {
      * values with the first scaled relative to the other such that the sum forms a number of up to 32-bit precision.
      */
     PTYPEn(SOURCE.INTEGRAL, HDU.GROUPS, VALUE.STRING, "name of random groups parameter"),
-
     /**
      * This keyword is reserved for use within the FITS Random Groups structure. This keyword shall be used, along with
      * the PSCALn keyword, when the nth FITS group parameter value is not the true physical value, to transform the
@@ -375,15 +350,13 @@ public enum Standard implements IFitsHeader {
      * transformation equation is as follows: physical_value = PZEROn + PSCALn * group_parameter_value.DEFAULT: 0.0
      */
     PZEROn(SOURCE.INTEGRAL, HDU.GROUPS, VALUE.REAL, "parameter quantization offset"),
-
     /**
      * Coordinate reference frame of major/minor axes.If absent the default value is 'FK5'. This version of the keyword
      * does not support alternative coordinate systems.
-     * 
+     *
      * @see WCS#RADESYSa
      */
     RADESYS(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "celestial coordinate reference frame"),
-
     /**
      * Coordinate reference frame of major/minor axes (generic).
      *
@@ -391,16 +364,14 @@ public enum Standard implements IFitsHeader {
      */
     @Deprecated
     RADECSYS(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "celestial coordinate reference frame"),
-
     /**
      * [Hz] Rest frequency of observed spectral line.
-     * 
+     *
      * @since 1.19
-     * 
+     *
      * @see   WCS#RESTFRQa
      */
     RESTFRQ(SOURCE.RESERVED, HDU.IMAGE, VALUE.REAL, "[Hz] line rest frequency"),
-
     /**
      * [Hz] Rest frequeny of observed spectral line (generic).
      *
@@ -408,31 +379,35 @@ public enum Standard implements IFitsHeader {
      */
     @Deprecated
     RESTFREQ(SOURCE.RESERVED, HDU.ANY, VALUE.REAL, "[Hz] observed line rest frequency"),
-
     /**
      * The value field shall contain a character string citing a reference where the data associated with the key are
      * published.
      */
     REFERENC(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "bibliographic reference"),
-
     /**
      * The SIMPLE keyword is required to be the first keyword in the primary key of all FITS files. The value field
      * shall contain a logical constant with the value T if the file conforms to the standard. This keyword is mandatory
      * for the primary key and is not permitted in extension headers. A value of F signifies that the file does not
      * conform to this standard.
      */
-    SIMPLE(SOURCE.MANDATORY, HDU.PRIMARY, VALUE.LOGICAL, "primary HDU", //
-            replaceable("header:simple", Object.class, "Java FITS: " + new java.util.Date())//
-    ),
-
+    //
+    SIMPLE(//
+    SOURCE.MANDATORY, //
+    HDU.PRIMARY, //
+    VALUE.LOGICAL, //
+    "primary HDU", //
+    replaceable("header:simple", Object.class, "Java FITS: " + new java.util.Date())),
     /**
      * The value field of this indexed keyword shall contain an integer specifying the column in which field n starts in
      * an ASCII TABLE extension. The first column of a row is numbered 1.RANGE: [1:]
      */
-    TBCOLn(SOURCE.MANDATORY, HDU.ASCII_TABLE, VALUE.INTEGER, "column byte offset", //
-            replaceable("asciitable:tbcolN", AsciiTable.class)//
-    ),
-
+    //
+    TBCOLn(//
+    SOURCE.MANDATORY, //
+    HDU.ASCII_TABLE, //
+    VALUE.INTEGER, //
+    "column byte offset", //
+    replaceable("asciitable:tbcolN", AsciiTable.class)),
     /**
      * The value field of this indexed keyword shall contain a character string describing how to interpret the contents
      * of field n as a multidimensional array, providing the number of dimensions and the length along each axis. The
@@ -440,10 +415,13 @@ public enum Standard implements IFitsHeader {
      * the FITS Standard in which the value string has the format '(l,m,n...)' where l, m, n,... are the dimensions of
      * the array.
      */
-    TDIMn(SOURCE.RESERVED, HDU.BINTABLE, VALUE.STRING, "dimensionality of column array elements", //
-            replaceable("binarytable:tdimN", BinaryTable.class)//
-    ),
-
+    //
+    TDIMn(//
+    SOURCE.RESERVED, //
+    HDU.BINTABLE, //
+    VALUE.STRING, //
+    "dimensionality of column array elements", //
+    replaceable("binarytable:tdimN", BinaryTable.class)),
     /**
      * The value field of this indexed keyword shall contain a character string describing the format recommended for
      * the display of the contents of field n. If the table value has been scaled, the physical value shall be
@@ -456,38 +434,41 @@ public enum Standard implements IFitsHeader {
      * the Standard but may be defined in conventions using such fields.
      */
     TDISPn(SOURCE.RESERVED, HDU.TABLE, VALUE.STRING, "column display format"),
-
     /**
      * The value field shall contain a character string identifying the telescope used to acquire the data associated
      * with the key.
      */
     TELESCOP(SOURCE.RESERVED, HDU.ANY, VALUE.STRING, "name of telescope / observatory"),
-
     /**
      * The value field shall contain a non-negative integer representing the number of fields in each row of a 'TABLE'
      * or 'BINTABLE' extension. The maximum permissible value is 999. RANGE: [0:999]
      */
     TFIELDS(SOURCE.MANDATORY, HDU.TABLE, VALUE.INTEGER, "number of columns in the table"),
-
     /**
      * The value field of this indexed keyword shall contain a character string describing the format in which field n
      * is encoded in a 'TABLE' or 'BINTABLE' extension.
      */
-    TFORMn(SOURCE.MANDATORY, HDU.TABLE, VALUE.STRING, "column data format", //
-            replaceable("asciitable:tformN", AsciiTable.class), //
-            replaceable("binarytable:tformN", BinaryTable.class)//
-    ),
-
+    //
+    TFORMn(//
+    SOURCE.MANDATORY, //
+    HDU.TABLE, //
+    VALUE.STRING, //
+    "column data format", //
+    replaceable("asciitable:tformN", AsciiTable.class), //
+    replaceable("binarytable:tformN", BinaryTable.class)),
     /**
      * The value field of this keyword shall contain an integer providing the separation, in bytes, between the start of
      * the main data table and the start of a supplemental data area called the heap. The default value shall be the
      * product of the values of NAXIS1 and NAXIS2. This keyword shall not be used if the value of PCOUNT is zero. A
      * proposed application of this keyword is presented in Appendix B.1 of the FITS Standard.
      */
-    THEAP(SOURCE.INTEGRAL, HDU.BINTABLE, VALUE.INTEGER, "heap byte offset", //
-            replaceable("binarytable:theap", BinaryTable.class)//
-    ),
-
+    //
+    THEAP(//
+    SOURCE.INTEGRAL, //
+    HDU.BINTABLE, //
+    VALUE.INTEGER, //
+    "heap byte offset", //
+    replaceable("binarytable:theap", BinaryTable.class)),
     /**
      * In ASCII 'TABLE' extensions, the value field for this indexed keyword shall contain the character string that
      * represents an undefined value for field n. The string is implicitly blank filled to the width of the field. In
@@ -496,7 +477,6 @@ public enum Standard implements IFitsHeader {
      * extensions if field n is of any other data type.
      */
     TNULLn(SOURCE.INTEGRAL, HDU.TABLE, VALUE.ANY, "column value for undefined elements"),
-
     /**
      * This indexed keyword shall be used, along with the TZEROn keyword, when the quantity in field n does not
      * represent a true physical quantity. The value field shall contain a floating point number representing the
@@ -506,7 +486,6 @@ public enum Standard implements IFitsHeader {
      * keyword is 1.0. This keyword may not be used if the format of field n is A, L, or X.DEFAULT: 1.0
      */
     TSCALn(SOURCE.RESERVED, HDU.TABLE, VALUE.REAL, "column quantization scaling"),
-
     /**
      * The value field for this indexed keyword shall contain a character string, giving the name of field n. It is
      * recommended that only letters, digits, and underscore (hexadecimal code 5F, ('_') be used in the name. String
@@ -514,7 +493,6 @@ public enum Standard implements IFitsHeader {
      * different fields should be avoided.
      */
     TTYPEn(SOURCE.RESERVED, HDU.TABLE, VALUE.STRING, "column name"),
-
     /**
      * The value field shall contain a character string describing the physical units in which the quantity in field n,
      * after any application of TSCALn and TZEROn, is expressed. The units of all FITS key keyword values, with the
@@ -523,7 +501,6 @@ public enum Standard implements IFitsHeader {
      * units (with the units, if specified, given as 'deg').
      */
     TUNITn(SOURCE.RESERVED, HDU.TABLE, VALUE.STRING, "column physical unit"),
-
     /**
      * This indexed keyword shall be used, along with the TSCALn keyword, when the quantity in field n does not
      * represent a true physical quantity. The value field shall contain a floating point number representing the true
@@ -532,64 +509,57 @@ public enum Standard implements IFitsHeader {
      * keyword is 0.0. This keyword may not be used if the format of field n is A, L, or X.DEFAULT: 0.0
      */
     TZEROn(SOURCE.RESERVED, HDU.TABLE, VALUE.REAL, "column quantization offset"),
-
     /**
      * The value field of this indexed keyword shall contain a floating point number specifying the maximum valid
      * physical value represented in column n of the table, exclusive of any special values. This keyword may only be
      * used in 'TABLE' or 'BINTABLE' extensions and is analogous to the DATAMAX keyword used for FITS images.
-     * 
+     *
      * @since 1.19
      */
     TDMAXn(SOURCE.RESERVED, HDU.TABLE, VALUE.REAL, "maximum value in the column"),
-
     /**
      * The value field of this indexed keyword shall contain a floating point number specifying the minimum valid
      * physical value represented in column n of the table, exclusive of any special values. This keyword may only be
      * used in 'TABLE' or 'BINTABLE' extensions and is analogous to the DATAMIN keyword used for FITS images.
-     * 
+     *
      * @since 1.19
      */
     TDMINn(SOURCE.RESERVED, HDU.TABLE, VALUE.REAL, "minimum value in the column"),
-
     /**
      * The value field of this indexed keyword shall contain a floating point number specifying the upper bound of the
      * legal range of physical values that may be represented in column n of the table. The column may contain values
      * that are greater than this legal maximum value but the interpretation of such values is not defined here. The
      * value of this keyword is typically used as the maxinum value when constructing a histogram of the values in the
      * column. This keyword may only be used in 'TABLE' or 'BINTABLE' extensions.
-     * 
+     *
      * @since 1.19
      */
     TLMAXn(SOURCE.RESERVED, HDU.TABLE, VALUE.REAL, "maximum legal value in the column"),
-
     /**
      * The value field of this indexed keyword shall contain a floating point number specifying the lower bound of the
      * legal range of physical values that may be represented in column n of the table. The column may contain values
      * that are less than this legal minimum value but the interpretation of such values is not defined here. The value
      * of this keyword is typically used as the mininum value when constructing a histogram of the values in the column.
      * This keyword may only be used in 'TABLE' or 'BINTABLE' extensions.
-     * 
+     *
      * @since 1.19
      */
     TLMINn(SOURCE.RESERVED, HDU.TABLE, VALUE.REAL, "minimum legal value in the column"),
-
     /**
      * The value field shall contain a character string giving the name of the extension type. This keyword is mandatory
      * for an extension key and must not appear in the primary key. For an extension that is not a standard extension,
      * the type name must not be the same as that of a standard extension.
      */
-    XTENSION(SOURCE.MANDATORY, HDU.EXTENSION, VALUE.STRING, "HDU extension type",
-            replaceable("imagedata:xtension", ImageData.class, "image HDU"), //
-            replaceable("binarytable:xtension", BinaryTable.class, "binary table HDU"), //
-            replaceable("asciitable:xtension", AsciiTable.class, "ASCII table HDU"), //
-            replaceable("undefineddata:xtension", UndefinedData.class), //
-            replaceable("header:xtension", Object.class)//
-    ),
-
+    XTENSION(SOURCE.MANDATORY, HDU.EXTENSION, VALUE.STRING, "HDU extension type", //
+    replaceable("imagedata:xtension", ImageData.class, "image HDU"), //
+    replaceable("binarytable:xtension", BinaryTable.class, "binary table HDU"), //
+    replaceable("asciitable:xtension", AsciiTable.class, "ASCII table HDU"), //
+    replaceable("undefineddata:xtension", UndefinedData.class), //
+    replaceable("header:xtension", Object.class)),
     /**
      * If set to <code>true</code>, it indicates that the HDU should inherit all non-confliucting keywords from the
      * primary HDU.
-     * 
+     *
      * @since 1.19
      */
     INHERIT(SOURCE.RESERVED, HDU.EXTENSION, VALUE.LOGICAL, "inherit primary header entries");
@@ -631,8 +601,7 @@ public enum Standard implements IFitsHeader {
         this(null, status, hdu, valueType, comment, replacements);
     }
 
-    Standard(String headerName, SOURCE status, HDU hdu, VALUE valueType, String comment,
-            StandardCommentReplacement... replacements) {
+    Standard(String headerName, SOURCE status, HDU hdu, VALUE valueType, String comment, StandardCommentReplacement... replacements) {
         key = new FitsKey(headerName == null ? name() : headerName, status, hdu, valueType, comment);
         commentReplacements = replacements;
         FitsKey.registerStandard(this);
@@ -640,23 +609,12 @@ public enum Standard implements IFitsHeader {
 
     @Override
     public final FitsKey impl() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Override
     public String comment() {
-        Class<?> contextClass = COMMENT_CONTEXT.get();
-        if (contextClass == null) {
-            contextClass = Object.class;
-        }
-        for (StandardCommentReplacement stdCommentReplacement : commentReplacements) {
-            if (stdCommentReplacement.getContext().isAssignableFrom(contextClass)) {
-                if (stdCommentReplacement.getComment() != null) {
-                    return stdCommentReplacement.getComment();
-                }
-            }
-        }
-        return key.comment();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -664,9 +622,9 @@ public enum Standard implements IFitsHeader {
      *                       creating a header card with this keyword provides a more transparent way of setting
      *                       context-specific comments. This convoluted approach is no longer supported and will be
      *                       removed in the future.
-     * 
+     *
      * @param      clazz Usually a subclass of <code>nom.tam.fits.Data</code>.
-     * 
+     *
      * @see              nom.tam.fits.HeaderCard#setComment(String)
      */
     @Deprecated
@@ -680,7 +638,7 @@ public enum Standard implements IFitsHeader {
      * @param      commentKey the reference key
      *
      * @return                the comment for the reference key
-     * 
+     *
      * @deprecated            (<i>)for internal use</i>)
      */
     @Deprecated
@@ -702,7 +660,7 @@ public enum Standard implements IFitsHeader {
      *
      * @param      commentKey the reference key
      * @param      value      the comment to set when the fits key is used.
-     * 
+     *
      * @deprecated            (<i>)for internal use</i>)
      */
     @Deprecated
@@ -725,17 +683,16 @@ public enum Standard implements IFitsHeader {
 
     /**
      * Returns the standard FITS keyword that matches the specified actual key.
-     * 
+     *
      * @param  key The key as it may appear in a FITS header, e.g. "CTYPE1A"
-     * 
+     *
      * @return     The standard FITS keyword/pattern that matches, e.g. {@link WCS#CTYPEna}.
-     * 
+     *
      * @see        IFitsHeader#extractIndices(String)
-     * 
+     *
      * @since      1.19
      */
     public static IFitsHeader match(String key) {
-        return FitsKey.matchStandard(key);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
-
 }
